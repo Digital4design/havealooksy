@@ -20,6 +20,20 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/home/usersList', 'HomeController@usersList')->name('usersList');
+Route::get('/validate-user', 'HomeController@checkUserRole');
+
+Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth']], function() {
+    Route::get('/', 'Admin\DashboardController@index');  
+    Route::get('/profile', 'Admin\DashboardController@profile');  
+    Route::post('/edit-profile', 'Admin\DashboardController@editProfile');
+    Route::get('/change-password', 'Admin\DashboardController@changePassword');  
+    Route::post('/save-password', 'Admin\DashboardController@savePassword');  
+    Route::get('/users', 'Admin\DashboardController@getUsersView');  
+    Route::get('/get-users', 'Admin\DashboardController@getUsers');  
+    Route::get('/categories', 'Admin\DashboardController@getCategoriesView');  
+    Route::get('/get-categories', 'Admin\DashboardController@getCategories');  
+    Route::get('/add-category', 'Admin\DashboardController@addCategory');  
+});
 
 /*
 Route::get('facebook', function () {

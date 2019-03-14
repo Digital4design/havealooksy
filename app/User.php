@@ -7,6 +7,8 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
+use Auth;
+
 class User extends Authenticatable
 {
     use Notifiable;
@@ -38,4 +40,22 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Check Roles admin here 
+     *
+     * @var array
+     */
+    public function isAdmin(){
+        $role = Role::join('role_user','roles.id','=','role_user.role_id')
+                      ->where('user_id',Auth::user()->id)
+                      ->first();
+        return $role->name == 'admin' ? true : false;   
+    }
+
+    public function getRole()
+    {
+        // return $this->belongsToMany('App\Role', 'role_user');
+        return $this->hasOneThrough('App\Role', 'App\Models\UserRoleRelation', 'user_id', 'id', 'id', 'role_id');
+    }
 }

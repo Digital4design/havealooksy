@@ -10,14 +10,14 @@
         <link rel="icon" href="favicon.ico">
         <title>Looksy</title>
         <!-- Bootstrap core CSS -->
-        <link href="{{asset('public/looksyassets/css/bootstrap.min.css')}} " rel="stylesheet">
+        <link href="{{asset('looksyassets/css/bootstrap.min.css')}} " rel="stylesheet">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
         <!-- Custom styles for this template -->
-        <link href="{{asset('public/looksyassets/css/owl.carousel.css')}}" rel="stylesheet">
-        <link href="{{asset('public/looksyassets/css/owl.theme.default.min.css')}}"  rel="stylesheet">
-        <link href="{{asset('public/looksyassets/css/style.css')}} " rel="stylesheet">
+        <link href="{{asset('looksyassets/css/owl.carousel.css')}}" rel="stylesheet">
+        <link href="{{asset('looksyassets/css/owl.theme.default.min.css')}}"  rel="stylesheet">
+        <link href="{{asset('looksyassets/css/style.css')}} " rel="stylesheet">
         
-        <script src="{{asset('public/looksyassets/js/ie-emulation-modes-warning.js')}}"></script>
+        <script src="{{asset('looksyassets/js/ie-emulation-modes-warning.js')}}"></script>
         <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
     </head>
     <body id="page-top">
@@ -26,13 +26,35 @@
         <div class="top-bar">
             <div class="container">
                 <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header page-scroll">
+                <div class="navbar-header page-scroll col-lg-3">
                     
-                    <a class="navbar-brand page-scroll" href="#page-top"><img src="{{asset('public/looksyassets/images/logo.png') }}
+                    <a class="navbar-brand page-scroll" href="#page-top"><img src="{{asset('looksyassets/images/logo.png') }}
                         " alt="Lattes theme logo"></a>
                 </div>
+
+                <!-- Search Form -->
+                <form action="#" method="post" novalidate="novalidate" class="col-lg-6">
+                    <div class="search_form_container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 p-0">
+                                        <input type="text" class="form-control search-slt" placeholder="Industry">
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 p-0">
+                                        <input type="text" class="form-control search-slt" placeholder="City , State , Country">
+                                    </div>                                    
+                                    <div class="col-lg-4 col-md-4 col-sm-12 p-0">
+                                        <button type="button" class="btn btn-danger wrn-btn"> <i class="fa fa-search"></i> Search</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
                 <!-- login signupbtns -->
-                <div class="menu float-right">
+                <div class="menu float-right col-lg-3">
                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
@@ -82,39 +104,13 @@
         <!-- Header -->
         <header>
             
-                <div class="slider-container">
+            <div class="slider-container">
                 <div class="container">
                     <div class="intro-text">                        
                         <div class="intro-heading">LEARN FROM EXPERIENCE</div>
                         <div class="intro-lead-in">Use looksy to book learning experiences with seasoned professionals</div>
-                        
                     </div>
                 </div>
-            </div>
-            
-            
-            <form action="#" method="post" novalidate="novalidate" class="search_bbar">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="row">
-                            <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                                <input type="text" class="form-control search-slt" placeholder="Industry">
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                                <input type="text" class="form-control search-slt" placeholder="City , State , Country">
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                                <input type="text" class="form-control search-slt" placeholder="Category">
-                            </div>
-                            
-                            <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                                <button type="button" class="btn btn-danger wrn-btn"> <i class="fa fa-search"></i> Search</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
             </div>
         </header>
         @yield('content')
@@ -131,11 +127,11 @@
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-        <script src="{{  asset('public/looksyassets/js/bootstrap.min.js') }}"></script>
-        <script src="{{  asset('public/looksyassets/js/owl.carousel.min.js') }}"></script>
-        <script src="{{ asset('public/looksyassets/js/cbpAnimatedHeader.js') }}"></script>
-        <script src="{{ asset('public/looksyassets/js/theme-scripts.js') }}"></script>
+        <script src="{{  asset('looksyassets/js/bootstrap.min.js') }}"></script>
+        <script src="{{  asset('looksyassets/js/owl.carousel.min.js') }}"></script>
+        <script src="{{ asset('looksyassets/js/cbpAnimatedHeader.js') }}"></script>
+        <script src="{{ asset('looksyassets/js/theme-scripts.js') }}"></script>
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-        <script src="{{ asset('public/looksyassets/js/ie10-viewport-bug-workaround.js') }}"></script>
+        <script src="{{ asset('looksyassets/js/ie10-viewport-bug-workaround.js') }}"></script>
     </body>
 </html>

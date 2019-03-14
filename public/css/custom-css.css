@@ -1,0 +1,9 @@
+.invalid-feedback {
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 95%;
+  color: #cd201f;
+}
+.wrap-login100-form-btn button:hover{
+	background-color:#4e1485;
+}

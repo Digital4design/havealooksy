@@ -62,6 +62,7 @@ class RegisterController extends Controller
             //'phone_number' => ['required','numeric','min:10','max:15'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'user_type' => ['required'],
         ]);
         $validator = Validator::make($request->all(), $rules);
        
@@ -79,6 +80,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $role_id = Role::where('name', $data['user_type'])->first();
         
         $newUserData = User::create([
             'first_name' => $data['first_name'],
@@ -92,7 +94,7 @@ class RegisterController extends Controller
         // set Role for New Register Doctor 
         $roleArray = array(
                     'user_id' => $newUserData->id,
-                    'role_id' => 2, // client role Id
+                    'role_id' => $role_id['id'],
                     );
         
         UserRoleRelation::insert($roleArray);

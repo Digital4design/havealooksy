@@ -23,9 +23,9 @@ class Role extends Seeder
         		),
         		array(
         			'id' =>2,
-        			'name' => 'client',
-        			'display_name' => 'client',
-        			'description' => 'client role',
+        			'name' => 'seller',
+        			'display_name' => 'Seller',
+        			'description' => 'Seller Role',
         			'created_at' =>  date("Y-m-d H:i:s"),
         			'updated_at' =>  date("Y-m-d H:i:s"),
         		),

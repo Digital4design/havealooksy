@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Auth;
-use DB;
 
 class UserRoleRelation extends Model
 {
@@ -27,7 +26,4 @@ class UserRoleRelation extends Model
      *
      * @var string
      */
-	
-	
-	
 }
