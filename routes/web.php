@@ -32,7 +32,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth']], function(
     Route::get('/get-users', 'Admin\DashboardController@getUsers');  
     Route::get('/categories', 'Admin\DashboardController@getCategoriesView');  
     Route::get('/get-categories', 'Admin\DashboardController@getCategories');  
-    Route::get('/add-category', 'Admin\DashboardController@addCategory');  
+    Route::post('/add-category', 'Admin\DashboardController@addCategory');
+    Route::post('/change-status/{id}/{status}', 'Admin\DashboardController@changeStatus');
 });
 
 /*

@@ -117,9 +117,22 @@ class DashboardController extends Controller
                                 return 'Active';
                             if($all_categories['status'] == 0)
                                 return 'Deactive';
-                        })->editColumn('parent_id', function ($all_categories){
-                            return Categories::where('id', $all_categories['parent_id'])
-                                        ->select('name')->first();
+                        })->addColumn('parent_category', function ($all_categories){
+                            if($all_categories['parent_id'] != 0)
+                                return Categories::where('id', $all_categories['parent_id'])
+                                        ->pluck('name')->first();
+                            if($all_categories['parent_id'] == 0)
+                                return '-';
+                        })->addColumn('action', function ($all_categories){
+                            if($all_categories['status'] == 1){
+                                $status = 'Active';
+                                $btn_color = 'danger';
+                            }
+                            if($all_categories['status'] == 0){
+                                $status = 'Deactive';
+                                $btn_color = 'default';
+                            }
+                            return "<button data-id='".$all_categories['id']."' class='btn btn-".$btn_color." active-deactive' type='button'>".$status."</button>";
                         })->make(true);
     }
 
@@ -127,8 +140,8 @@ class DashboardController extends Controller
     {
         $validator = Validator::make($request->all(),
         [
-            'name' => ['required', 'string', 'max:255'],
-            'status' => ['required']
+            'category_name' => ['required', 'string', 'max:255'],
+            'status' => ['required'],
         ]);
 
         if ($validator->fails()) {
@@ -137,7 +150,11 @@ class DashboardController extends Controller
 
         try
         {
-            
+            Categories::create([
+                'name' => $request->category_name,
+                'parent_id' => $request->parent_category,
+                'status' => $request->status,
+            ]);
             
             return response()->json(['status' => 'success','message' => 'Category added successfully']);
         }
@@ -145,5 +162,14 @@ class DashboardController extends Controller
         {
             return response()->json(['status' => 'danger','message' => 'Something went wrong. Please try again later.']);
         }
+    }
+
+    public function changeStatus($id, $status)
+    {
+        $change_status = Categories::find($id);
+        $change_status->status = $status;
+        $change_status->save();
+
+        return response()->json(['status' => 'success']);
     }
 }
