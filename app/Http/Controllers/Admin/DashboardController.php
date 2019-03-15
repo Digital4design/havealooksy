@@ -123,17 +123,19 @@ class DashboardController extends Controller
                                         ->pluck('name')->first();
                             if($all_categories['parent_id'] == 0)
                                 return '-';
-                        })->addColumn('action', function ($all_categories){
+                        })->addColumn('activate_deactivate', function ($all_categories){
                             if($all_categories['status'] == 1){
-                                $status = 'Active';
-                                $btn_color = 'danger';
-                            }
-                            if($all_categories['status'] == 0){
-                                $status = 'Deactive';
+                                $status = 'Deactivate';
                                 $btn_color = 'default';
                             }
-                            return "<button data-id='".$all_categories['id']."' class='btn btn-".$btn_color." active-deactive' type='button'>".$status."</button>";
-                        })->make(true);
+                            if($all_categories['status'] == 0){
+                                $status = 'Activate';
+                                $btn_color = 'danger';
+                            }
+                            return "<button type='button' data-id='".$all_categories['id']."' class='btn btn-".$btn_color." active-deactive' type='button'>".$status."</button>";
+                        })->addColumn('action', function ($all_categories){
+                            return "<button type='button' data-id='".$all_categories['id']."' class='btn btn-info button_edit' style='margin-right:1em;' data-toggle='modal' data-target='#edit-category'><i class='fa fa-edit'></i></button><button type='button' data-id='".$all_categories['id']."' class='btn btn-warning button_delete'><i class='fa fa-trash-o'></i></button>";
+                        })->rawColumns(['activate_deactivate' => 'activate_deactivate','action' => 'action'])->make(true);
     }
 
     public function addCategory(Request $request)
@@ -156,7 +158,7 @@ class DashboardController extends Controller
                 'status' => $request->status,
             ]);
             
-            return response()->json(['status' => 'success','message' => 'Category added successfully']);
+            return response()->json(['status' => 'success','message' => 'Category added successfully.']);
         }
         catch(\Exception $e)
         {
@@ -165,11 +167,60 @@ class DashboardController extends Controller
     }
 
     public function changeStatus($id, $status)
-    {
+    {   
         $change_status = Categories::find($id);
         $change_status->status = $status;
         $change_status->save();
 
-        return response()->json(['status' => 'success']);
+        return response()->json(['status' => 'success', 'category_status' => $status]);
+    }
+
+    public function deleteCategory($id)
+    {
+        try
+        {
+            $category = Categories::find($id)->delete();
+            return response()->json(['status' => 'success','message' => 'Category deleted successfully.']);
+        }
+        catch(\Exception $e)
+        {
+            return response()->json(['status' => 'danger','message' => 'Something went wrong. Please try again later.']);
+        }
+    }
+
+    public function getCategoryData($id)
+    {
+        $get = Categories::where('id', $id)
+                        ->with(['parentCategory'])
+                        ->first();
+
+        $all_categories = Categories::where('id', '!=', $id)->get();
+        return response()->json(['status' => 'success','data' => $get, 'all_categories' => $all_categories]);
+    }
+
+    public function editCategory(Request $request)
+    {
+        $validator = Validator::make($request->all(),
+        [
+            'edit_category_name' => ['required', 'string', 'max:255'],
+        ]);
+
+        if ($validator->fails()) {
+             return response()->json($validator->errors());
+        }
+
+        try
+        {
+            $edit_category = Categories::find($request->category_id);
+            $edit_category->name = $request->edit_category_name;
+            $edit_category->parent_id = $request->edit_parent_category;
+            $edit_category->save();
+            
+            return response()->json(['status' => 'success','message' => 'Category updated successfully.']);
+        }
+        catch(\Exception $e)
+        {
+            return response()->json(['status' => 'danger','message' => 'Something went wrong. Please try again later.']);
+        }
     }
 }

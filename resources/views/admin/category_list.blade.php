@@ -30,6 +30,7 @@
                           <th>Category Name</th>
                           <th>Status</th>
                           <th>Parent Category</th>
+                          <th>Activate/Deactivate</th>
                           <th>Action</th>
                         </tr>
                     </thead>
@@ -38,6 +39,7 @@
                           <th>Category Name</th>
                           <th>Status</th>
                           <th>Parent Category</th>
+                          <th>Activate/Deactivate</th>
                           <th>Action</th>
                         </tr>
                     </tfoot>
@@ -75,7 +77,6 @@
           <div id="parent_category" style="display:none;">
             <div class="form-group">
               <select name="parent_category" class="form-control">
-                <option value="0">Select Parent Category</option>
               </select>
             </div>
           </div>
@@ -84,6 +85,35 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="edit-category" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="edit_category_form">
+        @csrf
+        <input type="hidden" name="category_id">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span></button>
+          <h4 class="modal-title">Edit Category</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <input type="text" name="edit_category_name" class="form-control" placeholder="Category Name">
+            <p id="error-edit_category_name" class="error"></p>
+          </div>
+          <div class="form-group">
+            <select name="edit_parent_category" class="form-control">
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Update</button>
         </div>
       </form>
     </div>
@@ -99,7 +129,7 @@ $(function() {
         serverSide: true,
         lengthMenu: [10,25,50,100],
         ajax: {
-          "url": '{!! url("admin/get-categories") !!}',
+          "url": '{!! url("admin/categories/get-categories") !!}',
           "type": 'GET',
           "data": function (data) {
                 data.name = "{{ (!empty($name))? $name : null }}";
@@ -111,7 +141,8 @@ $(function() {
             { data: 'name', name: 'name' },
             { data: 'status', name: 'status' },
             { data: 'parent_category', name: 'parent_category' },
-            { data: 'action', name: 'action', orderable: false, },
+            { data: 'activate_deactivate', name: 'activate_deactivate', orderable: false },
+            { data: 'action', name: 'action', orderable: false },
         ],
         oLanguage: {
           "sInfoEmpty" : "Showing 0 to 0 of 0 entries",
@@ -121,11 +152,13 @@ $(function() {
     });
 
     $("#add-category-button").on("click", function(){
+      $("select[name=parent_category]").html("");
       $.ajax({
-        'url'      : '{{ url("admin/get-categories") }}',
+        'url'      : '{{ url("admin/categories/get-categories") }}',
         'method'   : 'get',
         'dataType' : 'json',
         success    : function(response){
+          $("select[name=parent_category]").append("<option value=0>Select Parent Category</option>");
           $.each(response.data, function(key, value){
             $("select[name=parent_category]").append("<option value="+value['id']+">"+value['name']+"</option>");
           }); 
@@ -135,13 +168,14 @@ $(function() {
 
     $("#add_category_form").submit(function(){
       $.ajax({
-        'url'      : '{{ url("/admin/add-category") }}',
+        'url'      : '{{ url("admin/categories/add-category") }}',
         'method'   : 'post',
         'dataType' : 'json',
         'data'     : $(this).serialize(),
         success    : function(data){
           
           if(data.status == 'success'){
+            $("#add-category").modal('toggle');
             swal({
               title: "Success",
               text: data.message,
@@ -186,30 +220,138 @@ $(function() {
       });
     });
 
-    $("button.active-deactive").on("click", function(){
+    $(document).on("click", "button.active-deactive", function(){
       var id = $(this).attr('data-id');
-      var data = "";
-      if($("button.active-deactive").hasClass("btn-danger")){
-        data = '0';
+
+      if($(this).hasClass("btn-danger")){
+        status_data = 1;
       }
-      if($("button.active-deactive").hasClass("btn-danger")){
-        data = '1';
+      if($(this).hasClass("btn-default")){
+        status_data = 0;
       }
 
       $.ajax({
-        'url'      : '{{ url("/admin/change-status/'+id+'/'+data+'") }}',
+        'url'      : '{{ url("admin/categories/change-status") }}/'+id+"/"+status_data,
         'method'   : 'get',
         'dataType' : 'json',
         success    : function(data){
           if(data.status == 'success'){
-            if(data==0)
-              $("button.active-deactive").removeClass("btn-danger").addClass("btn-default");
-            if(data==1)
-              $("button.active-deactive").removeClass("btn-default").addClass("btn-danger");
+            if(data.category_status == 1){
+              $(".active-deactive[data-id="+id+"]").removeClass("btn-danger").addClass("btn-default").text("Deactivate");
+              $(".active-deactive[data-id="+id+"]").closest("tr").find("td:eq(1)").text("Active");
+            }
+            if(data.category_status == 0){
+              $(".active-deactive[data-id="+id+"]").removeClass("btn-default").addClass("btn-danger").text("Activate");
+              $(".active-deactive[data-id="+id+"]").closest("tr").find("td:eq(1)").text("Deactive");
+            }
           }  
         } 
       });
+      return false;
+    });
 
+    $(document).on("click", "button.button_delete", function(){
+      var id = $(this).attr('data-id');
+
+      swal({
+        title: "Are you sure?",
+        text: "This category will be deleted permanently.",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-primary",
+        confirmButtonText: "Yes, delete it!",
+        closeOnConfirm: false
+      },
+      function(){
+        $.ajax({
+          'url'      : '{{ url("admin/categories/delete-category") }}/'+id,
+          'method'   : 'get',
+          'dataType' : 'json',
+          success    : function(data){
+            if(data.status == 'success'){
+              swal({
+                title: "Success",
+                text: data.message,
+                timer: 2000,
+                type: "success",
+                showConfirmButton: false
+              });
+              setTimeout(function(){ 
+                  location.reload();
+              }, 2000);
+            }  
+          } 
+        });
+      });
+      return false;
+    });
+
+    $(document).on("click", "button.button_edit", function(){
+      var id = $(this).attr('data-id');
+      $("select[name=edit_parent_category]").html("");
+      $.ajax({
+        'url'      : '{{ url("admin/categories/get-category-data") }}/'+id,
+        'method'   : 'get',
+        'dataType' : 'json',
+        success    : function(resp){
+          if(resp.status == 'success'){
+
+            $("select[name=edit_parent_category]").append("<option value=0>No Parent Category</option>");
+            $.each(resp.all_categories, function(key, value){
+                $("select[name=edit_parent_category]").append("<option value="+value['id']+">"+value['name']+"</option>");
+            });
+
+            $("input[name=category_id]").val(resp.data['id']);
+            $("input[name=edit_category_name]").val(resp.data['name']);
+            if(resp.data.parent_category != null)
+              $("select[name=edit_parent_category]").val(resp.data.parent_category['id']);
+            else
+              $("select[name=edit_parent_category]").val(0);
+          }  
+        } 
+      });
+      return false;
+    });
+
+    $("#edit_category_form").submit(function(){
+
+      $.ajax({
+        'url'      : '{{ url("admin/categories/edit-category") }}',
+        'method'   : 'post',
+        'dataType' : 'json',
+        'data'     : $(this).serialize(),
+        success    : function(resp){
+          if(resp.status == 'success'){
+            $("#edit-category").modal('toggle');
+            swal({
+              title: "Success",
+              text: resp.message,
+              timer: 2000,
+              type: "success",
+              showConfirmButton: false
+            });
+            setTimeout(function(){ 
+                location.reload();
+            }, 2000);
+          }
+          else if(resp.status == 'danger'){
+            swal("Error", resp.message, "warning");
+          }
+          else{
+            console.log(resp);
+
+            $('.error').html('');
+            $('.error').parent().removeClass('has-error');
+            $.each(resp,function(key,value){
+              if(value != ""){
+                $("#error-"+key).text(value);
+                $("#error-"+key).parent().addClass('has-error');
+              }
+            });
+          }  
+        } 
+      });
+      return false;
     });    
 });
 </script>

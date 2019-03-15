@@ -30,10 +30,27 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth']], function(
     Route::post('/save-password', 'Admin\DashboardController@savePassword');  
     Route::get('/users', 'Admin\DashboardController@getUsersView');  
     Route::get('/get-users', 'Admin\DashboardController@getUsers');  
-    Route::get('/categories', 'Admin\DashboardController@getCategoriesView');  
-    Route::get('/get-categories', 'Admin\DashboardController@getCategories');  
-    Route::post('/add-category', 'Admin\DashboardController@addCategory');
-    Route::post('/change-status/{id}/{status}', 'Admin\DashboardController@changeStatus');
+
+    Route::group(['prefix' => 'categories', 'middleware' => ['admin', 'auth']], function() {
+        Route::get('/', 'Admin\DashboardController@getCategoriesView');
+        Route::get('/get-categories', 'Admin\DashboardController@getCategories');  
+        Route::post('/add-category', 'Admin\DashboardController@addCategory');
+        Route::get('/change-status/{id}/{status}', 'Admin\DashboardController@changeStatus');
+        Route::get('/delete-category/{id}', 'Admin\DashboardController@deleteCategory');
+        Route::get('/get-category-data/{id}', 'Admin\DashboardController@getCategoryData');
+        Route::post('/edit-category', 'Admin\DashboardController@editCategory');
+    }); 
+});
+
+Route::group(['prefix' => 'seller', 'middleware' => ['seller', 'auth']], function() {
+    Route::get('/', 'Seller\DashboardController@index');
+
+    Route::group(['prefix' => 'listings', 'middleware' => ['seller', 'auth']], function() {
+        Route::get('/', ['as' => 'listings', 'uses' => 'Seller\DashboardController@getListingsView']);
+        Route::get('/get-listings', 'Seller\ListingController@getListings');
+        Route::get('/add-listing', 'Seller\ListingController@addListing');
+        Route::post('/save-listing', 'Seller\ListingController@saveListing'); 
+    });    
 });
 
 /*

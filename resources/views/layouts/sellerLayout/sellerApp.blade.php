@@ -261,7 +261,7 @@
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="{{ url('/admin/profile') }}" id="profile-button" class="btn btn-default btn-flat">Profile</a>
+                  <a href="{{ url('/seller/profile') }}" id="profile-button" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
                   <a href="{{ route('logout') }}" id="logout-button" class="btn btn-default btn-flat" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Sign out</a>
@@ -306,22 +306,17 @@
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
         <li>
-          <a href="{{ url('/admin') }}">
+          <a href="{{ url('/seller') }}">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
           </a>
         </li>
         <li>
-          <a href="{{ url('/admin/users') }}">
-            <i class="fa fa-users"></i> <span>Users</span>
+          <a href="{{ url('/seller/listings') }}">
+            <i class="fa fa-list-alt"></i> <span>Listings</span>
           </a>
         </li>
         <li>
-          <a href="{{ url('/admin/categories') }}">
-            <i class="fa fa-list"></i> <span>Categories</span>
-          </a>
-        </li>
-        <li>
-          <a href="{{ url('/admin/change-password') }}">
+          <a href="{{ url('/seller/change-password') }}">
             <i class="fa fa-unlock"></i> <span>Change Password</span>
           </a>
         </li>

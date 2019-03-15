@@ -53,6 +53,18 @@ class User extends Authenticatable
         return $role->name == 'admin' ? true : false;   
     }
 
+    /**
+     * Check Roles seller here 
+     *
+     * @var array
+     */
+    public function isSeller(){
+        $role = Role::join('role_user','roles.id','=','role_user.role_id')
+                      ->where('user_id',Auth::user()->id)
+                      ->first();
+        return $role->name == 'seller' ? true : false;   
+    }
+
     public function getRole()
     {
         // return $this->belongsToMany('App\Role', 'role_user');
