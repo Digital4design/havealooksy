@@ -44,12 +44,20 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth']], function(
 
 Route::group(['prefix' => 'seller', 'middleware' => ['seller', 'auth']], function() {
     Route::get('/', 'Seller\DashboardController@index');
+    Route::get('/profile', 'Seller\DashboardController@profile');  
+    Route::post('/edit-profile', 'Seller\DashboardController@editProfile');
+    Route::get('/change-password', 'Seller\DashboardController@changePassword');  
+    Route::post('/save-password', 'Seller\DashboardController@savePassword');
 
     Route::group(['prefix' => 'listings', 'middleware' => ['seller', 'auth']], function() {
         Route::get('/', ['as' => 'listings', 'uses' => 'Seller\DashboardController@getListingsView']);
         Route::get('/get-listings', 'Seller\ListingController@getListings');
         Route::get('/add-listing', 'Seller\ListingController@addListing');
-        Route::post('/save-listing', 'Seller\ListingController@saveListing'); 
+        Route::post('/save-listing', 'Seller\ListingController@saveListing');
+        Route::get('/change-status/{id}/{status}', 'Seller\ListingController@changeStatus'); 
+        Route::get('/edit-listing/{id}', ['as' => 'editListing', 'uses' => 'Seller\ListingController@editListingView']);
+        Route::post('/update-listing', 'Seller\ListingController@updateListing'); 
+        Route::get('/delete-listing/{id}', 'Seller\ListingController@deleteListing'); 
     });    
 });
 

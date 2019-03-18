@@ -69,7 +69,7 @@ class DashboardController extends Controller
         }
         try
         {
-            $user = User::find(Auth::user()->id)->first();
+            $user = User::find(Auth::user()->id);
             if (Hash::check($request->old_password, $user['password']))
             {
                 $user->password = Hash::make($request->new_password);

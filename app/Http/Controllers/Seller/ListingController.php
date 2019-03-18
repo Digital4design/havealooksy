@@ -16,10 +16,29 @@ class ListingController extends Controller
     	$all_listings = Listings::select("*")->get();
 
         return Datatables::of($all_listings)
-        				->addColumn('category', function ($all_listings){
+        				->editColumn('status', function ($all_listings){
+                            if($all_listings['status'] == 1)
+                                return 'Active';
+                            if($all_listings['status'] == 0)
+                                return 'Deactive';
+        				})->addColumn('category', function ($all_listings){
                                 return Categories::where('id', $all_listings['category_id'])
                                         ->pluck('name')->first();
-            			})->make(true);
+                        })->addColumn('activate_deactivate', function ($all_listings){
+                            if($all_listings['status'] == 1){
+                                $status = 'Deactivate';
+                                $btn_color = 'default';
+                            }
+                            if($all_listings['status'] == 0){
+                                $status = 'Activate';
+                                $btn_color = 'danger';
+                            }
+                            return "<button type='button' data-id='".$all_listings['id']."' class='btn btn-".$btn_color." active-deactive' type='button'>".$status."</button>";
+                        })->addColumn('action', function ($all_listings){
+                            return "<a href='".route('editListing', $all_listings['id'])."' class='btn btn-info' style='margin-right:1em;'><i class='fa fa-edit'></i></a><button type='button' data-id='".$all_listings['id']."' class='btn btn-warning button_delete'><i class='fa fa-trash-o'></i></button>";
+                        })->editColumn('image', function ($all_listings){
+                            return "<a href='".asset('images/listings/'.$all_listings['image'])."' style='font-size:1.3em;' target='_blank'><i class='fa fa-eye'></i></a>";
+            			})->rawColumns(['activate_deactivate' => 'activate_deactivate', 'action' => 'action', 'image' => 'image'])->make(true);
     }
 
     public function addListing()
@@ -64,6 +83,88 @@ class ListingController extends Controller
         catch(\Exception $e)
         {
             return redirect()->route('listings')->with(['status' => 'danger' , 'message' => 'Something went wrong. Please try again later.']);
+        }
+    }
+
+    public function changeStatus($id, $status)
+    {   
+        $change_status = Listings::find($id);
+        $change_status->status = $status;
+        $change_status->save();
+
+        return response()->json(['status' => 'success', 'listing_status' => $status]);
+    }
+
+    public function editListingView($id)
+    {
+    	$categories = Categories::with(['childCategories'])->where('status', '1')->where('parent_id', '0')->get();
+    	$listing_data = Listings::where('id', $id)->first();
+    	return view('seller.edit_listing')->with(['categories' => $categories, 'listing_data' => $listing_data]);
+    }
+
+    public function updateListing(Request $request)
+    {
+    	$validator = Validator::make($request->all(),[
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['required'],
+            'location' => ['required', 'string'],  
+            'price' => ['required', 'numeric'],  
+            'category' => ['required'],  
+            'status' => ['required'],
+            'image' => ['image', 'mimes:jpg,jpeg,png'],  
+        ]);
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+        try
+        {
+        	$listing = Listings::find($request->listing_id);
+        	$listing->title = $request->title;
+        	$listing->description = $request->description;
+        	$listing->location = $request->location;
+        	$listing->price = $request->price;
+        	$listing->category_id = $request->category;
+        	$listing->status = $request->status;
+
+        	if($request->hasFile('image')){
+        		if (file_exists(public_path('images/listings/'.$listing->image)))
+				{
+	            	$del_previous_pic = unlink(public_path('images/listings/'.$listing->image));
+	            }
+        		$file = $request->file('image');
+            	$filename = 'listing-'.time().'.'.$file->getClientOriginalExtension();
+            	$file->move('images/listings',$filename);
+
+            	$listing->image = $filename;
+        	}
+
+        	$listing->save();
+
+        	return redirect()->route('listings')->with(['status' => 'success' , 'message' => 'Listing updated successfully.']);
+        }
+        catch(\Exception $e)
+        {
+            return redirect()->route('listings')->with(['status' => 'danger' , 'message' => 'Something went wrong. Please try again later.']);
+        }
+    }
+
+    public function deleteListing($id)
+    {
+    	try
+        {
+            $listing = Listings::find($id);
+
+            if (file_exists(public_path('images/listings/'.$listing->image)))
+			{
+            	$del_image = unlink(public_path('images/listings/'.$listing->image));
+            	$listing->delete();
+            	return response()->json(['status' => 'success','message' => 'Listing deleted successfully.']);
+            }
+            return response()->json(['status' => 'danger','message' => 'Listing cannot be deleted!']);  
+        }
+        catch(\Exception $e)
+        {
+            return response()->json(['status' => 'danger','message' => 'Something went wrong. Please try again later.']);
         }
     }
 }

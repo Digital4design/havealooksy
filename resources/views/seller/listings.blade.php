@@ -42,8 +42,9 @@
                           <th>Price</th>
                           <th>Category</th>
                           <th>Status</th>
-                          <!-- <th>Activate/Deactivate</th>
-                          <th>Action</th> -->
+                          <th>Image</th>
+                          <th>Activate/Deactivate</th>
+                          <th>Action</th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -54,8 +55,9 @@
                           <th>Price</th>
                           <th>Category</th>
                           <th>Status</th>
-                          <!-- <th>Activate/Deactivate</th>
-                          <th>Action</th> -->
+                          <th>Image</th>
+                          <th>Activate/Deactivate</th>
+                          <th>Action</th>
                         </tr>
                     </tfoot>
                   </table>
@@ -94,14 +96,81 @@ $(function() {
             { data: 'price', name: 'price' },
             { data: 'category', name: 'category' },
             { data: 'status', name: 'status' },
-            // { data: 'activate_deactivate', name: 'activate_deactivate', orderable: false },
-            // { data: 'action', name: 'action', orderable: false },
+            { data: 'image', name: 'image', orderable: false },
+            { data: 'activate_deactivate', name: 'activate_deactivate', orderable: false },
+            { data: 'action', name: 'action', orderable: false },
         ],
         oLanguage: {
           "sInfoEmpty" : "Showing 0 to 0 of 0 entries",
           "sZeroRecords": "No matching records found",
           "sEmptyTable": "No data available in table",
         },
+    });
+
+    $(document).on("click", "button.active-deactive", function(){
+      var id = $(this).attr('data-id');
+
+      if($(this).hasClass("btn-danger")){
+        status_data = 1;
+      }
+      if($(this).hasClass("btn-default")){
+        status_data = 0;
+      }
+
+      $.ajax({
+        'url'      : '{{ url("seller/listings/change-status") }}/'+id+"/"+status_data,
+        'method'   : 'get',
+        'dataType' : 'json',
+        success    : function(data){
+          if(data.status == 'success'){
+            if(data.listing_status == 1){
+              $(".active-deactive[data-id="+id+"]").removeClass("btn-danger").addClass("btn-default").text("Deactivate");
+              $(".active-deactive[data-id="+id+"]").closest("tr").find("td:eq(5)").text("Active");
+            }
+            if(data.listing_status == 0){
+              $(".active-deactive[data-id="+id+"]").removeClass("btn-default").addClass("btn-danger").text("Activate");
+              $(".active-deactive[data-id="+id+"]").closest("tr").find("td:eq(5)").text("Deactive");
+            }
+          }  
+        } 
+      });
+      return false;
+    });
+
+    $(document).on("click", "button.button_delete", function(){
+      var id = $(this).attr('data-id');
+
+      swal({
+        title: "Are you sure?",
+        text: "This listing will be deleted permanently.",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-primary",
+        confirmButtonText: "Yes, delete it!",
+        closeOnConfirm: false
+      },
+      function(){
+        $.ajax({
+          'url'      : '{{ url("seller/listings/delete-listing") }}/'+id,
+          'method'   : 'get',
+          'dataType' : 'json',
+          success    : function(data){
+            if(data.status == 'success'){
+              swal({
+                title: "Success",
+                text: data.message,
+                timer: 2000,
+                type: "success",
+                showConfirmButton: false
+              });
+              setTimeout(function(){ 
+                  location.reload();
+              }, 2000);
+            }  
+          } 
+        });
+      });
+      return false;
     });    
 });
 </script>
