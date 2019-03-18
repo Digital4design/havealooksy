@@ -99,7 +99,26 @@ class DashboardController extends Controller
         return Datatables::of($all_users)
                         ->addColumn('user_type', function ($all_users){
                             return $all_users['getRole']['display_name'];
-                        })->make(true);
+                        })->addColumn('block_unblock', function ($all_users){
+                            if($all_users['status'] == 1){
+                                $status = 'Block';
+                                $btn_color = 'danger';
+                            }
+                            if($all_users['status'] == 0){
+                                $status = 'Unblock';
+                                $btn_color = 'info';
+                            }
+                            return "<button type='button' data-id='".$all_users['id']."' class='btn btn-".$btn_color." block-unblock'>".$status."</button>";
+                        })->rawColumns(['block_unblock' => 'block_unblock'])->make(true);
+    }
+
+    public function changeUserStatus($id, $status)
+    {
+        $change_user_status = User::find($id);
+        $change_user_status->status = $status;
+        $change_user_status->save();
+
+        return response()->json(['status' => 'success', 'user_status' => $status]);
     }
 
     public function getCategoriesView()

@@ -245,13 +245,13 @@
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="{{asset('public/adminPanelAssets')}}/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+              <img src="{{asset('public/images/default-pic.svg')}}" class="user-image" alt="User Image">
               <span class="hidden-xs">{{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="{{asset('public/adminPanelAssets')}}/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <img src="{{asset('public/images/default-pic.svg')}}" class="img-circle" alt="User Image">
 
                 <p>
                   {{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}
@@ -283,7 +283,7 @@
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="{{asset('public/adminPanelAssets')}}/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src="{{asset('public/images/default-pic.svg')}}" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
           <p>{{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}</p>
@@ -305,23 +305,23 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
-        <li>
+        <li class="{{ Request::is('admin') ? 'active' : '' }}">
           <a href="{{ url('/admin') }}">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
           </a>
         </li>
-        <li>
-          <a href="{{ url('/admin/users') }}">
+        <li class="{{ Request::is('admin/users') ? 'active' : '' }}">
+          <a href="{{ url('admin/users') }}">
             <i class="fa fa-users"></i> <span>Users</span>
           </a>
         </li>
-        <li>
-          <a href="{{ url('/admin/categories') }}">
+        <li class="{{ Request::is('admin/categories') ? 'active' : '' }}">
+          <a href="{{ url('admin/categories') }}">
             <i class="fa fa-list"></i> <span>Categories</span>
           </a>
         </li>
-        <li>
-          <a href="{{ url('/admin/change-password') }}">
+        <li class="{{ Request::is('admin/change-password') ? 'active' : '' }}">
+          <a href="{{ url('admin/change-password') }}">
             <i class="fa fa-unlock"></i> <span>Change Password</span>
           </a>
         </li>

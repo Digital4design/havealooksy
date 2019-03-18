@@ -19,6 +19,7 @@
                           <th>Email</th>
                           <th>Postal Code</th>
                           <th>User Type</th>
+                          <th>Block/Unblock</th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -29,6 +30,7 @@
                           <th>Email</th>
                           <th>Postal Code</th>
                           <th>User Type</th>
+                          <th>Block/Unblock</th>
                         </tr>
                     </tfoot>
                   </table>
@@ -49,7 +51,7 @@ $(function() {
         serverSide: true,
         lengthMenu: [10,25,50,100],
         ajax: {
-          "url": '{!! url("admin/get-users") !!}',
+          "url": '{!! url("admin/users/get-users") !!}',
           "type": 'GET',
           "data": function (data) {
                 data.first_name = "{{ (!empty($first_name))? $first_name : null }}";
@@ -67,12 +69,41 @@ $(function() {
             { data: 'email', name: 'email' },
             { data: 'postal_code', name: 'postal_code' },
             { data: 'user_type', name: 'user_type' },
+            { data: 'block_unblock', name: 'block_unblock', orderable: false },
         ],
         oLanguage: {
           "sInfoEmpty" : "Showing 0 to 0 of 0 entries",
           "sZeroRecords": "No matching records found",
           "sEmptyTable": "No data available in table",
         },
+    });
+
+    $(document).on("click", "button", function(){
+      var id = $(this).attr('data-id');
+
+      if($(this).hasClass("btn-danger")){
+        status_data = 0;
+      }
+      if($(this).hasClass("btn-info")){
+        status_data = 1;
+      }
+
+      $.ajax({
+        'url'      : '{{ url("admin/users/change-status") }}/'+id+"/"+status_data,
+        'method'   : 'get',
+        'dataType' : 'json',
+        success    : function(data){
+          if(data.status == 'success'){
+            if(data.user_status == 1){
+              $(".block-unblock[data-id="+id+"]").removeClass("btn-info").addClass("btn-danger").text("Block");
+            }
+            if(data.user_status == 0){
+              $(".block-unblock[data-id="+id+"]").removeClass("btn-danger").addClass("btn-info").text("Unblock");
+            }
+          }  
+        } 
+      });
+      return false;
     });
 });
 </script>

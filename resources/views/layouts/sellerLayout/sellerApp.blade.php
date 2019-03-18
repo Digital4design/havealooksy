@@ -305,18 +305,18 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
-        <li>
-          <a href="{{ url('/seller') }}">
+        <li class="{{ Request::is('seller') ? 'active' : '' }}">
+          <a href="{{ url('seller') }}">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
           </a>
         </li>
-        <li>
-          <a href="{{ url('/seller/listings') }}">
+        <li class="{{ Request::is('seller/listings') ? 'active' : '' }}">
+          <a href="{{ url('seller/listings') }}">
             <i class="fa fa-list-alt"></i> <span>Listings</span>
           </a>
         </li>
-        <li>
-          <a href="{{ url('/seller/change-password') }}">
+        <li class="{{ Request::is('seller/change-password') ? 'active' : '' }}">
+          <a href="{{ url('seller/change-password') }}">
             <i class="fa fa-unlock"></i> <span>Change Password</span>
           </a>
         </li>

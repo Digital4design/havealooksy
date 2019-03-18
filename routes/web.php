@@ -27,9 +27,13 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth']], function(
     Route::get('/profile', 'Admin\DashboardController@profile');  
     Route::post('/edit-profile', 'Admin\DashboardController@editProfile');
     Route::get('/change-password', 'Admin\DashboardController@changePassword');  
-    Route::post('/save-password', 'Admin\DashboardController@savePassword');  
-    Route::get('/users', 'Admin\DashboardController@getUsersView');  
-    Route::get('/get-users', 'Admin\DashboardController@getUsers');  
+    Route::post('/save-password', 'Admin\DashboardController@savePassword');
+
+    Route::group(['prefix' => 'users', 'middleware' => ['admin', 'auth']], function() {
+        Route::get('/', 'Admin\DashboardController@getUsersView');    
+        Route::get('/get-users', 'Admin\DashboardController@getUsers');
+        Route::get('/change-status/{id}/{status}', 'Admin\DashboardController@changeUserStatus');
+    }); 
 
     Route::group(['prefix' => 'categories', 'middleware' => ['admin', 'auth']], function() {
         Route::get('/', 'Admin\DashboardController@getCategoriesView');
