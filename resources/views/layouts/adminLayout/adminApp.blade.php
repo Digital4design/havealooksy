@@ -7,25 +7,25 @@
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
-  <link rel="stylesheet" href="{{asset('adminPanelAssets')}}/bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{asset('public/adminPanelAssets')}}/bower_components/bootstrap/dist/css/bootstrap.min.css">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="{{asset('adminPanelAssets')}}/bower_components/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="{{asset('public/adminPanelAssets')}}/bower_components/font-awesome/css/font-awesome.min.css">
   <!-- Ionicons -->
-  <link rel="stylesheet" href="{{asset('adminPanelAssets')}}/bower_components/Ionicons/css/ionicons.min.css">
+  <link rel="stylesheet" href="{{asset('public/adminPanelAssets')}}/bower_components/Ionicons/css/ionicons.min.css">
   <!-- DataTables -->
-  <link rel="stylesheet" href="{{asset('adminPanelAssets')}}/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+  <link rel="stylesheet" href="{{asset('public/adminPanelAssets')}}/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="{{asset('adminPanelAssets')}}/dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="{{asset('public/adminPanelAssets')}}/dist/css/AdminLTE.min.css">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
-  <link rel="stylesheet" href="{{asset('adminPanelAssets')}}/dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="{{asset('public/adminPanelAssets')}}/dist/css/skins/_all-skins.min.css">
   <!-- bootstrap wysihtml5 - text editor -->
   <!-- <link rel="stylesheet" href="{{asset('adminPanelAssets')}}/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css"> -->
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="{{asset('css/custom-css.css')}}">
-  <link rel="stylesheet" href="{{asset('css/sweetalert/sweetalert.min.css')}}">
+  <link rel="stylesheet" href="{{asset('public/css/custom-css.css')}}">
+  <link rel="stylesheet" href="{{asset('public/css/sweetalert/sweetalert.min.css')}}">
   <style type="text/css">
     #profile-button:hover, #logout-button:hover{color:#fff;background-color: #d33724;border-color: #f39c12;}
     .navbar-nav>.user-menu>.dropdown-menu>.user-footer{background-color:#357ca5;}
@@ -59,7 +59,7 @@
                   <li><!-- start message -->
                     <a href="#">
                       <div class="pull-left">
-                        <img src="{{asset('adminPanelAssets')}}/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                        <img src="{{asset('public/adminPanelAssets')}}/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
                       </div>
                       <h4>
                         Support Team
@@ -72,7 +72,7 @@
                   <li>
                     <a href="#">
                       <div class="pull-left">
-                        <img src="{{asset('adminPanelAssets')}}/dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
+                        <img src="{{asset('public/adminPanelAssets')}}/dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
                       </div>
                       <h4>
                         AdminLTE Design Team
@@ -84,7 +84,7 @@
                   <li>
                     <a href="#">
                       <div class="pull-left">
-                        <img src="{{asset('adminPanelAssets')}}/dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
+                        <img src="{{asset('public/adminPanelAssets')}}/dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
                       </div>
                       <h4>
                         Developers
@@ -96,7 +96,7 @@
                   <li>
                     <a href="#">
                       <div class="pull-left">
-                        <img src="{{asset('adminPanelAssets')}}/dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
+                        <img src="{{asset('public/adminPanelAssets')}}/dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
                       </div>
                       <h4>
                         Sales Department
@@ -108,7 +108,7 @@
                   <li>
                     <a href="#">
                       <div class="pull-left">
-                        <img src="{{asset('adminPanelAssets')}}/dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
+                        <img src="{{asset('public/adminPanelAssets')}}/dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
                       </div>
                       <h4>
                         Reviewers
@@ -245,13 +245,13 @@
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="{{asset('adminPanelAssets')}}/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+              <img src="{{asset('public/adminPanelAssets')}}/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
               <span class="hidden-xs">{{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="{{asset('adminPanelAssets')}}/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <img src="{{asset('public/adminPanelAssets')}}/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
 
                 <p>
                   {{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}
@@ -283,7 +283,7 @@
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="{{asset('adminPanelAssets')}}/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src="{{asset('public/adminPanelAssets')}}/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
           <p>{{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}</p>
@@ -343,23 +343,23 @@
 <!-- ./wrapper -->
 
 <!-- jQuery 3 -->
-<script src="{{asset('adminPanelAssets')}}/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="{{asset('public/adminPanelAssets')}}/bower_components/jquery/dist/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
-<script src="{{asset('adminPanelAssets')}}/bower_components/jquery-ui/jquery-ui.min.js"></script>
+<script src="{{asset('public/adminPanelAssets')}}/bower_components/jquery-ui/jquery-ui.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
   $.widget.bridge('uibutton', $.ui.button);
 </script>
 <!-- Bootstrap 3.3.7 -->
-<script src="{{asset('adminPanelAssets')}}/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="{{asset('public/adminPanelAssets')}}/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- Bootstrap WYSIHTML5 -->
-<script src="{{asset('adminPanelAssets')}}/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+<script src="{{asset('public/adminPanelAssets')}}/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
 <!-- DataTables -->
-<script src="{{asset('adminPanelAssets')}}/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="{{asset('adminPanelAssets')}}/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{{asset('public/adminPanelAssets')}}/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{{asset('public/adminPanelAssets')}}/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <!-- AdminLTE App -->
-<script src="{{asset('adminPanelAssets')}}/dist/js/adminlte.min.js"></script>
-<script src="{{asset('js/sweetalert/sweetalert.min.js')}}"></script>
+<script src="{{asset('public/adminPanelAssets')}}/dist/js/adminlte.min.js"></script>
+<script src="{{asset('public/js/sweetalert/sweetalert.min.js')}}"></script>
 @yield('pageJs')
 </body>
 </html>

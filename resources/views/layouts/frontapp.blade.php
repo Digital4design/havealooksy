@@ -7,17 +7,17 @@
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
         <meta name="description" content="">
         <meta name="author" content="">
-        <link rel="icon" href="favicon.ico">
+        <link rel="icon" href="public/favicon.ico">
         <title>Looksy</title>
         <!-- Bootstrap core CSS -->
-        <link href="{{asset('looksyassets/css/bootstrap.min.css')}} " rel="stylesheet">
+        <link href="{{asset('public/looksyassets/css/bootstrap.min.css')}} " rel="stylesheet">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
         <!-- Custom styles for this template -->
-        <link href="{{asset('looksyassets/css/owl.carousel.css')}}" rel="stylesheet">
-        <link href="{{asset('looksyassets/css/owl.theme.default.min.css')}}"  rel="stylesheet">
-        <link href="{{asset('looksyassets/css/style.css')}} " rel="stylesheet">
+        <link href="{{asset('public/looksyassets/css/owl.carousel.css')}}" rel="stylesheet">
+        <link href="{{asset('public/looksyassets/css/owl.theme.default.min.css')}}"  rel="stylesheet">
+        <link href="{{asset('public/looksyassets/css/style.css')}} " rel="stylesheet">
         
-        <script src="{{asset('looksyassets/js/ie-emulation-modes-warning.js')}}"></script>
+        <script src="{{asset('public/looksyassets/js/ie-emulation-modes-warning.js')}}"></script>
         <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
     </head>
     <body id="page-top">
@@ -28,7 +28,7 @@
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header page-scroll col-lg-3">
                     
-                    <a class="navbar-brand page-scroll" href="#page-top"><img src="{{asset('looksyassets/images/logo.png') }}
+                    <a class="navbar-brand page-scroll" href="#page-top"><img src="{{asset('public/looksyassets/images/logo.png') }}
                         " alt="Lattes theme logo"></a>
                 </div>
 
@@ -127,11 +127,11 @@
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-        <script src="{{  asset('looksyassets/js/bootstrap.min.js') }}"></script>
-        <script src="{{  asset('looksyassets/js/owl.carousel.min.js') }}"></script>
-        <script src="{{ asset('looksyassets/js/cbpAnimatedHeader.js') }}"></script>
-        <script src="{{ asset('looksyassets/js/theme-scripts.js') }}"></script>
+        <script src="{{  asset('public/looksyassets/js/bootstrap.min.js') }}"></script>
+        <script src="{{  asset('public/looksyassets/js/owl.carousel.min.js') }}"></script>
+        <script src="{{ asset('public/looksyassets/js/cbpAnimatedHeader.js') }}"></script>
+        <script src="{{ asset('public/looksyassets/js/theme-scripts.js') }}"></script>
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-        <script src="{{ asset('looksyassets/js/ie10-viewport-bug-workaround.js') }}"></script>
+        <script src="{{ asset('public/looksyassets/js/ie10-viewport-bug-workaround.js') }}"></script>
     </body>
 </html>

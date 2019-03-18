@@ -37,7 +37,7 @@ class ListingController extends Controller
                         })->addColumn('action', function ($all_listings){
                             return "<a href='".route('editListing', $all_listings['id'])."' class='btn btn-info' style='margin-right:1em;'><i class='fa fa-edit'></i></a><button type='button' data-id='".$all_listings['id']."' class='btn btn-warning button_delete'><i class='fa fa-trash-o'></i></button>";
                         })->editColumn('image', function ($all_listings){
-                            return "<a href='".asset('images/listings/'.$all_listings['image'])."' style='font-size:1.3em;' target='_blank'><i class='fa fa-eye'></i></a>";
+                            return "<a href='".asset('public/images/listings/'.$all_listings['image'])."' style='font-size:1.3em;' target='_blank'><i class='fa fa-eye'></i></a>";
             			})->rawColumns(['activate_deactivate' => 'activate_deactivate', 'action' => 'action', 'image' => 'image'])->make(true);
     }
 

@@ -7,23 +7,23 @@
                     <div class="col-lg-12 text-center slider-cat">
                         <div class="owl-carousel">
                             <div class="item">
-                                <div class="partner-logo"><img src="{{ asset('looksyassets/images/icon1.png') }}" alt="partners"></div>
+                                <div class="partner-logo"><img src="{{ asset('public/looksyassets/images/icon1.png') }}" alt="partners"></div>
                                 <div class="partner-text"> Food & Beverage </div>
                             </div>
                             <div class="item">
-                                <div class="partner-logo"><img src="{{ asset('looksyassets/images/icon2.png') }}" alt="partners"></div>
+                                <div class="partner-logo"><img src="{{ asset('public/looksyassets/images/icon2.png') }}" alt="partners"></div>
                                 <div class="partner-text"> Media & Entertainment </div>
                             </div>
                             <div class="item">
-                                <div class="partner-logo"><img src="{{ asset('looksyassets/images/icon3.png') }}" alt="partners"></div>
+                                <div class="partner-logo"><img src="{{ asset('public/looksyassets/images/icon3.png') }}" alt="partners"></div>
                                 <div class="partner-text"> Real Estate </div>
                             </div>
                             <div class="item">
-                                <div class="partner-logo"><img src="{{ asset('looksyassets/images/icon4.png') }}" alt="partners"></div>
+                                <div class="partner-logo"><img src="{{ asset('public/looksyassets/images/icon4.png') }}" alt="partners"></div>
                                 <div class="partner-text"> Sports </div>
                             </div>
                             <div class="item">
-                                <div class="partner-logo"><img src="{{ asset('looksyassets/images/icon5.png') }}" alt="partners"></div>
+                                <div class="partner-logo"><img src="{{ asset('public/looksyassets/images/icon5.png') }}" alt="partners"></div>
                                 <div class="partner-text"> TV & Film </div>
                             </div>
                             
@@ -53,7 +53,7 @@
                 <div class="item ">
                     <div class="ot-portfolio-item">
                         <figure class="effect-bubba">
-                            <img src="{{ asset('looksyassets/images/img1.jpg') }}" alt="img02" class="img-responsive" />
+                            <img src="{{ asset('public/looksyassets/images/img1.jpg') }}" alt="img02" class="img-responsive" />
                             <figcaption>
                                 <h2>Green Salad</h2>
                                 <p>Branding, Design</p>
@@ -67,7 +67,7 @@
                 <div class="item ">
                     <div class="ot-portfolio-item">
                         <figure class="effect-bubba">
-                            <img src="{{ asset('looksyassets/images/img2.jpg') }}" alt="img02" class="img-responsive" />
+                            <img src="{{ asset('public/looksyassets/images/img2.jpg') }}" alt="img02" class="img-responsive" />
                             <figcaption>
                                 <h2>Canchánchara  Rum</h2>
                                 <p>Branding, Web Design</p>
@@ -81,7 +81,7 @@
                 <div class="item ">
                     <div class="ot-portfolio-item">
                         <figure class="effect-bubba">
-                            <img src="{{ asset('looksyassets/images/img3.jpg') }}" alt="img02" class="img-responsive" />
+                            <img src="{{ asset('public/looksyassets/images/img3.jpg') }}" alt="img02" class="img-responsive" />
                             <figcaption>
                                 <h2>Troia Resort</h2>
                                 <p>Branding, Web Design</p>
@@ -95,7 +95,7 @@
                 <div class="item ">
                     <div class="ot-portfolio-item">
                         <figure class="effect-bubba">
-                            <img src="{{ asset('looksyassets/images/img4.jpg') }}" alt="img02" class="img-responsive" />
+                            <img src="{{ asset('public/looksyassets/images/img4.jpg') }}" alt="img02" class="img-responsive" />
                             <figcaption>
                                 <h2>Eden</h2>
                                 <p>Branding, Web Design</p>
@@ -109,7 +109,7 @@
                 <div class="item ">
                     <div class="ot-portfolio-item">
                         <figure class="effect-bubba">
-                            <img src="{{ asset('looksyassets/images/img5.jpg') }}" alt="img02" class="img-responsive" />
+                            <img src="{{ asset('public/looksyassets/images/img5.jpg') }}" alt="img02" class="img-responsive" />
                             <figcaption>
                                 <h2>Plato, Ljubljana</h2>
                                 <p>Branding, Web Design</p>
@@ -142,7 +142,7 @@
                     <div class="col-md-3">
                         <div class="team-item">
                             <div class="team-image">
-                                <img src="{{ asset('looksyassets/images/cat1.jpg') }}" class="img-responsive" alt="author">
+                                <img src="{{ asset('public/looksyassets/images/cat1.jpg') }}" class="img-responsive" alt="author">
                             </div>
                             <div class="team-text">
                                 <div class="team-name">RESTAURANT</div> 
@@ -156,7 +156,7 @@
                     <div class="col-md-3">
                         <div class="team-item">
                             <div class="team-image">
-                                <img src="{{ asset('looksyassets/images/cat2.jpg') }}" class="img-responsive" alt="author">
+                                <img src="{{ asset('public/looksyassets/images/cat2.jpg') }}" class="img-responsive" alt="author">
                             </div>
                             <div class="team-text">
                                 <div class="team-name">RESTAURANT</div> 
@@ -170,7 +170,7 @@
                     <div class="col-md-3">
                         <div class="team-item">
                             <div class="team-image">
-                                <img src="{{ asset('looksyassets/images/cat3.jpg') }}" class="img-responsive" alt="author">
+                                <img src="{{ asset('public/looksyassets/images/cat3.jpg') }}" class="img-responsive" alt="author">
                             </div>
                             <div class="team-text">
                                 <div class="team-name">RESTAURANT</div> 
@@ -184,7 +184,7 @@
                     <div class="col-md-3">
                         <div class="team-item">
                             <div class="team-image">
-                                <img src="{{ asset('looksyassets/images/cat4.jpg') }}" class="img-responsive" alt="author">
+                                <img src="{{ asset('public/looksyassets/images/cat4.jpg') }}" class="img-responsive" alt="author">
                             </div>
                             <div class="team-text">
                                 <div class="team-name">RESTAURANT</div> 
@@ -211,7 +211,7 @@
                     <div class="col-md-3">
                         <div class="team-item">
                             <div class="team-image">
-                                <img src="{{ asset('looksyassets/images/cat2.jpg') }}" class="img-responsive" alt="author">
+                                <img src="{{ asset('public/looksyassets/images/cat2.jpg') }}" class="img-responsive" alt="author">
                             </div>
                             <div class="team-text">
                                 <div class="team-name">Food</div> 
@@ -225,7 +225,7 @@
                     <div class="col-md-3">
                         <div class="team-item">
                             <div class="team-image">
-                                <img src="{{ asset('looksyassets/images/cat3.jpg') }}" class="img-responsive" alt="author">
+                                <img src="{{ asset('public/looksyassets/images/cat3.jpg') }}" class="img-responsive" alt="author">
                             </div>
                             <div class="team-text">
                                 <div class="team-name">Real Estate</div> 
@@ -239,7 +239,7 @@
                     <div class="col-md-3">
                         <div class="team-item">
                             <div class="team-image">
-                                <img src="{{ asset('looksyassets/images/cat1.jpg') }}" class="img-responsive" alt="author">
+                                <img src="{{ asset('public/looksyassets/images/cat1.jpg') }}" class="img-responsive" alt="author">
                             </div>
                             <div class="team-text">
                                 <div class="team-name">Food</div> 
@@ -255,7 +255,7 @@
                     <div class="col-md-3">
                         <div class="team-item">
                             <div class="team-image">
-                                <img src="{{ asset('looksyassets/images/cat4.jpg') }}" class="img-responsive" alt="author">
+                                <img src="{{ asset('public/looksyassets/images/cat4.jpg') }}" class="img-responsive" alt="author">
                             </div>
                             <div class="team-text">
                                 <div class="team-name">RESTAURANT</div> 

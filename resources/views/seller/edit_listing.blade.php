@@ -116,7 +116,7 @@
                 <div class="form-group">
                   <label for="image" class="col-sm-2 control-label">Image</label>
                   <div class="col-sm-3">
-                    <img id="listing_image" src="{{ asset('images/listings/'.$listing_data['image']) }}">
+                    <img id="listing_image" src="{{ asset('public/images/listings/'.$listing_data['image']) }}">
                     <a id="remove_image" style="margin-top: 10px;" class="btn btn-block btn-info">Remove</a>
                   </div>
                 </div>

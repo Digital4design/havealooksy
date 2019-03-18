@@ -6,7 +6,7 @@
             <div class="banner">
                 <div class="banner-container">
                     <div class="navbar-header">
-                        <a class="navbar-brand page-scroll" href="#page-top"><img src="{{asset('looksyassets/images/logo.png')}}" alt="Lattes theme logo"></a>
+                        <a class="navbar-brand page-scroll" href="#page-top"><img src="{{asset('public/looksyassets/images/logo.png')}}" alt="Lattes theme logo"></a>
                     </div>
                     <div class="banner-content">
                         <h2>Become  A  Host</h3>
@@ -20,7 +20,7 @@
                 <form  method="POST" class="login100-form validate-form" action="{{ route('login') }}">
                         @csrf
                     <div class="wrap-input100 validate-input">
-                        <input class="input100 validate-form{{ $errors->has('email') ? ' is-invalid' : '' }}" type="text" name="email" placeholder="email"> 
+                        <input class="input100 validate-form{{ $errors->has('email') ? ' is-invalid' : '' }}" type="text" name="email" placeholder="Email Address"> 
                          @if ($errors->has('email'))
                              <span class="invalid-feedback" role="alert">
                                  <strong>{{ $errors->first('email') }}</strong>
