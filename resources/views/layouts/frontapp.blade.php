@@ -62,7 +62,7 @@
                     <span class="icon-bar"></span>
                     </button>
                     <ul class="nav navbar-right"> 
-                      <li class="login"><a href="{{ url('/havealooksy/login') }}"> Login</a></li>
+                      <li class="login"><a href="{{ url('/login') }}"> Login</a></li>
                       <li class="signup"><a href="{{ url('/register') }}"> Signup</a></li>                
                     </ul>               
                 </div>
