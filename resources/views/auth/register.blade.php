@@ -5,6 +5,13 @@
 .select_input{
     font-size: 14px;color: #ada8a8;line-height: 1.2;display: block;width: 100%;height:40px;border-radius:4px;border: 1px solid #cccccc5e;;
 }
+.user_select{display:flex;justify-content:center;align-items:center;}
+.user_select_container{position:relative;padding:0;margin:auto 5px;width:100%;}
+.user_select input[type=radio]{opacity:0;height:40px;width:100%;}
+.user_select input[type=radio]:hover, .user_select_container label:hover{cursor:pointer;}
+.user_select_container label{position:absolute;top:12px;left:72px;}
+.btn-default{background-color: #f4f4f4;color: #444;border-color: #ddd;}
+.user_select_container:active{background-color:#d73925;}
 </style>
 @stop
 
@@ -28,12 +35,22 @@
             <h2 class="text-center">Signup Now</h2>
             <form method="POST" class="login100-form validate-form" action="{{ route('register') }}">
                 @csrf
-                <div class="wrap-input100 validate-input">
+                <!-- <div class="wrap-input100 validate-input">
                     <select class="select_input form-control" name="user_type">
                         <option value="" selected>Select User Type</option>
                         <option value="buyer">Buyer</option>
                         <option value="seller">Seller</option>
                     </select>                         
+                </div> -->
+                <div class="wrap-input100 validate-input user_select">
+                    <div class="user_select_container btn btn-default">
+                        <input id="buyer" type="radio" value="buyer" class="form-control" name="user_type">
+                        <label for="buyer">Buyer</label>
+                    </div>
+                    <div class="user_select_container btn btn-default">
+                        <input id="seller" type="radio" value="seller" class="form-control" name="user_type">
+                        <label for="seller">Seller</label>
+                    </div>
                 </div>
                 <div class="wrap-input100 validate-input">
                     <input class="input100 form-control{{ $errors->has('first_name') ? ' is-invalid' : '' }}" type="text" name="first_name" placeholder="First Name" value="{{ old('first_name') }}" required>
@@ -62,7 +79,7 @@
                     @endif                         
                 </div>
                 <div class="wrap-input100 validate-input">
-                    <input class="input100 form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" type="email" name="email" placeholder="E-Mail Address" required>
+                    <input class="input100 form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" type="email" name="email" placeholder="E-Mail Address" value="{{ old('email') }}" required>
                     @if ($errors->has('email'))
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $errors->first('email') }}</strong>
@@ -96,12 +113,15 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-6 col-md-offset-4">
+                    <p>Already have an account?&nbsp;<a href="{{ route('login') }}" style="text-decoration:none;">Sign In</a></p>
+                </div>
+                <!-- <div class="form-group">
+                    <div class="col-md-6 col-md-offset-4"> -->
                         <!-- <a href="{{ url('/auth/github') }}" class="btn btn-github"><i class="fa fa-github"></i> Github</a>
                         <a href="{{ url('/auth/twitter') }}" class="btn btn-twitter"><i class="fa fa-twitter"></i> Twitter</a> -->
-                        <a href="{{ url('/auth/facebook') }}" class="btn btn-facebook"><i class="fa fa-facebook"></i> Facebook</a>
+                        <!-- <a href="{{ url('/auth/facebook') }}" class="btn btn-facebook"><i class="fa fa-facebook"></i> Facebook</a>
                     </div>
-                </div>
+                </div> -->
             </form>
         </div>
     </div>
@@ -109,4 +129,10 @@
 @endsection
 
 @section('pageJs')
+<script type="text/javascript">
+    $(".user_select input[type=radio]").on("click", function(){
+        $(".user_select_container").removeClass("btn-danger").addClass("btn-default");
+        $(this).parent(".user_select_container").removeClass("btn-default").addClass("btn-danger");
+    });
+</script>
 @stop

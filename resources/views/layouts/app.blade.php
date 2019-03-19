@@ -7,7 +7,7 @@
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
         <meta name="description" content="">
         <meta name="author" content="">
-        <link rel="icon" href="public/favicon.ico">
+        <link rel="icon" href="{{ asset('public/favicon.ico') }}">
         <title>Looksy</title>
         <!-- Bootstrap core CSS -->
         <link href="{{asset('public/looksyassets/css/bootstrap.min.css')}}" rel="stylesheet">

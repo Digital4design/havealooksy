@@ -29,6 +29,11 @@
   <style type="text/css">
     #profile-button:hover, #logout-button:hover{color:#fff;background-color: #d33724;border-color: #f39c12;}
     .navbar-nav>.user-menu>.dropdown-menu>.user-footer{background-color:#357ca5;}
+    .user-panel img.img-circle{width:100%;height:auto;max-width:50px;min-height:50px;}
+    .user-header img.img-circle{z-index: 5;border: 3px solid;width:90px;height:90px;border-color: rgba(255,255,255,0.2);}
+    .change-pic-link{position:relative;}
+    #header-pic-link:hover{background-color: transparent;}
+    .change-pic-link:hover img.img-circle{opacity:0.7;background-color:rgba(0,0,0,0.7);}
   </style>
   @yield('pageCss')
 </head>
@@ -245,13 +250,16 @@
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="{{asset('public/images/default-pic.svg')}}" class="user-image" alt="User Image">
+              <img src="{{ (Auth::user()->profile_picture) ? asset('public/images/profile_pictures/'.Auth::user()->profile_picture) : asset('public/images/default-pic.svg') }}" class="user-image" alt="User Image">
               <span class="hidden-xs">{{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="{{asset('public/images/default-pic.svg')}}" class="img-circle" alt="User Image">
+                <a id="header-pic-link" href="#" data-target="#change-picture" data-toggle="modal" class="change-pic-link" style="display:unset;padding:0;">
+                  <img src="{{ (Auth::user()->profile_picture) ? asset('public/images/profile_pictures/'.Auth::user()->profile_picture) : asset('public/images/default-pic.svg') }}" class="img-circle" alt="User Image">
+                  <span class="change-pic" style="display:none;font-size:1.2em;position:absolute;top:2px;left:30px;color:#fff;">{{ (Auth::user()->profile_picture) ? 'Edit' : 'Add' }}</span>
+                </a>
 
                 <p>
                   {{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}
@@ -283,7 +291,10 @@
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="{{asset('public/images/default-pic.svg')}}" class="img-circle" alt="User Image">
+          <a href="#" data-target="#change-picture" data-toggle="modal" class="change-pic-link">
+            <img src="{{ (Auth::user()->profile_picture) ? asset('public/images/profile_pictures/'.Auth::user()->profile_picture) : asset('public/images/default-pic.svg') }}" class="img-circle" alt="User Image">
+            <span class="change-pic" style="display:none;font-size:0.9em;position:absolute;top:3px;left:15px;">{{ (Auth::user()->profile_picture) ? 'Edit' : 'Add' }}</span>
+          </a>
         </div>
         <div class="pull-left info">
           <p>{{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}</p>
@@ -342,6 +353,47 @@
 </div>
 <!-- ./wrapper -->
 
+<!-- Modals -->
+<div class="modal fade" id="change-picture" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="POST" action="{{ url('admin/change-profile-picture') }}" enctype="multipart/form-data">
+        @csrf
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span></button>
+          <h4 class="modal-title">{{ (Auth::user()->profile_picture) ? 'Edit Profile Picture' : 'Add Profile Picture' }}</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Select Profile Picture</label>
+            <input type="file" name="profile_picture" class="form-control">
+            <p class="help-block">Only .jpeg, .jpg, .png are supported.</p>
+
+            @if ($errors->has('profile_picture'))
+              <span class="invalid-feedback" role="alert">
+                  <strong>{{ $errors->first('profile_picture') }}</strong>
+              </span>
+            @endif
+          </div>
+          @if(Auth::user()->profile_picture)
+          <div class="form-group">
+            <img src="{{ asset('public/images/profile_pictures/'.Auth::user()->profile_picture) }}" style="height:auto;width:100%;">
+          </div>
+          <div class="form-group">
+            <a href="{{ url('admin/remove-profile-picture') }}" class="btn btn-block btn-warning" style="margin-top:10px;">Remove Profile Picture</a>
+          </div>
+          @endif
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Upload</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- End Modals -->
+
 <!-- jQuery 3 -->
 <script src="{{asset('public/adminPanelAssets')}}/bower_components/jquery/dist/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
@@ -360,6 +412,14 @@
 <!-- AdminLTE App -->
 <script src="{{asset('public/adminPanelAssets')}}/dist/js/adminlte.min.js"></script>
 <script src="{{asset('public/js/sweetalert/sweetalert.min.js')}}"></script>
+<script type="text/javascript">
+  $(".change-pic-link").mouseover(function(){
+    $(".change-pic").css("display", "block");
+  });
+  $(".change-pic-link").mouseout(function(){
+    $(".change-pic").css("display", "none");
+  }); 
+</script>
 @yield('pageJs')
 </body>
 </html>

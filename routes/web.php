@@ -28,6 +28,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth']], function(
     Route::post('/edit-profile', 'Admin\DashboardController@editProfile');
     Route::get('/change-password', 'Admin\DashboardController@changePassword');  
     Route::post('/save-password', 'Admin\DashboardController@savePassword');
+    Route::post('/change-profile-picture', 'Admin\DashboardController@changeProfilePicture');
+    Route::get('/remove-profile-picture', 'Admin\DashboardController@removeProfilePicture');
 
     Route::group(['prefix' => 'users', 'middleware' => ['admin', 'auth']], function() {
         Route::get('/', 'Admin\DashboardController@getUsersView');    
@@ -52,6 +54,8 @@ Route::group(['prefix' => 'seller', 'middleware' => ['seller', 'auth']], functio
     Route::post('/edit-profile', 'Seller\DashboardController@editProfile');
     Route::get('/change-password', 'Seller\DashboardController@changePassword');  
     Route::post('/save-password', 'Seller\DashboardController@savePassword');
+    Route::post('/change-profile-picture', 'Seller\DashboardController@changeProfilePicture');
+    Route::get('/remove-profile-picture', 'Seller\DashboardController@removeProfilePicture');
 
     Route::group(['prefix' => 'listings', 'middleware' => ['seller', 'auth']], function() {
         Route::get('/', ['as' => 'listings', 'uses' => 'Seller\DashboardController@getListingsView']);

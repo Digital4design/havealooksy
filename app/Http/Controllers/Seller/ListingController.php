@@ -127,9 +127,9 @@ class ListingController extends Controller
         	$listing->status = $request->status;
 
         	if($request->hasFile('image')){
-        		if (file_exists(public_path('public/images/listings/'.$listing->image)))
+        		if (file_exists(public_path('images/listings/'.$listing->image)))
 				{
-	            	$del_previous_pic = unlink(public_path('public/images/listings/'.$listing->image));
+	            	$del_previous_pic = unlink(public_path('images/listings/'.$listing->image));
 	            }
         		$file = $request->file('image');
             	$filename = 'listing-'.time().'.'.$file->getClientOriginalExtension();

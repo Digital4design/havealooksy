@@ -82,6 +82,54 @@ class DashboardController extends Controller
         }
     }
 
+    public function changeProfilePicture(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'profile_picture' => ['required', 'image', 'mimes:jpg,jpeg,png'],    
+        ]);
+        if ($validator->fails()) {
+             return back()->withErrors($validator)->withInput();
+        }
+        try
+        {
+            $user = User::find(Auth::user()->id);
+
+            if($user->profile_picture)
+            {   
+                if(file_exists(public_path('images/profile_pictures/'.$user->profile_picture)))
+                {   
+                    $del_pic = unlink(public_path('images/profile_pictures/'.$user->profile_picture));
+                }
+            }
+
+            $file = $request->file('profile_picture');
+            $filename = 'user-'.time().'.'.$file->getClientOriginalExtension();
+            $file->move('public/images/profile_pictures/',$filename);
+
+            $user->profile_picture = $filename;
+            $user->save();
+            
+            return back()->with(['status' => 'success','message' => 'Profile Picture updated successfully']);
+        }
+        catch(\Exception $e)
+        {
+            return back()->with(['status' => 'danger','message' => 'Something went wrong. Please try again later.']);
+        }
+    }
+
+    public function removeProfilePicture()
+    {
+        $user = User::find(Auth::user()->id);
+        if(file_exists(public_path('images/profile_pictures/'.$user->profile_picture)))
+        {   
+            $del_pic = unlink(public_path('images/profile_pictures/'.$user->profile_picture));
+            $user->profile_picture = null;
+            $user->save();
+            return back()->with(['status' => 'success','message' => 'Profile Picture removed successfully']);
+        }
+        return back()->with(['status' => 'danger','message' => 'Something went wrong. Please try again later.']);
+    }
+
     public function getListingsView()
     {
     	return view('seller.listings');
