@@ -30,6 +30,7 @@
                           <th>Category Name</th>
                           <th>Status</th>
                           <th>Parent Category</th>
+                          <th>Image</th>
                           <th>Activate/Deactivate</th>
                           <th>Action</th>
                         </tr>
@@ -39,6 +40,7 @@
                           <th>Category Name</th>
                           <th>Status</th>
                           <th>Parent Category</th>
+                          <th>Image</th>
                           <th>Activate/Deactivate</th>
                           <th>Action</th>
                         </tr>
@@ -54,7 +56,7 @@
 <div class="modal fade" id="add-category" style="display: none;">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form id="add_category_form">
+      <form id="add_category_form" enctype="multipart/form-data" method="POST">
         @csrf
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -73,6 +75,11 @@
               <option value="0">Deactive</option>
             </select>
             <p id="error-status" class="error"></p>
+          </div>
+          <div class="form-group">
+            <input type="file" name="image" class="form-control">
+            <p class="help-block">Only .jpeg, .jpg, .png are supported.</p>
+            <p id="error-image" class="error"></p>
           </div>
           <div id="parent_category" style="display:none;">
             <div class="form-group">
@@ -93,7 +100,7 @@
 <div class="modal fade" id="edit-category" style="display: none;">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form id="edit_category_form">
+      <form id="edit_category_form" method="POST" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="category_id">
         <div class="modal-header">
@@ -109,6 +116,14 @@
           <div class="form-group">
             <select name="edit_parent_category" class="form-control">
             </select>
+          </div>
+          <div id="category_image_upload" class="form-group" style="display:none;">
+            <input type="file" name="image" class="form-control">
+            <p id="error-image" class="error"></p>
+          </div>
+          <div class="form-group" id="category_image" style="display:none;">
+            <img style="height:auto;width:50%;"><br>
+            <button type="button" id="image_remove_button" class="btn btn-warning" style="margin-top:10px;margin-left:55px;">Remove Profile Picture</button>
           </div>
         </div>
         <div class="modal-footer">
@@ -141,6 +156,7 @@ $(function() {
             { data: 'name', name: 'name' },
             { data: 'status', name: 'status' },
             { data: 'parent_category', name: 'parent_category' },
+            { data: 'image', name: 'image' },
             { data: 'activate_deactivate', name: 'activate_deactivate', orderable: false },
             { data: 'action', name: 'action', orderable: false },
         ],
@@ -167,11 +183,15 @@ $(function() {
     });
 
     $("#add_category_form").submit(function(){
+      var formData = new FormData(this);
       $.ajax({
-        'url'      : '{{ url("admin/categories/add-category") }}',
-        'method'   : 'post',
-        'dataType' : 'json',
-        'data'     : $(this).serialize(),
+        'url'        : '{{ url("admin/categories/add-category") }}',
+        'method'     : 'post',
+        'dataType'   : 'json',
+        'data'       : formData,
+        'cache'      : false,
+        'contentType': false,
+        'processData': false,
         success    : function(data){
           
           if(data.status == 'success'){
@@ -303,6 +323,16 @@ $(function() {
 
             $("input[name=category_id]").val(resp.data['id']);
             $("input[name=edit_category_name]").val(resp.data['name']);
+
+            if(resp.data['image']){
+              $("#category_image").css("display", "block");
+              $("#category_image>img").attr("src", "{{ asset('public/images/categories') }}/"+resp.data['image']);
+              $("#image_remove_button").attr("data-id", resp.data['id']);
+            }
+            else{
+              $("#category_image_upload").css("display", "block");
+            }
+
             if(resp.data.parent_category != null)
               $("select[name=edit_parent_category]").val(resp.data.parent_category['id']);
             else
@@ -313,13 +343,32 @@ $(function() {
       return false;
     });
 
-    $("#edit_category_form").submit(function(){
+    $("#image_remove_button").on("click", function(){
+      var id = $(this).attr("data-id");
+      $.ajax({
+        'url'      : '{{ url("admin/categories/remove-image") }}/'+id,
+        'method'   : 'get',
+        'dataType' : 'json',
+        success    : function(resp){
+          if(resp.status == 'success'){
+            $("#category_image").css("display", "none");
+            $("#category_image_upload").fadeIn(200);
+          }  
+        } 
+      });
+      return false;
+    });
 
+    $("#edit_category_form").submit(function(){
+      var formData = new FormData(this);
       $.ajax({
         'url'      : '{{ url("admin/categories/edit-category") }}',
         'method'   : 'post',
         'dataType' : 'json',
-        'data'     : $(this).serialize(),
+        'data'       : formData,
+        'cache'      : false,
+        'contentType': false,
+        'processData': false,
         success    : function(resp){
           if(resp.status == 'success'){
             $("#edit-category").modal('toggle');

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Auth;
+use App\Models\Categories;
+use App\Models\Listings;
 
 class HomeController extends Controller
 {
@@ -12,10 +14,10 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
 
     /**
      * Show the application dashboard.
@@ -24,10 +26,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // return view('home');
-        if(Auth::guest()){
-            return redirect('/login');
-        }else{
+        if(Auth::guest())
+        {
+            $categories = Categories::where('status', '1')->get();
+            $fav_listings = Listings::where('is_favorite', '1')->where('status', '1')->get();
+
+            return view('index')->with(['categories' => $categories, 'fav_listings' => $fav_listings]);
+        }
+        else
+        {
             return redirect('/validate-user');
         } 
     }

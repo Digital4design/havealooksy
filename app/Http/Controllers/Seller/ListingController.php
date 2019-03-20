@@ -38,7 +38,12 @@ class ListingController extends Controller
                             return "<a href='".route('editListing', $all_listings['id'])."' class='btn btn-info' style='margin-right:1em;'><i class='fa fa-edit'></i></a><button type='button' data-id='".$all_listings['id']."' class='btn btn-warning button_delete'><i class='fa fa-trash-o'></i></button>";
                         })->editColumn('image', function ($all_listings){
                             return "<a href='".asset('public/images/listings/'.$all_listings['image'])."' style='font-size:1.3em;' target='_blank'><i class='fa fa-eye'></i></a>";
-            			})->rawColumns(['activate_deactivate' => 'activate_deactivate', 'action' => 'action', 'image' => 'image'])->make(true);
+                        })->editColumn('is_favorite', function ($all_listings){
+                            if($all_listings['is_favorite'] == 1)
+                                return "<button data-id='".$all_listings['id']."' class='btn btn-default is-favorite'>Remove from favorites</button>";
+                            if($all_listings['is_favorite'] == 0)
+                                return "<button data-id='".$all_listings['id']."' class='btn btn-danger is-favorite'>Add to favorites</button>";
+            			})->rawColumns(['activate_deactivate' => 'activate_deactivate', 'action' => 'action', 'image' => 'image', 'is_favorite' => 'is_favorite'])->make(true);
     }
 
     public function addListing()
@@ -93,6 +98,15 @@ class ListingController extends Controller
         $change_status->save();
 
         return response()->json(['status' => 'success', 'listing_status' => $status]);
+    }
+
+    public function changeFavoriteStatus($id, $status)
+    {
+        $fav_status = Listings::find($id);
+        $fav_status->is_favorite = $status;
+        $fav_status->save();
+
+        return response()->json(['status' => 'success', 'fav_status' => $status]);
     }
 
     public function editListingView($id)

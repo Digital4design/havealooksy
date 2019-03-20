@@ -6,27 +6,16 @@
                 <div class="row">
                     <div class="col-lg-12 text-center slider-cat">
                         <div class="owl-carousel">
-                            <div class="item">
-                                <div class="partner-logo"><img src="{{ asset('public/looksyassets/images/icon1.png') }}" alt="partners"></div>
-                                <div class="partner-text"> Food & Beverage </div>
-                            </div>
-                            <div class="item">
-                                <div class="partner-logo"><img src="{{ asset('public/looksyassets/images/icon2.png') }}" alt="partners"></div>
-                                <div class="partner-text"> Media & Entertainment </div>
-                            </div>
-                            <div class="item">
-                                <div class="partner-logo"><img src="{{ asset('public/looksyassets/images/icon3.png') }}" alt="partners"></div>
-                                <div class="partner-text"> Real Estate </div>
-                            </div>
-                            <div class="item">
-                                <div class="partner-logo"><img src="{{ asset('public/looksyassets/images/icon4.png') }}" alt="partners"></div>
-                                <div class="partner-text"> Sports </div>
-                            </div>
-                            <div class="item">
-                                <div class="partner-logo"><img src="{{ asset('public/looksyassets/images/icon5.png') }}" alt="partners"></div>
-                                <div class="partner-text"> TV & Film </div>
-                            </div>
-                            
+                            @if(!$categories->isEmpty())
+                                @foreach($categories as $value)
+                                    <div class="item">
+                                        <div class="partner-logo"><img src="{{ asset('public/images/categories/'.$value['image']) }}" alt="partners"></div>
+                                        <div class="partner-text">{{ $value['name'] }}</div>
+                                    </div>
+                                @endforeach
+                            @else
+                                <p class="text-center">No Category Available!</p>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -48,79 +37,26 @@
             <div class="row">
               <div class="col-lg-12 text-center slider-cat">
                 <div class="owl-carousel">
-                
                 <!-- start portfolio item -->
-                <div class="item ">
-                    <div class="ot-portfolio-item">
-                        <figure class="effect-bubba">
-                            <img src="{{ asset('public/looksyassets/images/img1.jpg') }}" alt="img02" class="img-responsive" />
-                            <figcaption>
-                                <h2>Green Salad</h2>
-                                <p>Branding, Design</p>
-                                <a href="#" data-toggle="modal" data-target="#Modal-1">View more</a>
-                            </figcaption>
-                        </figure>
-                    </div>
-                </div>
+                @if(!$fav_listings->isEmpty())
+                    @foreach($fav_listings as $value)
+                        <div class="item ">
+                            <div class="ot-portfolio-item">
+                                <figure class="effect-bubba">
+                                    <img src="{{ asset('public/images/listings/'.$value['image']) }}" alt="{{ $value['title'] }}" class="img-responsive" />
+                                    <figcaption>
+                                        <h2>{{ $value['title'] }}</h2>
+                                        <p>{{ $value['description'] }}</p>
+                                        <a href="#" data-toggle="modal" data-target="#Modal-1">View more</a>
+                                    </figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    @endforeach
+                @else
+                    <p class="text-center">No favorite Listing Available!</p>
+                @endif
                 <!-- end portfolio item -->
-                <!-- start portfolio item -->
-                <div class="item ">
-                    <div class="ot-portfolio-item">
-                        <figure class="effect-bubba">
-                            <img src="{{ asset('public/looksyassets/images/img2.jpg') }}" alt="img02" class="img-responsive" />
-                            <figcaption>
-                                <h2>Canchánchara  Rum</h2>
-                                <p>Branding, Web Design</p>
-                                <a href="#" data-toggle="modal" data-target="#Modal-2">View more</a>
-                            </figcaption>
-                        </figure>
-                    </div>
-                </div>
-                <!-- end portfolio item -->
-                <!-- start portfolio item -->
-                <div class="item ">
-                    <div class="ot-portfolio-item">
-                        <figure class="effect-bubba">
-                            <img src="{{ asset('public/looksyassets/images/img3.jpg') }}" alt="img02" class="img-responsive" />
-                            <figcaption>
-                                <h2>Troia Resort</h2>
-                                <p>Branding, Web Design</p>
-                                <a href="#" data-toggle="modal" data-target="#Modal-3">View more</a>
-                            </figcaption>
-                        </figure>
-                    </div>
-                </div>
-                <!-- end portfolio item -->
-                <!-- start portfolio item -->
-                <div class="item ">
-                    <div class="ot-portfolio-item">
-                        <figure class="effect-bubba">
-                            <img src="{{ asset('public/looksyassets/images/img4.jpg') }}" alt="img02" class="img-responsive" />
-                            <figcaption>
-                                <h2>Eden</h2>
-                                <p>Branding, Web Design</p>
-                                <a href="#" data-toggle="modal" data-target="#Modal-3">View more</a>
-                            </figcaption>
-                        </figure>
-                    </div>
-                </div>
-                <!-- end portfolio item -->
-                <!-- start portfolio item -->
-                <div class="item ">
-                    <div class="ot-portfolio-item">
-                        <figure class="effect-bubba">
-                            <img src="{{ asset('public/looksyassets/images/img5.jpg') }}" alt="img02" class="img-responsive" />
-                            <figcaption>
-                                <h2>Plato, Ljubljana</h2>
-                                <p>Branding, Web Design</p>
-                                <a href="#" data-toggle="modal" data-target="#Modal-3">View more</a>
-                            </figcaption>
-                        </figure>
-                    </div>
-                </div>
-                <!-- end portfolio item -->
-                
-                
                 </div>
                 </div>
             </div>

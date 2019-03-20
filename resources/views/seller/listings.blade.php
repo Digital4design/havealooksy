@@ -41,10 +41,11 @@
                           <th>Location</th>
                           <th>Price</th>
                           <th>Category</th>
-                          <th>Status</th>
+                          <!-- <th>Status</th> -->
                           <th>Image</th>
                           <th>Activate/Deactivate</th>
                           <th>Action</th>
+                          <th></th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -54,10 +55,11 @@
                           <th>Location</th>
                           <th>Price</th>
                           <th>Category</th>
-                          <th>Status</th>
+                          <!-- <th>Status</th> -->
                           <th>Image</th>
                           <th>Activate/Deactivate</th>
                           <th>Action</th>
+                          <th></th>
                         </tr>
                     </tfoot>
                   </table>
@@ -86,7 +88,7 @@ $(function() {
                 data.location = "{{ (!empty($location)) ? $location : null }}";
                 data.price = "{{ (!empty($price))? $price : null }}";
                 data.category = "{{ (!empty($category))? $category : null }}";
-                data.status = "{{ (!empty($status))? $status : null }}";
+                // data.status = "{{ (!empty($status))? $status : null }}";
           }
         },
         columns: [
@@ -95,10 +97,11 @@ $(function() {
             { data: 'location', name: 'location' },
             { data: 'price', name: 'price' },
             { data: 'category', name: 'category' },
-            { data: 'status', name: 'status' },
+            // { data: 'status', name: 'status' },
             { data: 'image', name: 'image', orderable: false },
             { data: 'activate_deactivate', name: 'activate_deactivate', orderable: false },
             { data: 'action', name: 'action', orderable: false },
+            { data: 'is_favorite', name: 'is_favorite', orderable: false },
         ],
         oLanguage: {
           "sInfoEmpty" : "Showing 0 to 0 of 0 entries",
@@ -125,12 +128,43 @@ $(function() {
           if(data.status == 'success'){
             if(data.listing_status == 1){
               $(".active-deactive[data-id="+id+"]").removeClass("btn-danger").addClass("btn-default").text("Deactivate");
-              $(".active-deactive[data-id="+id+"]").closest("tr").find("td:eq(5)").text("Active");
+              // $(".active-deactive[data-id="+id+"]").closest("tr").find("td:eq(5)").text("Active");
             }
             if(data.listing_status == 0){
               $(".active-deactive[data-id="+id+"]").removeClass("btn-default").addClass("btn-danger").text("Activate");
-              $(".active-deactive[data-id="+id+"]").closest("tr").find("td:eq(5)").text("Deactive");
+              // $(".active-deactive[data-id="+id+"]").closest("tr").find("td:eq(5)").text("Deactive");
             }
+          }  
+        } 
+      });
+      return false;
+    });
+
+    $(document).on("click", "button.is-favorite", function(){
+      var id = $(this).attr('data-id');
+
+      if($(this).hasClass("btn-danger")){
+        fav = 1
+      }
+      if($(this).hasClass("btn-default")){
+        fav = 0;
+      }
+
+      $.ajax({
+        'url'      : '{{ url("seller/listings/change-favorite-status") }}/'+id+"/"+fav,
+        'method'   : 'get',
+        'dataType' : 'json',
+        success    : function(data){
+          if(data.status == 'success'){
+            // if(data.fav_status == 1){
+            //   $(".is-favorite[data-id="+id+"]").removeClass("btn-danger").addClass("btn-default").text("Remove from favorites");
+            // }
+            // if(data.fav_status == 0){
+            //   $(".is-favorite[data-id="+id+"]").removeClass("btn-default").addClass("btn-danger").text("Add to favorites");
+            // }
+            setTimeout(function(){ 
+                location.reload();
+            });
           }  
         } 
       });

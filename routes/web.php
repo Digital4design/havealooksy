@@ -11,15 +11,15 @@
 |
 */
 
-Route::get('/', function () {
-	//return view('welcome');
-    return view('index');
-});
+// Route::get('/', function () {
+//     return view('index');
+// });
+
+Route::get('/', 'HomeController@index');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/home/usersList', 'HomeController@usersList')->name('usersList');
 Route::get('/validate-user', 'HomeController@checkUserRole');
 
 Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth']], function() {
@@ -45,6 +45,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth']], function(
         Route::get('/delete-category/{id}', 'Admin\DashboardController@deleteCategory');
         Route::get('/get-category-data/{id}', 'Admin\DashboardController@getCategoryData');
         Route::post('/edit-category', 'Admin\DashboardController@editCategory');
+        Route::get('/remove-image/{id}', 'Admin\DashboardController@removeCategoryImage');
     }); 
 });
 
@@ -62,7 +63,8 @@ Route::group(['prefix' => 'seller', 'middleware' => ['seller', 'auth']], functio
         Route::get('/get-listings', 'Seller\ListingController@getListings');
         Route::get('/add-listing', 'Seller\ListingController@addListing');
         Route::post('/save-listing', 'Seller\ListingController@saveListing');
-        Route::get('/change-status/{id}/{status}', 'Seller\ListingController@changeStatus'); 
+        Route::get('/change-status/{id}/{status}', 'Seller\ListingController@changeStatus');
+        Route::get('/change-favorite-status/{id}/{status}', 'Seller\ListingController@changeFavoriteStatus'); 
         Route::get('/edit-listing/{id}', ['as' => 'editListing', 'uses' => 'Seller\ListingController@editListingView']);
         Route::post('/update-listing', 'Seller\ListingController@updateListing'); 
         Route::get('/delete-listing/{id}', 'Seller\ListingController@deleteListing'); 

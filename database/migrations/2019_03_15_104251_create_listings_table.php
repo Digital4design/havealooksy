@@ -20,8 +20,9 @@ class CreateListingsTable extends Migration
             $table->text('location');
             $table->text('image');
             $table->double('price');
-            $table->bigInteger('category_id')->unsigned();
-            $table->foreign('category_id')->references('id')->on('categories');
+            $table->bigInteger('category_id')->unsigned()->nullable();
+            $table->foreign('category_id')->references('id')->on('categories')
+                    ->onUpdate('cascade')->onDelete('set null');
             $table->enum('status', ['1', '0'])->comment('1 = Active; 0 = Deactive');
             $table->timestamps();
         });

@@ -202,7 +202,12 @@ class DashboardController extends Controller
                             return "<button type='button' data-id='".$all_categories['id']."' class='btn btn-".$btn_color." active-deactive' type='button'>".$status."</button>";
                         })->addColumn('action', function ($all_categories){
                             return "<button type='button' data-id='".$all_categories['id']."' class='btn btn-info button_edit' style='margin-right:1em;' data-toggle='modal' data-target='#edit-category'><i class='fa fa-edit'></i></button><button type='button' data-id='".$all_categories['id']."' class='btn btn-warning button_delete'><i class='fa fa-trash-o'></i></button>";
-                        })->rawColumns(['activate_deactivate' => 'activate_deactivate','action' => 'action'])->make(true);
+                        })->editColumn('image', function ($all_categories){
+                            if($all_categories['image'] != "")
+                                return "<a href='".asset('public/images/categories/'.$all_categories['image'])."' style='font-size:1.3em;' target='_blank'><i class='fa fa-eye'></i></a>";
+                            else
+                                return "<p>-</p>";
+                        })->rawColumns(['activate_deactivate' => 'activate_deactivate', 'image' => 'image','action' => 'action'])->make(true);
     }
 
     public function addCategory(Request $request)
@@ -211,6 +216,7 @@ class DashboardController extends Controller
         [
             'category_name' => ['required', 'string', 'max:255'],
             'status' => ['required'],
+            'image' => ['required', 'image', 'mimes:jpg,jpeg,png'],
         ]);
 
         if ($validator->fails()) {
@@ -219,12 +225,18 @@ class DashboardController extends Controller
 
         try
         {
+            $file = $request->file('image');
+            $filename = 'category-'.time().'.'.$file->getClientOriginalExtension();
+
             Categories::create([
                 'name' => $request->category_name,
                 'parent_id' => $request->parent_category,
                 'status' => $request->status,
+                'image' => $filename,
             ]);
             
+            $file->move('public/images/categories',$filename);
+
             return response()->json(['status' => 'success','message' => 'Category added successfully.']);
         }
         catch(\Exception $e)
@@ -246,7 +258,17 @@ class DashboardController extends Controller
     {
         try
         {
-            $category = Categories::find($id)->delete();
+            $category = Categories::find($id);
+
+            if($category->image){
+                if (file_exists(public_path('images/categories/'.$category->image)))
+                {
+                    $del_image = unlink(public_path('images/categories/'.$category->image));
+                }
+            }
+
+            $category->delete();
+
             return response()->json(['status' => 'success','message' => 'Category deleted successfully.']);
         }
         catch(\Exception $e)
@@ -270,6 +292,7 @@ class DashboardController extends Controller
         $validator = Validator::make($request->all(),
         [
             'edit_category_name' => ['required', 'string', 'max:255'],
+            'image' => ['image', 'mimes:jpg,jpeg,png'],
         ]);
 
         if ($validator->fails()) {
@@ -281,6 +304,15 @@ class DashboardController extends Controller
             $edit_category = Categories::find($request->category_id);
             $edit_category->name = $request->edit_category_name;
             $edit_category->parent_id = $request->edit_parent_category;
+
+            if($request->hasFile('image')){
+                $file = $request->file('image');
+                $filename = 'category-'.time().'.'.$file->getClientOriginalExtension();
+                $file->move('public/images/categories',$filename);
+
+                $edit_category->image = $filename;
+            }
+
             $edit_category->save();
             
             return response()->json(['status' => 'success','message' => 'Category updated successfully.']);
@@ -289,5 +321,18 @@ class DashboardController extends Controller
         {
             return response()->json(['status' => 'danger','message' => 'Something went wrong. Please try again later.']);
         }
+    }
+
+    public function removeCategoryImage($id)
+    {
+        $category = Categories::find($id);
+        if(file_exists(public_path('images/categories/'.$category->image)))
+        {   
+            $del_pic = unlink(public_path('images/categories/'.$category->image));
+            $category->image = null;
+            $category->save();
+            return response()->json(['status' => 'success']);
+        }
+        return response()->json(['status' => 'danger']);
     }
 }
