@@ -17,12 +17,13 @@
 
 Route::get('/', 'HomeController@index');
 
-Auth::routes();
+// Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/validate-user', 'HomeController@checkUserRole');
+Route::get('/validate-user', 'HomeController@checkUserRole')->middleware('verified');
 
-Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth']], function() {
+Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth', 'verified']], function() {
     Route::get('/', 'Admin\DashboardController@index');  
     Route::get('/profile', 'Admin\DashboardController@profile');  
     Route::post('/edit-profile', 'Admin\DashboardController@editProfile');
@@ -49,7 +50,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth']], function(
     }); 
 });
 
-Route::group(['prefix' => 'seller', 'middleware' => ['seller', 'auth']], function() {
+Route::group(['prefix' => 'seller', 'middleware' => ['seller', 'auth', 'verified']], function() {
     Route::get('/', 'Seller\DashboardController@index');
     Route::get('/profile', 'Seller\DashboardController@profile');  
     Route::post('/edit-profile', 'Seller\DashboardController@editProfile');

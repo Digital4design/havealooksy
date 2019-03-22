@@ -1,5 +1,16 @@
 @extends('layouts.app')
 
+@section('pageCss')
+<link href="{{asset('public/css/app.css')}}" rel="stylesheet">
+<style type="text/css">
+    /*.container{display:block;height:100vh;max-width:100%;padding:0px;margin:0px;}*/
+    .container{padding: 250px 0px;}
+    .card{font-size:1.8em;box-shadow:0px 0px 3px #ccc;}
+    .card-header{background-color:rgba(137,43,225,0.8);color:#fff;}
+    /*.row{padding: 250px 120px;}*/
+</style>
+@stop
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">

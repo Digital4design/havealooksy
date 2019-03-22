@@ -8,12 +8,13 @@ use Yajra\Datatables\Datatables;
 use App\Models\Listings;
 use App\Models\Categories;
 use Validator;
+use Auth;
 
 class ListingController extends Controller
 {
     public function getListings()
     {
-    	$all_listings = Listings::select("*")->get();
+    	$all_listings = Listings::where('user_id', Auth::user()->id)->get();
 
         return Datatables::of($all_listings)
         				->editColumn('status', function ($all_listings){
