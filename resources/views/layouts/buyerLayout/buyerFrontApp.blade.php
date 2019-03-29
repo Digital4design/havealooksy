@@ -19,6 +19,16 @@
         
         <script src="{{asset('public/looksyassets/js/ie-emulation-modes-warning.js')}}"></script>
         <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
+        <style type="text/css">
+            .login.hoverable{background-color:transparent;}
+            .login.hoverable a{border-radius:5px;padding:10px 35px;}
+            .dropdown-items{position:absolute;list-style:none;background-color:rgba(118,29,201,0.8);right:0px;z-index:1;color:#fff;border-radius:5px;margin-top:5px;padding:0px;display:none;}
+            li.dropdown-item{padding:15px 10px;}
+            li.dropdown-item:hover{background-color:rgb(118,29,201);width:100%;}
+            li.dropdown-item a{text-decoration:none;}
+            li.dropdown-item a:hover{background-color:transparent;}
+            .show-hide{display:block;}
+        </style>
         @yield('pageCss')
     </head>
     <body id="page-top">
@@ -54,20 +64,33 @@
                     </div>
                 </form>
 
-                <!-- login signupbtns -->
+                <!-- Login User -->
                 <div class="menu float-right col-lg-3">
                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
-                    </button>
+                    </button>   
                     <ul class="nav navbar-right"> 
-                      <li class="login"><a href="{{ url('/login') }}"> Login</a></li>
-                      <li class="signup"><a href="{{ url('/register') }}"> Signup</a></li>                
-                    </ul>               
+                      <!-- <li style="position:relative;"><a href="">{{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}</a>
+                        <ul style="position:absolute;top:50px;left:-15px;">
+                            <li class="dropdown-item"><a href="{{ url('buyer/dashboard') }}">Dashboard</a></li>
+                            <li>
+                                <a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a>
+                            </li>
+                        </ul>
+                      </li> --> 
+                      <li class="login hoverable"><a>{{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}</a></li>
+                      <ul class="dropdown-items">
+                          <li class="dropdown-item"><a href="{{ url('buyer/dashboard') }}">Dashboard</a></li>
+                          <li class="dropdown-item"><a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a></li>
+                      </ul>
+                    </ul>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                    </form>                             
                 </div>
-                
               </div>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -88,7 +111,7 @@
                             <a class="page-scroll" href="#portfolio">Saved</a>
                         </li>
                         <li>
-                            <a class="page-scroll" href="">Messages</a>
+                            <a class="page-scroll" href="{{ url('home/messages') }}">Messages</a>
                         </li>
                         <li>
                             <a class="page-scroll" href="#contact">Contact</a>
@@ -134,6 +157,11 @@
         <script src="{{ asset('public/looksyassets/js/theme-scripts.js') }}"></script>
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
         <script src="{{ asset('public/looksyassets/js/ie10-viewport-bug-workaround.js') }}"></script>
+        <script type="text/javascript">
+            $(".login.hoverable").on("click", function(){
+                $(".dropdown-items").toggleClass("show-hide", 2000); 
+            });
+        </script>
         @yield('pageJs')
     </body>
 </html>

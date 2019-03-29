@@ -65,6 +65,18 @@ class User extends Authenticatable implements MustVerifyEmail
         return $role->name == 'seller' ? true : false;   
     }
 
+    /**
+     * Check Roles seller here 
+     *
+     * @var array
+     */
+    public function isBuyer(){
+        $role = Role::join('role_user','roles.id','=','role_user.role_id')
+                      ->where('user_id',Auth::user()->id)
+                      ->first();
+        return $role->name == 'buyer' ? true : false;   
+    }
+
     public function getRole()
     {
         // return $this->belongsToMany('App\Role', 'role_user');

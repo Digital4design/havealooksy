@@ -52,16 +52,19 @@
         <ul class="nav navbar-nav">
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="get_unread_conversations">
               <i class="fa fa-envelope-o"></i>
-              <span class="label label-success">4</span>
+              @php $unreadCount = Chat::messages()->for(Auth::user())->unreadCount(); @endphp
+              @if($unreadCount)
+                <span class="label label-success">{{ $unreadCount }}</span>
+              @endif
             </a>
             <ul class="dropdown-menu">
-              <li class="header">You have 4 messages</li>
+              <li class="header">You have {{ $unreadCount }} unread messages</li>
               <li>
                 <!-- inner menu: contains the actual data -->
-                <ul class="menu">
-                  <li><!-- start message -->
+                <ul class="menu" id="conversations_list">
+                  <!-- <li>
                     <a href="#">
                       <div class="pull-left">
                         <img src="{{asset('public/adminPanelAssets')}}/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
@@ -72,59 +75,10 @@
                       </h4>
                       <p>Why not buy a new awesome theme?</p>
                     </a>
-                  </li>
-                  <!-- end message -->
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="{{asset('public/adminPanelAssets')}}/dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        AdminLTE Design Team
-                        <small><i class="fa fa-clock-o"></i> 2 hours</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="{{asset('public/adminPanelAssets')}}/dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Developers
-                        <small><i class="fa fa-clock-o"></i> Today</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="{{asset('public/adminPanelAssets')}}/dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Sales Department
-                        <small><i class="fa fa-clock-o"></i> Yesterday</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="{{asset('public/adminPanelAssets')}}/dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Reviewers
-                        <small><i class="fa fa-clock-o"></i> 2 days</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
+                  </li> -->
                 </ul>
               </li>
-              <li class="footer"><a href="#">See All Messages</a></li>
+              <li class="footer"><a href="{{ url('admin/chat') }}">See All Messages</a></li>
             </ul>
           </li>
           <!-- Notifications: style can be found in dropdown.less -->
@@ -331,6 +285,11 @@
             <i class="fa fa-list"></i> <span>Categories</span>
           </a>
         </li>
+        <li class="{{ Request::is('admin/chat') ? 'active' : '' }}">
+          <a href="{{ url('admin/chat') }}">
+            <i class="fa fa-commenting"></i> <span>Messages</span><span class="pull-right" style="margin-right:5px;">{{ ($unreadCount != 0) ? $unreadCount : '' }}</span>
+          </a>
+        </li>
         <li class="{{ Request::is('admin/change-password') ? 'active' : '' }}">
           <a href="{{ url('admin/change-password') }}">
             <i class="fa fa-unlock"></i> <span>Change Password</span>
@@ -413,12 +372,29 @@
 <script src="{{asset('public/adminPanelAssets')}}/dist/js/adminlte.min.js"></script>
 <script src="{{asset('public/js/sweetalert/sweetalert.min.js')}}"></script>
 <script type="text/javascript">
+$(document).ready(function(){
   $(".change-pic-link").mouseover(function(){
     $(".change-pic").css("display", "block");
   });
   $(".change-pic-link").mouseout(function(){
     $(".change-pic").css("display", "none");
-  }); 
+  });
+  $(document).on("click", "#get_unread_conversations", function(){
+    $.ajax({
+      'url'      : '{{ url("admin/get-unread-conversations") }}',
+      'method'   : 'get',
+      'dataType' : 'json',
+      success    : function(resp){
+        
+          if(resp.status == 'success'){
+            if(resp.conversations !=""){
+              $("#conversations_list").append(resp.conversations);
+            }
+          }
+      } 
+    });
+  });
+}); 
 </script>
 @yield('pageJs')
 </body>

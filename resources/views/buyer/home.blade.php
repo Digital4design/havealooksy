@@ -1,4 +1,4 @@
-@extends('layouts.frontapp')
+@extends('layouts.buyerLayout.buyerFrontApp')
 
 @section('pageCss')
 <style type="text/css">
