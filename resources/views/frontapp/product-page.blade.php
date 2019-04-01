@@ -1,4 +1,12 @@
-@extends('layouts.frontapp')
+@guest
+  @php $layout = 'layouts.frontapp' @endphp
+@endguest
+
+@auth
+  @php $layout = 'layouts.buyerLayout.buyerFrontApp' @endphp
+@endauth
+
+@extends($layout)
 
 @section('pageCss')
 <style type="text/css">
@@ -78,7 +86,7 @@
 					@foreach($listings as $val)
 					<!-- team member item -->
 					<div class="col-md-3 product-link grid_view">
-						<a href="{{ url('home/get-products/product-details/'.$val['id']) }}">
+						<a href="{{ url('get-products/product-details/'.$val['id']) }}">
 							<div class="team-item">
 								<div class="team-image">
 									<img src="{{ asset('public/images/listings/'.$val['image']) }}" class="img-responsive" alt="author">
@@ -92,7 +100,7 @@
 						</a>
 					</div>
 					<div class="col-md-9 product-link list_view" style="display:none;">
-						<a href="{{ url('home/get-products/product-details/'.$val['id']) }}">
+						<a href="{{ url('get-products/product-details/'.$val['id']) }}">
 							<div class="team-item">
 								<div class="team-image" style="width:30%;">
 									<img src="{{ asset('public/images/listings/'.$val['image']) }}" class="img-responsive" alt="author">
@@ -138,7 +146,7 @@
 
 			$("#apply_filters_form").submit(function(){
 				$.ajax({
-			      'url'      : "{{ url('home/get-products/apply-filters') }}",
+			      'url'      : "{{ url('get-products/apply-filters') }}",
 			      'method'   : 'post',
 			      'dataType' : 'json',
 			      'data'     : $(this).serialize(),

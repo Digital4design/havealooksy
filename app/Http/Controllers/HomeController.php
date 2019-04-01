@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Auth;
 use App\Models\Categories;
 use App\Models\Listings;
 use Validator;
+use Auth;
 
 class HomeController extends Controller
 {
@@ -70,9 +70,10 @@ class HomeController extends Controller
     /* Get Product Details */
     public function getProductDetails($id)
     {
-        $listing_data = Listings::with(['getCategory'])->where('id', $id)->first();
+        $listing_data = Listings::with(['getCategory', 'getListerRole'])->where('id', $id)->first();
+
         $all_listings_of_category = Listings::where('category_id', $listing_data['category_id'])
-                                            ->where('status', '1')->get();
+                                            ->where('status', '1')->where('id', '<>', $id)->get();
 
         return view('frontapp.product-details')->with(['listing_data' => $listing_data, 'all_listings' => $all_listings_of_category]);
     }
@@ -105,5 +106,10 @@ class HomeController extends Controller
         }
 
         return response()->json(['status' => 'danger', 'message' => 'No matches found.']);
+    }
+
+    public function messagesView()
+    {
+        return redirect(Auth::user()->roles->first()->name.'/chat');
     } 
 }

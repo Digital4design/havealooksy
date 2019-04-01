@@ -34,7 +34,7 @@
     .change-pic-link{position:relative;}
     #header-pic-link:hover{background-color: transparent;}
     .change-pic-link:hover img.img-circle{opacity:0.7;background-color:rgba(0,0,0,0.7);}
-    #see_all_messages:hover{color:#000;background-color:silver;}
+    #see_all_messages:hover{color:#000;background-color:silver;}.error{color:red;}
   </style>
   @yield('pageCss')
 </head>
@@ -42,8 +42,8 @@
 <div class="wrapper">
   <header class="main-header">
     <a href="{{ url('/admin') }}" class="logo">
-      <span class="logo-mini"><b>A</b>LT</span>
-      <span class="logo-lg"><b>Admin</b>LTE</span>
+      <!-- <span class="logo-mini"><b>A</b>LT</span> -->
+      <span class="logo-lg"><b>LOOKSY</b></span>
     </a>
     <nav class="navbar navbar-static-top">
       <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
@@ -244,30 +244,19 @@
     <section class="sidebar">
       <!-- Sidebar user panel -->
       <div class="user-panel">
-        <div class="pull-left image">
+        <div class="pull-left image col-md-3" style="padding:0px;">
           <a href="#" data-target="#change-picture" data-toggle="modal" class="change-pic-link">
             <img src="{{ (Auth::user()->profile_picture) ? asset('public/images/profile_pictures/'.Auth::user()->profile_picture) : asset('public/images/default-pic.svg') }}" class="img-circle" alt="User Image">
             <span class="change-pic" style="display:none;font-size:0.9em;position:absolute;top:3px;left:15px;">{{ (Auth::user()->profile_picture) ? 'Edit' : 'Add' }}</span>
           </a>
           
         </div>
-        <div class="pull-left info">
+        <div class="pull-left info col-md-9">
           <p>{{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}</p>
           <p>{{ Auth::user()->roles->first()->display_name }}</p>
           <!-- <a href="#"><i class="fa fa-circle text-success"></i> Online</a> -->
         </div>
       </div>
-      <!-- search form -->
-      <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Search...">
-          <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
-        </div>
-      </form>
-      <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
@@ -312,7 +301,7 @@
 <div class="modal fade" id="change-picture" style="display: none;">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form method="POST" action="{{ url('seller/change-profile-picture') }}" enctype="multipart/form-data">
+      <form method="POST" id="profile_picture_form" enctype="multipart/form-data">
         @csrf
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -324,19 +313,14 @@
             <label>Select Profile Picture</label>
             <input type="file" name="profile_picture" class="form-control">
             <p class="help-block">Only .jpeg, .jpg, .png are supported.</p>
-
-            @if ($errors->has('profile_picture'))
-              <span class="invalid-feedback" role="alert">
-                  <strong>{{ $errors->first('profile_picture') }}</strong>
-              </span>
-            @endif
+            <p class="error" id="error-profile_picture"></p>
           </div>
           @if(Auth::user()->profile_picture)
-          <div class="form-group">
+          <div class="form-group" id="uploaded_profile_pic">
             <img src="{{ asset('public/images/profile_pictures/'.Auth::user()->profile_picture) }}" style="height:auto;width:100%;">
           </div>
-          <div class="form-group">
-            <a href="{{ url('seller/remove-profile-picture') }}" class="btn btn-block btn-warning" style="margin-top:10px;">Remove Profile Picture</a>
+          <div class="form-group" id="remove_profile_pic_button">
+            <a id="remove-profile-picture" href="{{ url('seller/remove-profile-picture') }}" class="btn btn-block btn-warning" style="margin-top:10px;">Remove Profile Picture</a>
           </div>
           @endif
         </div>
@@ -389,6 +373,79 @@
             }
         } 
       });
+    });
+
+    $("#profile_picture_form").submit(function(){
+      var formData = new FormData(this);
+      $.ajax({
+        'url'        : '{{ url("seller/change-profile-picture") }}',
+        'method'     : 'post',
+        'dataType'   : 'json',
+        'data'       : formData,
+        'cache'      : false,
+        'contentType': false,
+        'processData': false,
+        success    : function(resp){
+          
+            if(resp.status == 'success'){
+              $("#change-picture").modal("toggle");
+              swal({
+                title: "Success",
+                text: resp.message,
+                timer: 2000,
+                type: "success",
+                showConfirmButton: false
+              });
+              setTimeout(function(){ 
+                  location.reload();
+              }, 1000);
+            }
+            else if(resp.status == 'danger'){
+              swal("Error", resp.message, "warning");
+            }
+            else{
+              console.log(resp);
+
+              $('.error').html('');
+              $('.error').parent().removeClass('has-error');
+              $.each(resp,function(key,value){
+                if(value != ""){
+                  $("#error-"+key).text(value);
+                  $("#error-"+key).parent().addClass('has-error');
+                  $("#error-"+key).parent().find('.help-block').css('color', '#737373');
+                }
+              });
+            }
+        } 
+      });
+      return false;
+    });
+
+    $("#remove-profile-picture").on("click", function(){
+      $.ajax({
+        'url'        : '{{ url("seller/remove-profile-picture") }}',
+        'method'     : 'get',
+        'dataType'   : 'json',
+        success    : function(resp){
+          
+            if(resp.status == 'success'){
+              swal({
+                title: "Success",
+                text: resp.message,
+                timer: 1000,
+                type: "success",
+                showConfirmButton: false
+              });
+              $("#uploaded_profile_pic").css("display", "none");
+              $("#remove_profile_pic_button").css("display", "none");
+              $("img").attr("src", "{{ url('public/images/default-pic.svg') }}")
+            }
+            else if(resp.status == 'danger'){
+              swal("Error", resp.message, "warning");
+            }
+        } 
+      });
+      return false;
     });
   }); 
 </script>

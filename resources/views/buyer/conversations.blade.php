@@ -1,4 +1,4 @@
-@extends('layouts.adminLayout.adminApp')
+@extends('layouts.buyerLayout.buyerApp')
 
 @section('pageCss')
 <style type="text/css">
@@ -8,7 +8,7 @@
 .small-box.user>.inner, .small-box.conv>.inner{display:flex;justify-content:center;align-items:center;padding:10px;text-decoration:none;}
 .small-box.user{margin-bottom:10px;border-radius:5px;}
 .small-box>.inner:hover{background-color:#9ae5e5;border-radius:5px;color:#fff;}
-.conv-profile_pic img{width:100%;border-radius:50%;position: absolute;top:-30px;left:15px;height: 60px;width: 70%;border: 2px solid #ccc;}
+.conv-profile_pic img{width:100%;border-radius:50%;position: absolute;top:-30px;left:15px;height: 60px;width: 70%;border:2px solid #ccc;}
 .small-box>.inner.no_conversation:hover{background-color:transparent;color:#333;}
 .unread{color:orange;position:relative;font-size:22px;}
 </style>
@@ -31,7 +31,7 @@
               @if(!$conversations->isEmpty())
                 @foreach($conversations as $val)
                   <div class="small-box conv" style="margin-bottom:10px;border-radius:5px;box-shadow:1px 1px 5px #ccc;">
-                      <a href="{{ url('admin/chat/get-chat/'.$val['user']['id']) }}" class="inner conv_link" style="padding:10px;">
+                      <a href="{{ url('buyer/chat/get-chat/'.$val['user']['id']) }}" class="inner conv_link" style="padding:10px;">
                           <div class="col-lg-1 conv-profile_pic">
                             <img src="{{ $val['user']['profile_picture'] ? asset('public/images/profile_pictures/'.$val['user']['profile_picture']) : asset('public/images/default-pic.svg')}}">
                           </div>
@@ -59,7 +59,7 @@
     </section>
 </div>
 <div class="modal fade" id="start-new-conversation" style="display: none;">
-  <div class="modal-dialog modal-dialog-centered">
+  <div class="modal-dialog">
     <div class="modal-content" style="max-height:90vh;overflow-y:scroll;">
       <form id="new_conversation_form" method="POST">
         @csrf
@@ -72,7 +72,7 @@
           <div class="form-group">
             @foreach($users as $usr)
               <div class="small-box user" style="box-shadow:1px 1px 5px #ccc;">
-                  <a href="{{ url('admin/chat/get-chat/'.$usr['id']) }}" class="inner">
+                  <a href="{{ url('buyer/chat/get-chat/'.$usr['id']) }}" class="inner">
                       <div class="col-lg-1" style="position:relative;height:52px;width:9.9%;">
                         <img src="{{ $usr['profile_picture'] ? asset('public/images/profile_pictures/'.$usr['profile_picture']) : asset('public/images/default-pic.svg')}}" style="position:absolute;height:100%;width:100%;top:0px;left:0;border-radius:50%;border:2px solid #ccc;">
                       </div>

@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Seller;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Yajra\Datatables\Datatables;
-use App\Models\Listings;
 use App\Models\Categories;
+use App\Models\Listings;
 use Validator;
 use Auth;
 

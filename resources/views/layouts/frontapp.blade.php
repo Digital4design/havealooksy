@@ -29,7 +29,7 @@
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header page-scroll col-lg-3">
                     
-                    <a class="navbar-brand page-scroll" href="#page-top"><img src="{{asset('public/looksyassets/images/logo.png') }}
+                    <a class="navbar-brand page-scroll" href="{{ url('/') }}"><img src="{{asset('public/looksyassets/images/logo.png') }}
                         " alt="Lattes theme logo"></a>
                 </div>
 
@@ -88,7 +88,7 @@
                             <a class="page-scroll" href="#portfolio">Saved</a>
                         </li>
                         <li>
-                            <a class="page-scroll" href="">Messages</a>
+                            <a class="page-scroll" href="{{ url('/messages') }}">Messages</a>
                         </li>
                         <li>
                             <a class="page-scroll" href="#contact">Contact</a>

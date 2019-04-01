@@ -1,4 +1,12 @@
-@extends('layouts.frontapp')
+@guest
+  @php $layout = 'layouts.frontapp' @endphp
+@endguest
+
+@auth
+  @php $layout = 'layouts.buyerLayout.buyerFrontApp' @endphp
+@endauth
+
+@extends($layout)
 
 @section('content')
 <section class="product-detail">
@@ -41,7 +49,7 @@
 						</div>
 						<p class="vote">CATEGORY : {{ $listing_data['getCategory']['name'] }}</p>
 						<div class="action">				
-							<a href="{{ url('buyer/chat/get-chat/'.$listing_data['user_id']) }}" class="like btn btn-default"><i class="fa fa-comment"></i>Message Us</a>
+							<a href="{{ url('/'.$listing_data['getListerRole']['name'].'/chat/get-chat/'.$listing_data['user_id']) }}" class="like btn btn-default"><i class="fa fa-comment"></i>Message Us</a>
 						</div>
 					</div>
 				</div>
@@ -67,18 +75,16 @@
 						@foreach($all_listings as $val)
 						<!-- start portfolio item -->
 						<div class="item">
-							<!-- <a href="{{ url('home/get-products/product-details/'.$val['id']) }}"> -->
-								<div class="ot-portfolio-item">
-									<figure class="effect-bubba">
-										<img src="{{ asset('public/images/listings/'.$val['image']) }}" alt="img02" class="img-responsive" />
-										<figcaption>
-											<h2>{{ $val['title'] }}</h2>
-											<p>{{ $val['description'] }}</p>
-											<a href="#" data-toggle="modal" data-target="#Modal-1">View more</a>
-										</figcaption>
-									</figure>
-								</div>
-							<!-- </a> -->
+							<div class="ot-portfolio-item">
+								<figure class="effect-bubba">
+									<img src="{{ asset('public/images/listings/'.$val['image']) }}" alt="img02" class="img-responsive" />
+									<figcaption>
+										<h2>{{ $val['title'] }}</h2>
+										<p>{{ $val['description'] }}</p>
+										<a href="{{ url('get-products/product-details/'.$val['id']) }}" style="padding:180px 50px;">View more</a>
+									</figcaption>
+								</figure>
+							</div>
 						</div>
 						<!-- end portfolio item -->
 						@endforeach

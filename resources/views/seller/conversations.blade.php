@@ -3,9 +3,9 @@
 @section('pageCss')
 <style type="text/css">
 .conv-screen{padding: 10px;height:65vh;display:flex;flex-direction:column;overflow-y:scroll;}
-.profile_pic, .conv-profile_pic{position:relative;}
-.profile_pic img{position:absolute;height:35px;width:100%;top:-16px;left:0;}
-.small-box.user>.inner, .small-box.conv>.inner{display:flex;justify-content:center;align-items:center;padding:15px;text-decoration:none;}
+/*.profile_pic, */.conv-profile_pic{position:relative;}
+/*.profile_pic img{position:absolute;height:35px;width:100%;top:-16px;left:0;}*/
+.small-box.user>.inner, .small-box.conv>.inner{display:flex;justify-content:center;align-items:center;padding:10px;text-decoration:none;}
 .small-box.user{margin-bottom:10px;border-radius:5px;}
 .small-box>.inner:hover{background-color:#9ae5e5;border-radius:5px;color:#fff;}
 .conv-profile_pic img{width:100%;border-radius:50%;position: absolute;top:-30px;left:15px;height: 60px;width: 70%;border:2px solid #ccc;}
@@ -60,7 +60,7 @@
 </div>
 <div class="modal fade" id="start-new-conversation" style="display: none;">
   <div class="modal-dialog">
-    <div class="modal-content">
+    <div class="modal-content" style="max-height:90vh;overflow-y:scroll;">
       <form id="new_conversation_form" method="POST">
         @csrf
         <div class="modal-header">
@@ -69,12 +69,12 @@
           <h4 class="modal-title">Start New Conversation</h4>
         </div>
         <div class="modal-body">
-          <div class="form-group" style="overflow-y:scroll;">
+          <div class="form-group">
             @foreach($users as $usr)
               <div class="small-box user" style="box-shadow:1px 1px 5px #ccc;">
                   <a href="{{ url('seller/chat/get-chat/'.$usr['id']) }}" class="inner">
-                      <div class="col-lg-1 profile_pic">
-                        <img src="{{ $usr['profile_picture'] ? asset('public/images/profile_pictures/'.$usr['profile_picture']) : asset('public/images/default-pic.svg')}}">
+                      <div class="col-lg-1" style="position:relative;height:52px;width:9.9%;">
+                        <img src="{{ $usr['profile_picture'] ? asset('public/images/profile_pictures/'.$usr['profile_picture']) : asset('public/images/default-pic.svg')}}" style="position:absolute;height:100%;width:100%;top:0px;left:0;border-radius:50%;border:2px solid #ccc;">
                       </div>
                       <div class="col-lg-11">
                         <p style="margin-bottom:0px;">{{ $usr['first_name'] }} {{ $usr['last_name'] }}<span class="pull-right" style="font-size:12px;color:#999;">&nbsp;({{$usr['getRole']['display_name']}})</span></p>

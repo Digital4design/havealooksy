@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Seller;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use App\User;
 use Validator;
+use App\User;
 use Auth;
 
 class DashboardController extends Controller
@@ -88,7 +88,7 @@ class DashboardController extends Controller
             'profile_picture' => ['required', 'image', 'mimes:jpg,jpeg,png'],    
         ]);
         if ($validator->fails()) {
-             return back()->withErrors($validator)->withInput();
+             return response()->json($validator->errors());
         }
         try
         {
@@ -109,11 +109,11 @@ class DashboardController extends Controller
             $user->profile_picture = $filename;
             $user->save();
             
-            return back()->with(['status' => 'success','message' => 'Profile Picture updated successfully']);
+            return response()->json(['status' => 'success','message' => 'Profile Picture updated successfully']);
         }
         catch(\Exception $e)
         {
-            return back()->with(['status' => 'danger','message' => 'Something went wrong. Please try again later.']);
+            return response()->json(['status' => 'danger','message' => 'Something went wrong. Please try again later.']);
         }
     }
 
@@ -125,9 +125,9 @@ class DashboardController extends Controller
             $del_pic = unlink(public_path('images/profile_pictures/'.$user->profile_picture));
             $user->profile_picture = null;
             $user->save();
-            return back()->with(['status' => 'success','message' => 'Profile Picture removed successfully']);
+            return response()->json(['status' => 'success','message' => 'Profile Picture removed successfully']);
         }
-        return back()->with(['status' => 'danger','message' => 'Something went wrong. Please try again later.']);
+        return repsonse()->json(['status' => 'danger','message' => 'Something went wrong. Please try again later.']);
     }
 
     public function getListingsView()

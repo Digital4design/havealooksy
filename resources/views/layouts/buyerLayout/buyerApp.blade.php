@@ -34,7 +34,7 @@
     .change-pic-link{position:relative;}
     #header-pic-link:hover{background-color: transparent;}
     .change-pic-link:hover img.img-circle{opacity:0.7;background-color:rgba(0,0,0,0.7);}
-    #see_all_messages:hover{color:#000;background-color:silver;}
+    #see_all_messages:hover{color:#000;background-color:silver;}.error{color:red;}
   </style>
   @yield('pageCss')
 </head>
@@ -42,8 +42,8 @@
 <div class="wrapper">
   <header class="main-header">
     <a href="{{ url('/admin') }}" class="logo">
-      <span class="logo-mini"><b>A</b>LT</span>
-      <span class="logo-lg"><b>Admin</b>LTE</span>
+      <!-- <span class="logo-mini"><b>A</b>LT</span> -->
+      <span class="logo-lg"><b>LOOKSY</b></span>
     </a>
     <nav class="navbar navbar-static-top">
       <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
@@ -78,7 +78,7 @@
                   </li> -->
                 </ul>
               </li>
-              <li class="footer"><a id="see_all_messages" href="{{ url('seller/chat') }}">See All Messages</a></li>
+              <li class="footer"><a id="see_all_messages" href="{{ url('buyer/chat') }}">See All Messages</a></li>
             </ul>
           </li>
           <!-- Notifications: style can be found in dropdown.less -->
@@ -223,7 +223,7 @@
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="{{ url('/seller/profile') }}" id="profile-button" class="btn btn-default btn-flat">Profile</a>
+                  <a href="{{ url('/buyer/profile') }}" id="profile-button" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
                   <a href="{{ route('logout') }}" id="logout-button" class="btn btn-default btn-flat" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Sign out</a>
@@ -244,50 +244,34 @@
     <section class="sidebar">
       <!-- Sidebar user panel -->
       <div class="user-panel">
-        <div class="pull-left image">
+        <div class="pull-left image col-md-3" style="padding:0px;">
           <a href="#" data-target="#change-picture" data-toggle="modal" class="change-pic-link">
             <img src="{{ (Auth::user()->profile_picture) ? asset('public/images/profile_pictures/'.Auth::user()->profile_picture) : asset('public/images/default-pic.svg') }}" class="img-circle" alt="User Image">
             <span class="change-pic" style="display:none;font-size:0.9em;position:absolute;top:3px;left:15px;">{{ (Auth::user()->profile_picture) ? 'Edit' : 'Add' }}</span>
           </a>
           
         </div>
-        <div class="pull-left info">
+        <div class="pull-left info col-md-9">
           <p>{{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}</p>
           <p>{{ Auth::user()->roles->first()->display_name }}</p>
           <!-- <a href="#"><i class="fa fa-circle text-success"></i> Online</a> -->
         </div>
       </div>
-      <!-- search form -->
-      <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Search...">
-          <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
-        </div>
-      </form>
-      <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
-        <li class="{{ Request::is('seller') ? 'active' : '' }}">
-          <a href="{{ url('seller') }}">
+        <li class="{{ Request::is('buyer') ? 'active' : '' }}">
+          <a href="{{ url('buyer/dashboard') }}">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
           </a>
         </li>
-        <li class="{{ Request::is('seller/listings') ? 'active' : '' }}">
-          <a href="{{ url('seller/listings') }}">
-            <i class="fa fa-list-alt"></i> <span>Listings</span>
-          </a>
-        </li>
-		    <li class="{{ Request::is('seller/chat') ? 'active' : '' }}">
-          <a href="{{ url('seller/chat') }}">
+		    <li class="{{ Request::is('buyer/chat') ? 'active' : '' }}">
+          <a href="{{ url('buyer/chat') }}">
             <i class="fa fa-commenting"></i> <span>Messages</span><span class="pull-right" style="margin-right:5px;">{{ ($unreadCount != 0) ? $unreadCount : '' }}</span>
           </a>
         </li>
-        <li class="{{ Request::is('seller/change-password') ? 'active' : '' }}">
-          <a href="{{ url('seller/change-password') }}">
+        <li class="{{ Request::is('buyer/change-password') ? 'active' : '' }}">
+          <a href="{{ url('buyer/change-password') }}">
             <i class="fa fa-unlock"></i> <span>Change Password</span>
           </a>
         </li>
@@ -312,7 +296,7 @@
 <div class="modal fade" id="change-picture" style="display: none;">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form method="POST" action="{{ url('seller/change-profile-picture') }}" enctype="multipart/form-data">
+      <form method="POST" id="profile_picture_form" enctype="multipart/form-data">
         @csrf
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -324,19 +308,14 @@
             <label>Select Profile Picture</label>
             <input type="file" name="profile_picture" class="form-control">
             <p class="help-block">Only .jpeg, .jpg, .png are supported.</p>
-
-            @if ($errors->has('profile_picture'))
-              <span class="invalid-feedback" role="alert">
-                  <strong>{{ $errors->first('profile_picture') }}</strong>
-              </span>
-            @endif
+            <p class="error" id="error-profile_picture"></p>
           </div>
           @if(Auth::user()->profile_picture)
-          <div class="form-group">
+          <div class="form-group" id="uploaded_profile_pic">
             <img src="{{ asset('public/images/profile_pictures/'.Auth::user()->profile_picture) }}" style="height:auto;width:100%;">
           </div>
-          <div class="form-group">
-            <a href="{{ url('seller/remove-profile-picture') }}" class="btn btn-block btn-warning" style="margin-top:10px;">Remove Profile Picture</a>
+          <div class="form-group" id="remove_profile_pic_button">
+            <a id="remove-profile-picture" href="{{ url('buyer/remove-profile-picture') }}" class="btn btn-block btn-warning" style="margin-top:10px;">Remove Profile Picture</a>
           </div>
           @endif
         </div>
@@ -377,7 +356,7 @@
     });
     $(document).on("click", "#get_unread_conversations", function(){
       $.ajax({
-        'url'      : '{{ url("seller/get-unread-conversations") }}',
+        'url'      : '{{ url("buyer/get-unread-conversations") }}',
         'method'   : 'get',
         'dataType' : 'json',
         success    : function(resp){
@@ -389,6 +368,79 @@
             }
         } 
       });
+    });
+
+    $("#profile_picture_form").submit(function(){
+      var formData = new FormData(this);
+      $.ajax({
+        'url'        : '{{ url("buyer/change-profile-picture") }}',
+        'method'     : 'post',
+        'dataType'   : 'json',
+        'data'       : formData,
+        'cache'      : false,
+        'contentType': false,
+        'processData': false,
+        success    : function(resp){
+          
+            if(resp.status == 'success'){
+              $("#change-picture").modal("toggle");
+              swal({
+                title: "Success",
+                text: resp.message,
+                timer: 2000,
+                type: "success",
+                showConfirmButton: false
+              });
+              setTimeout(function(){ 
+                  location.reload();
+              }, 1000);
+            }
+            else if(resp.status == 'danger'){
+              swal("Error", resp.message, "warning");
+            }
+            else{
+              console.log(resp);
+
+              $('.error').html('');
+              $('.error').parent().removeClass('has-error');
+              $.each(resp,function(key,value){
+                if(value != ""){
+                  $("#error-"+key).text(value);
+                  $("#error-"+key).parent().addClass('has-error');
+                  $("#error-"+key).parent().find('.help-block').css('color', '#737373');
+                }
+              });
+            }
+        } 
+      });
+      return false;
+    });
+
+    $("#remove-profile-picture").on("click", function(){
+      $.ajax({
+        'url'        : '{{ url("buyer/remove-profile-picture") }}',
+        'method'     : 'get',
+        'dataType'   : 'json',
+        success    : function(resp){
+          
+            if(resp.status == 'success'){
+              swal({
+                title: "Success",
+                text: resp.message,
+                timer: 1000,
+                type: "success",
+                showConfirmButton: false
+              });
+              $("#uploaded_profile_pic").css("display", "none");
+              $("#remove_profile_pic_button").css("display", "none");
+              $("img").attr("src", "{{ url('public/images/default-pic.svg') }}")
+            }
+            else if(resp.status == 'danger'){
+              swal("Error", resp.message, "warning");
+            }
+        } 
+      });
+      return false;
     });
   }); 
 </script>

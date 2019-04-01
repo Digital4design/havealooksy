@@ -1,4 +1,12 @@
-@extends('layouts.frontapp')
+@guest
+  @php $layout = 'layouts.frontapp' @endphp
+@endguest
+
+@auth
+  @php $layout = 'layouts.buyerLayout.buyerFrontApp' @endphp
+@endauth
+
+@extends($layout)
 
 @section('pageCss')
 <style type="text/css">
@@ -15,7 +23,7 @@
                         <div class="owl-carousel">
                             @if(!$categories->isEmpty())
                                 @foreach($categories as $value)
-                                    <a href="{{ url('home/get-products/'.$value['id']) }}" class="item" target="_blank">
+                                    <a href="{{ url('get-products/'.$value['id']) }}" class="item" target="_blank">
                                         <div class="partner-logo"><img src="{{ asset('public/images/categories/'.$value['image']) }}" alt="partners"></div>
                                         <div class="partner-text">{{ $value['name'] }}</div>
                                     </a>
@@ -37,7 +45,7 @@
                 <div class="col-lg-12 text-center">
                     <div class="section-title">
                         <h2>Favorites</h2>
-                        <a href="{{ url('product-detail') }}"></a>
+                        <!-- <a href="{{ url('product-detail') }}"></a> -->
                     </div>
                 </div>
             </div>
@@ -54,7 +62,7 @@
                                     <figcaption>
                                         <h2>{{ $value['title'] }}</h2>
                                         <p>{{ $value['description'] }}</p>
-                                        <a href="#" data-toggle="modal" data-target="#Modal-1">View more</a>
+                                        <a href="{{ url('get-products/product-details/'.$value['id']) }}" style="padding:180px 50px;">View more</a>
                                     </figcaption>
                                 </figure>
                             </div>

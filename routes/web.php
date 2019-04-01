@@ -15,17 +15,22 @@
 //     return view('index');
 // });
 
-Route::get('/', 'HomeController@index');
+Route::get('/', 'HomeController@index')->name('home');
 
 // Auth::routes();
 Auth::routes(['verify' => true]);
 
-Route::group(['prefix' => 'home'], function(){
-    Route::get('/', 'HomeController@index')->name('home');
-    Route::get('/get-products/{id}', 'HomeController@getProducts');
-    Route::get('/get-products/product-details/{id}', 'HomeController@getProductDetails');
-    Route::post('/get-products/apply-filters', 'HomeController@applyFilters');
-});
+Route::get('/get-products/{id}', 'HomeController@getProducts');
+Route::get('/get-products/product-details/{id}', 'HomeController@getProductDetails');
+Route::post('/get-products/apply-filters', 'HomeController@applyFilters');
+Route::get('/messages', 'HomeController@messagesView')->middleware('auth');
+
+// Route::group(['prefix' => 'home'], function(){
+//     Route::get('/', 'HomeController@index')->name('home');
+//     Route::get('/get-products/{id}', 'HomeController@getProducts');
+//     Route::get('/get-products/product-details/{id}', 'HomeController@getProductDetails');
+//     Route::post('/get-products/apply-filters', 'HomeController@applyFilters');
+// });
 
 Route::get('/validate-user', 'HomeController@checkUserRole')->middleware('verified');
 
