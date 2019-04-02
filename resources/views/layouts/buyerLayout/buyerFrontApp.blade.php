@@ -112,7 +112,7 @@
                             <a class="page-scroll" href="#portfolio">Saved</a>
                         </li>
                         <li>
-                            <a class="page-scroll" href="{{ url('home/messages') }}">Messages</a>
+                            <a class="page-scroll" href="{{ url('/messages') }}">Messages</a>
                         </li>
                         <li>
                             <a class="page-scroll" href="#contact">Contact</a>

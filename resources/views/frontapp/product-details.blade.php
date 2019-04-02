@@ -49,7 +49,8 @@
 						</div>
 						<p class="vote">CATEGORY : {{ $listing_data['getCategory']['name'] }}</p>
 						<div class="action">				
-							<a href="{{ url('/'.$listing_data['getListerRole']['name'].'/chat/get-chat/'.$listing_data['user_id']) }}" class="like btn btn-default"><i class="fa fa-comment"></i>Message Us</a>
+							<!-- <a href="{{ url('/'.$listing_data['getListerRole']['name'].'/chat/get-chat/'.$listing_data['user_id']) }}" class="like btn btn-default"><i class="fa fa-comment"></i>Message Us</a> -->
+							<a href="{{ Auth::check() ? url('/'.Auth::user()->roles->first()->name.'/chat/get-chat/'.$listing_data['user_id']) : route('login') }}" class="like btn btn-default"><i class="fa fa-comment"></i>Message Us</a>
 						</div>
 					</div>
 				</div>
