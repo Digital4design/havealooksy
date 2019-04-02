@@ -177,7 +177,7 @@ return [
         Laravel\Socialite\SocialiteServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
-        Musonza\Chat\ChatServiceProvider::class,
+        /*Musonza\Chat\ChatServiceProvider::class,*/
 
     ],
 
