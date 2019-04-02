@@ -1413,7 +1413,11 @@ section#category-same.listing-page {
 }
 /*******************/
 
-
+@media (min-width: 1280px) {
+	.container {
+	   width: 1180px;
+	}
+}
 @media (max-width: 1300px) {
 	.login-sec.signup-sec {padding: 0 2%;}   
 	.login-sec.signup-sec h2.text-center {margin-bottom: 22px;}
@@ -1429,7 +1433,42 @@ section.login-block, .login-block .row { height: 70vh;}
 
 }
 
+/* Search form responsive */
+@media(max-width:767px){
+    .col-sm-6, .menu.col-sm-3{
+        padding:0px 10px;
+    }
+    .search_form_input{
+        padding:0px 2px;
+    }
+    .search_form_input>input, .search_form_input>button{
+        font-size:9px;
+        padding:0px 5px;
+        height: calc(2.8rem + 2px) !important;
+    }
+    li.login>a, li.signup>a{
+        font-size: 9.5px;
+        margin-top: 10px;
+    }
+    header .intro-text .intro-heading{
+        font-size:3.5em;
+        margin-top: 20px;
+    }
+    header .intro-text .intro-lead-in{
+        font-size: 1.5em;
+    }
+    header .intro-text{
+        padding-bottom: 20px;
+    }
+    header .intro-text .intro-heading, header .intro-text .intro-lead-in{
+        line-height:1em;
+    }
+}
+
 /*search box css start here*/
+.search_form_container{
+    width:100%;
+}
 .search-sec{
     padding: 2rem;
 }
@@ -1440,7 +1479,7 @@ form.search_bbar {
 	display: block;
 	width: 100%;
 	/* font-size: 1.8rem; */
-	font-size: 1.5rem;
+	font-size: 1.4rem;
 	line-height: 1.5;
 	color: #55595c;
 	background-color: #fff;
@@ -1451,6 +1490,7 @@ form.search_bbar {
 	padding: 0 16px;
 	
 }
+
 .wrn-btn{
 	width: 100%;
 	/* font-size: 22px; */
@@ -1476,16 +1516,5 @@ form.search_bbar {
 	background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(109,27,185,1)), color-stop(1%, rgba(109,27,185,1)), color-stop(99%, rgba(137,43,225,1)), color-stop(100%, rgba(137,43,225,1)));
 	background: -webkit-linear-gradient(top, rgba(109,27,185,1) 0%, rgba(109,27,185,1) 1%, rgba(137,43,225,1) 99%, rgba(137,43,225,1) 100%);
 	background: -o-linear-gradient(top, rgba(109,27,185,1) 0%, rgba(109,27,185,1) 1%, rgba(137,43,225,1) 99%, rgba(137,43,225,1) 100%);
-	background: -ms-linear-gradient(top, rgba(109,27,185,1) 0%, rgba(109,27,185,1) 1%, rgba(137,43,225,1) 99%, rgba(137,43,225,1) ;
-	                  
+	background: -ms-linear-gradient(top, rgba(109,27,185,1) 0%, rgba(109,27,185,1) 1%, rgba(137,43,225,1) 99%, rgba(137,43,225,1);	                  
 }
-
-
-
-
-      
-
-
-
-
-

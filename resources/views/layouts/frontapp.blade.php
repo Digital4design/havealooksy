@@ -34,25 +34,23 @@
                 </div>
 
                 <!-- Search Form -->
-                <form action="#" method="post" novalidate="novalidate" class="col-lg-6">
+                <div class="col-sm-6">
                     <div class="search_form_container">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="row">
-                                    <div class="col-lg-4 col-md-4 col-sm-12 p-0">
-                                        <input type="text" class="form-control search-slt" placeholder="Industry">
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-12 p-0">
-                                        <input type="text" class="form-control search-slt" placeholder="City , State , Country">
-                                    </div>                                    
-                                    <div class="col-lg-4 col-md-4 col-sm-12 p-0">
-                                        <button type="button" class="btn btn-danger wrn-btn"> <i class="fa fa-search"></i> Search</button>
-                                    </div>
+                        <form action="#" method="post" novalidate="novalidate">
+                            <div class="row">
+                                <div class="col-sm-4 col-xs-4 search_form_input">
+                                    <input type="text" class="form-control search-slt" placeholder="Industry">
+                                </div>
+                                <div class="col-sm-4 col-xs-4 search_form_input">
+                                    <input type="text" class="form-control search-slt" placeholder="City , State , Country">
+                                </div>                                    
+                                <div class="col-sm-4 col-xs-4 search_form_input">
+                                    <button type="button" class="btn btn-danger wrn-btn"> <i class="fa fa-search"></i> Search</button>
                                 </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
-                </form>
+                </div>
 
                 <!-- login signupbtns -->
                 <div class="menu float-right col-lg-3">
@@ -64,7 +62,7 @@
                     </button>
                     <ul class="nav navbar-right"> 
                       <li class="login"><a href="{{ url('/login') }}"> Login</a></li>
-                      <li class="signup"><a href="{{ url('/register') }}"> Signup</a></li>                
+                      <li class="signup"><a href="{{ url('/register') }}"> Signup</a></li>               
                     </ul>               
                 </div>
                 
