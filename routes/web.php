@@ -24,6 +24,7 @@ Route::get('/get-products/{id}', 'HomeController@getProducts');
 Route::get('/get-products/product-details/{id}', 'HomeController@getProductDetails');
 Route::post('/get-products/apply-filters', 'HomeController@applyFilters');
 Route::get('/messages', 'HomeController@messagesView')->middleware('auth');
+Route::get('/messages/chat/{id}', 'HomeController@messagesChatView')->middleware('auth');
 
 // Route::group(['prefix' => 'home'], function(){
 //     Route::get('/', 'HomeController@index')->name('home');

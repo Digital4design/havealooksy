@@ -8,6 +8,10 @@ use Socialite;
 use App\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use Session;
+use Redirect;
+use URL;
+use Auth;
 
 class LoginController extends Controller
 {
@@ -41,6 +45,28 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    public function showLoginForm()
+    {
+        Session::put('url.intended',URL::previous());
+        return view('auth.login');        
+    }
+
+    /**
+     * The user has been authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        if(Auth::user()->roles->first()->name == 'buyer')
+        {
+            return Redirect::to(Session::get('url.intended'));
+        }
+        return redirect()->to('/');
+    }
+
     /**
      * Get the needed authorization credentials from the request.
      *
@@ -53,6 +79,7 @@ class LoginController extends Controller
         $credentials['status'] = 1;
         return $credentials;
     }
+    
     /**
      * Get the failed login response instance.
      *

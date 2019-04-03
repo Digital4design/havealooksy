@@ -111,5 +111,10 @@ class HomeController extends Controller
     public function messagesView()
     {
         return redirect(Auth::user()->roles->first()->name.'/chat');
+    }
+
+    public function messagesChatView($id)
+    {
+        return redirect(Auth::user()->roles->first()->name.'/chat/get-chat/'.$id);
     } 
 }
