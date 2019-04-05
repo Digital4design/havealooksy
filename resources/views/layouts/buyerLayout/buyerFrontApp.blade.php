@@ -21,8 +21,9 @@
         <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
         <style type="text/css">
             #hoverable{background-color:transparent;}
-            #hoverable a{border-radius:5px;padding:8px 26px;letter-spacing:2px;word-spacing:4px;}
-            #hoverable a:hover{background:none;border-bottom:2px solid #761dc9;border-radius:0px;}
+            #hoverable a{border-radius:5px;}
+            #hoverable a:hover{background:none;border-radius:0px;}
+            #hoverable a.user_name:hover{background:none;border-bottom:2px solid #761dc9;border-radius:0px;}
             .dropdown-items{position:absolute;list-style:none;background-color:rgba(0,0,0,0.6);right:0px;z-index:1;color:#fff;border-radius:5px;margin-top:3px;padding:0px;display:none;}
             li.dropdown-item{padding:15px 7px;}
             li.dropdown-item:hover{background-color:rgb(118,29,201);width:100%;}
@@ -82,7 +83,7 @@
                             </li>
                         </ul>
                       </li> --> 
-                      <li id="hoverable"><a>{{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}</a></li>
+                      <li id="hoverable"><a class="user_name">{{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}</a></li>
                       <ul class="dropdown-items">
                           <li class="dropdown-item"><a href="{{ url('buyer/dashboard') }}">Dashboard</a></li>
                           <li class="dropdown-item"><a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a></li>
@@ -112,7 +113,12 @@
                             <a class="page-scroll" href="#portfolio">Saved</a>
                         </li>
                         <li>
-                            <a class="page-scroll" href="{{ url('/messages') }}">Messages</a>
+                            @php $unreadCount = Chat::messages()->for(Auth::user())->unreadCount(); @endphp
+                            <a class="page-scroll" href="{{ url('/messages') }}">Messages
+                                @if($unreadCount)
+                                <span class="label" style="margin-left:5px;background-color:rgba(137,43,225,0.6);font-weight:normal;padding:3px 5px;">{{ $unreadCount }}</span>
+                                @endif
+                            </a>
                         </li>
                         <li>
                             <a class="page-scroll" href="#contact">Contact</a>
@@ -160,8 +166,9 @@
         <script src="{{ asset('public/looksyassets/js/ie10-viewport-bug-workaround.js') }}"></script>
         <script type="text/javascript">
             $("#hoverable").on("click", function(){
-                // $(".dropdown-items").toggleClass("show-hide", 2000); 
-                $(".dropdown-items").slideToggle(); 
+                // $(".dropdown-items").toggleClass("show-hide", 2000);
+                $("#hoverable a").toggleClass("user_name"); 
+                $(".dropdown-items").slideToggle();
             });
         </script>
         @yield('pageJs')

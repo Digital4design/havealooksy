@@ -123,7 +123,7 @@
           </div>
           <div class="form-group" id="category_image" style="display:none;">
             <img style="height:auto;width:50%;"><br>
-            <button type="button" id="image_remove_button" class="btn btn-warning" style="margin-top:10px;margin-left:55px;">Remove Profile Picture</button>
+            <button type="button" id="image_remove_button" class="btn btn-warning" style="margin-top:10px;margin-left:55px;">Remove Category Image</button>
           </div>
         </div>
         <div class="modal-footer">
@@ -235,6 +235,7 @@ $(function() {
         } 
         else 
         {
+          $("select[name=parent_category]").val(0);
           $("#button_label").html("Attach Parent Category<i class='fa fa-plus' style='margin-left:0.5em;'></i>");
         }
       });

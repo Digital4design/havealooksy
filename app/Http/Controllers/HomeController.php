@@ -31,7 +31,10 @@ class HomeController extends Controller
         {
             $categories = Categories::where('status', '1')->get();
             $fav_listings = Listings::where('is_favorite', '1')->where('status', '1')->get();
-            return view('index')->with(['categories' => $categories, 'fav_listings' => $fav_listings]);
+            $new_listings = Listings::where('status', '1')
+                                    ->take(4)->orderBy('created_at', 'desc')
+                                    ->get();
+            return view('index')->with(['categories' => $categories, 'fav_listings' => $fav_listings, 'new_listings' => $new_listings]);
         }
         else
         {
@@ -115,6 +118,9 @@ class HomeController extends Controller
 
     public function messagesChatView($id)
     {
+        if(Auth::user()->id == $id){
+            return redirect(Auth::user()->roles->first()->name.'/chat');
+        }
         return redirect(Auth::user()->roles->first()->name.'/chat/get-chat/'.$id);
     } 
 }

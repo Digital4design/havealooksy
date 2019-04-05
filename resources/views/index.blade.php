@@ -10,7 +10,7 @@
 
 @section('pageCss')
 <style type="text/css">
-   a.item{text-decoration:none;color:inherit;}  
+    a.item{text-decoration:none;color:inherit;}  
 </style>
 @stop
 
@@ -24,7 +24,11 @@
                             @if(!$categories->isEmpty())
                                 @foreach($categories as $value)
                                     <a href="{{ url('get-products/'.$value['id']) }}" class="item" target="_blank">
+                                        @if($value['image'] != "")
                                         <div class="partner-logo"><img src="{{ asset('public/images/categories/'.$value['image']) }}" alt="partners"></div>
+                                        @else
+                                        <div class="partner-logo"><img src="{{ asset('public/images/no-image-available.png') }}" alt="partners"></div>
+                                        @endif
                                         <div class="partner-text">{{ $value['name'] }}</div>
                                     </a>
                                 @endforeach
@@ -158,64 +162,28 @@
                     </div>
                 </div>
                 <div class="row">
-                
-                    <div class="col-md-3">
-                        <div class="team-item">
-                            <div class="team-image">
-                                <img src="{{ asset('public/looksyassets/images/cat2.jpg') }}" class="img-responsive" alt="author">
-                            </div>
-                            <div class="team-text">
-                                <div class="team-name">Food</div> 
-                                <h3>Salsa Delicatessen</h3>
-                                <p>$125 per person</p>
-                            </div>
+                    @if(!$new_listings->isEmpty())
+                        @foreach($new_listings as $val)
+                        <!-- team member item -->
+                        <div class="col-md-3">
+                            <a href="{{ url('get-products/product-details/'.$val['id']) }}">
+                                <div class="team-item">
+                                    <div class="team-image">
+                                        <img src="{{ asset('public/images/listings/'.$val['image']) }}" alt="{{ $val['title'] }}" class="img-responsive">
+                                    </div>
+                                    <div class="team-text">
+                                        <div class="team-name">{{ $val['title'] }}</div> 
+                                        <h3>{{ $val['description'] }}</h3>
+                                        <p>${{ $val['price'] }}</p>
+                                    </div>
+                                </div>
+                            </a>
                         </div>
-                    </div>
-                    <!-- end team member item -->
-                    <!-- team member item -->
-                    <div class="col-md-3">
-                        <div class="team-item">
-                            <div class="team-image">
-                                <img src="{{ asset('public/looksyassets/images/cat3.jpg') }}" class="img-responsive" alt="author">
-                            </div>
-                            <div class="team-text">
-                                <div class="team-name">Real Estate</div> 
-                                <h3>RESTAURANT</h3>
-                                <p>$125 per person</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end team member item -->
-                    <!-- team member item -->
-                    <div class="col-md-3">
-                        <div class="team-item">
-                            <div class="team-image">
-                                <img src="{{ asset('public/looksyassets/images/cat1.jpg') }}" class="img-responsive" alt="author">
-                            </div>
-                            <div class="team-text">
-                                <div class="team-name">Food</div> 
-                                <h3>Katz's Delicatessen</h3>
-                                <p>$125 per person</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end team member item -->
-                    <!-- team member item -->
-                    
-                    <!-- team member item -->
-                    <div class="col-md-3">
-                        <div class="team-item">
-                            <div class="team-image">
-                                <img src="{{ asset('public/looksyassets/images/cat4.jpg') }}" class="img-responsive" alt="author">
-                            </div>
-                            <div class="team-text">
-                                <div class="team-name">RESTAURANT</div> 
-                                <h3>Katz's Delicatessen</h3>
-                                <p>$125 per person</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end team member item -->
+                        <!-- end team member item -->
+                        @endforeach
+                    @else
+                        <p class="text-center">No New Listing Available!</p>
+                    @endif
                 </div>
             </div>
         </section>
@@ -225,38 +193,38 @@
                 <div class="row">
                     <div class="col-md-2 col-sm-6">
                         <ul>
-                          <li><a href=""> Home</a></li>
-                          <li><a href=""> About</a></li>
-                          <li><a href=""> Message</a></li>
-                          <li><a href=""> Saved</a></li>
-                          <li><a href=""> Contact</a></li>
+                          <li><a href="#"> Home</a></li>
+                          <li><a href="#"> About</a></li>
+                          <li><a href="{{ url('/messages') }}"> Message</a></li>
+                          <li><a href="#"> Saved</a></li>
+                          <li><a href="#"> Contact</a></li>
                         </ul>
                     </div>
                     <div class="col-md-2 col-sm-6">
                         <ul>
-                          <li><a href=""> Help</a></li>
-                          <li><a href=""> Support</a></li>                      
+                          <li><a href="#"> Help</a></li>
+                          <li><a href="#"> Support</a></li>                      
                         </ul>
                     </div>
                     <div class="col-md-2 col-sm-6">
                         <ul>
-                          <li><a href=""> Term</a></li>
-                          <li><a href=""> Privacy</a></li>                      
-                          <li><a href=""> Site Map</a></li>                     
+                          <li><a href="#"> Term</a></li>
+                          <li><a href="#"> Privacy</a></li>                      
+                          <li><a href="#"> Site Map</a></li>                     
                         </ul>
                     </div>
                     <div class="col-md-2 col-sm-6">
                         <ul>
-                          <li><a href=""> Carrer</a></li>
-                          <li><a href=""> Policies</a></li>                     
-                          <li><a href=""> Press</a></li>                        
+                          <li><a href="#"> Carrer</a></li>
+                          <li><a href="#"> Policies</a></li>                     
+                          <li><a href="#"> Press</a></li>                        
                         </ul>
                     </div>
                     <div class="col-md-2 col-sm-6 social-icons">
                         <ul>
-                          <li><a href=""> <i class="fa fa-facebook"></i></a></li>
-                          <li><a href=""> <i class="fa fa-twitter"></i></a></li>                        
-                          <li><a href=""> <i class="fa fa-instagram"></i></a></li>
+                          <li><a href="#"> <i class="fa fa-facebook"></i></a></li>
+                          <li><a href="#"> <i class="fa fa-twitter"></i></a></li>                        
+                          <li><a href="#"> <i class="fa fa-instagram"></i></a></li>
                       </ul>
                     </div>
                 </div>

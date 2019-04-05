@@ -80,6 +80,7 @@ class ListingController extends Controller
                 'category_id' => $request->category,
                 'status' => $request->status,
                 'image' => $filename,
+                'user_id' => Auth::user()->id,
             ]);
 
             $file->move('public/images/listings',$filename);

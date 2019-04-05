@@ -44,7 +44,7 @@
 								<div class="btn-plus"><span class="glyphicon glyphicon-plus"></span></div>
 							</div>
 							<div class="action">
-								<a href="{{ route('login') }}" class="add-to-cart btn btn-default">Add To Cart</a>							
+								<a href="{{ route('login') }}" class="add-to-cart btn btn-default">BOOK NOW</a>							
 							</div>
 						</div>
 						<p class="vote">CATEGORY : {{ $listing_data['getCategory']['name'] }}</p>

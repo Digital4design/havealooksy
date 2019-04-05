@@ -9,16 +9,24 @@ use App\Models\Categories;
 use App\Models\Listings;
 use Validator;
 use App\User;
+use Redirect;
+use Session;
 use Auth;
 
 class DashboardController extends Controller
 {
     public function index()
     {
+        if(Session::has('previous_url')){
+            return Redirect::to(Session::get('previous_url'));
+        }
     	$categories = Categories::where('status', '1')->get();
         $fav_listings = Listings::where('is_favorite', '1')->where('status', '1')->get();
+        $new_listings = Listings::where('status', '1')
+                                    ->take(4)->orderBy('created_at', 'desc')
+                                    ->get();
 
-    	return view('index')->with(['categories' => $categories, 'fav_listings' => $fav_listings]);
+    	return view('index')->with(['categories' => $categories, 'fav_listings' => $fav_listings, 'new_listings' => $new_listings]);
     }
 
     public function dashboardView()

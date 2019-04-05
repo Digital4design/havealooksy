@@ -47,7 +47,7 @@ class LoginController extends Controller
 
     public function showLoginForm()
     {
-        Session::put('url.intended',URL::previous());
+        Session::put('previous_url',URL::previous());
         return view('auth.login');        
     }
 
@@ -58,14 +58,14 @@ class LoginController extends Controller
      * @param  mixed  $user
      * @return mixed
      */
-    protected function authenticated(Request $request, $user)
-    {
-        if(Auth::user()->roles->first()->name == 'buyer')
-        {
-            return Redirect::to(Session::get('url.intended'));
-        }
-        return redirect()->to('/');
-    }
+    // protected function authenticated(Request $request, $user)
+    // {
+    //     if(Auth::user()->roles->first()->name == 'buyer')
+    //     {
+    //         return Redirect::to(Session::get('url.intended'));
+    //     }
+    //     return redirect()->to('/');
+    // }
 
     /**
      * Get the needed authorization credentials from the request.
