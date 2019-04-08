@@ -35,6 +35,26 @@
     #header-pic-link:hover{background-color: transparent;}
     .change-pic-link:hover img.img-circle{opacity:0.7;background-color:rgba(0,0,0,0.7);}
     #see_all_messages:hover{color:#000;background-color:silver;}.error{color:red;}
+    .loader {
+      border: 8px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 8px solid #3498db;
+      width: 50px;
+      height: 50px;
+      -webkit-animation: spin 2s linear infinite; /* Safari */
+      animation: spin 2s linear infinite;
+    }
+    .hide{display:none;}
+
+    /* Safari */
+    @-webkit-keyframes spin {
+      0% { -webkit-transform: rotate(0deg); }
+      100% { -webkit-transform: rotate(360deg); }
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
   @yield('pageCss')
 </head>
@@ -331,6 +351,9 @@
     </div>
   </div>
 </div>
+<div id="loading" class="hide" style="position:absolute;top:50%;left:50%;z-index:1;">
+  <div class="loader"></div>
+</div>
 <!-- End Modals -->
 
 <!-- jQuery 3 -->
@@ -377,6 +400,7 @@
 
     $("#profile_picture_form").submit(function(){
       var formData = new FormData(this);
+      $("#loading").toggleClass("hide");
       $.ajax({
         'url'        : '{{ url("seller/change-profile-picture") }}',
         'method'     : 'post',
@@ -388,6 +412,7 @@
         success    : function(resp){
           
             if(resp.status == 'success'){
+              $("#loading").toggleClass("hide");
               $("#change-picture").modal("toggle");
               swal({
                 title: "Success",
@@ -422,6 +447,7 @@
     });
 
     $("#remove-profile-picture").on("click", function(){
+      $("#loading").toggleClass("hide");
       $.ajax({
         'url'        : '{{ url("seller/remove-profile-picture") }}',
         'method'     : 'get',
@@ -429,6 +455,7 @@
         success    : function(resp){
           
             if(resp.status == 'success'){
+              $("#loading").toggleClass("hide");
               swal({
                 title: "Success",
                 text: resp.message,

@@ -17,9 +17,6 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        if(Session::has('previous_url')){
-            return Redirect::to(Session::get('previous_url'));
-        }
     	$categories = Categories::where('status', '1')->get();
         $fav_listings = Listings::where('is_favorite', '1')->where('status', '1')->get();
         $new_listings = Listings::where('status', '1')

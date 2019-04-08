@@ -127,7 +127,7 @@ class ListingController extends Controller
             'price' => ['required', 'numeric'],  
             'category' => ['required'],  
             'status' => ['required'],
-            'image' => ['image', 'mimes:jpg,jpeg,png'],  
+            'image' => ['required', 'image', 'mimes:jpg,jpeg,png'],  
         ]);
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();

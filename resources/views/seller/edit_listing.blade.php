@@ -123,7 +123,7 @@
                 <div class="form-group" id="add_image_section" style="display: none;">
                   <label for="image" class="col-sm-2 control-label">Image</label>
                   <div class="col-sm-10">
-                    <input id="image" name="image" type="file" class="form-control">
+                    <input id="image" name="image" type="file" class="form-control" required>
                     <p class="help-block">Only .jpeg, .jpg, .png are supported.</p>
 
                     @if ($errors->has('image'))

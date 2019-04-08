@@ -58,14 +58,14 @@ class LoginController extends Controller
      * @param  mixed  $user
      * @return mixed
      */
-    // protected function authenticated(Request $request, $user)
-    // {
-    //     if(Auth::user()->roles->first()->name == 'buyer')
-    //     {
-    //         return Redirect::to(Session::get('url.intended'));
-    //     }
-    //     return redirect()->to('/');
-    // }
+    protected function authenticated(Request $request, $user)
+    {
+        if(Auth::user()->roles->first()->name == 'buyer')
+        {
+            return redirect()->intended(Session::get('previous_url'));
+        }
+        return redirect()->intended('/');
+    }
 
     /**
      * Get the needed authorization credentials from the request.
