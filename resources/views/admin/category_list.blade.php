@@ -184,6 +184,7 @@ $(function() {
 
     $("#add_category_form").submit(function(){
       var formData = new FormData(this);
+      $("#loading").toggleClass("hide");
       $.ajax({
         'url'        : '{{ url("admin/categories/add-category") }}',
         'method'     : 'post',
@@ -195,6 +196,7 @@ $(function() {
         success    : function(data){
           
           if(data.status == 'success'){
+            $("#loading").toggleClass("hide");
             $("#add-category").modal('toggle');
             swal({
               title: "Success",
@@ -310,12 +312,14 @@ $(function() {
     $(document).on("click", "button.button_edit", function(){
       var id = $(this).attr('data-id');
       $("select[name=edit_parent_category]").html("");
+      $("#loading").toggleClass("hide");
       $.ajax({
         'url'      : '{{ url("admin/categories/get-category-data") }}/'+id,
         'method'   : 'get',
         'dataType' : 'json',
         success    : function(resp){
           if(resp.status == 'success'){
+            $("#loading").toggleClass("hide");
 
             $("select[name=edit_parent_category]").append("<option value=0>No Parent Category</option>");
             $.each(resp.all_categories, function(key, value){
@@ -362,6 +366,7 @@ $(function() {
 
     $("#edit_category_form").submit(function(){
       var formData = new FormData(this);
+      $("#loading").toggleClass("hide");
       $.ajax({
         'url'      : '{{ url("admin/categories/edit-category") }}',
         'method'   : 'post',
@@ -372,6 +377,7 @@ $(function() {
         'processData': false,
         success    : function(resp){
           if(resp.status == 'success'){
+            $("#loading").toggleClass("hide");
             $("#edit-category").modal('toggle');
             swal({
               title: "Success",

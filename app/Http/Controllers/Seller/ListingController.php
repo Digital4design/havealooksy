@@ -14,7 +14,7 @@ class ListingController extends Controller
 {
     public function getListings()
     {
-    	$all_listings = Listings::where('user_id', Auth::user()->id)->get();
+    	$all_listings = Listings::where('user_id', Auth::user()->id)->where('is_approved', 1)->get();
 
         return Datatables::of($all_listings)
         				->editColumn('status', function ($all_listings){
@@ -22,6 +22,11 @@ class ListingController extends Controller
                                 return 'Active';
                             if($all_listings['status'] == 0)
                                 return 'Deactive';
+                        })->editColumn('is_favorite', function ($all_listings){
+                            if($all_listings['is_favorite'] == 1)
+                                return 'Favorite';
+                            if($all_listings['is_favorite'] == 0)
+                                return 'Non-Favorite';
         				})->addColumn('category', function ($all_listings){
                                 return Categories::where('id', $all_listings['category_id'])
                                         ->pluck('name')->first();
@@ -39,12 +44,12 @@ class ListingController extends Controller
                             return "<a href='".route('editListing', $all_listings['id'])."' class='btn btn-info' style='margin-right:1em;'><i class='fa fa-edit'></i></a><button type='button' data-id='".$all_listings['id']."' class='btn btn-warning button_delete'><i class='fa fa-trash-o'></i></button>";
                         })->editColumn('image', function ($all_listings){
                             return "<a href='".asset('public/images/listings/'.$all_listings['image'])."' style='font-size:1.3em;' target='_blank'><i class='fa fa-eye'></i></a>";
-                        })->editColumn('is_favorite', function ($all_listings){
+                        })->addColumn('is_favorite_listing', function ($all_listings){
                             if($all_listings['is_favorite'] == 1)
                                 return "<button data-id='".$all_listings['id']."' class='btn btn-default is-favorite'>Remove from favorites</button>";
                             if($all_listings['is_favorite'] == 0)
                                 return "<button data-id='".$all_listings['id']."' class='btn btn-danger is-favorite'>Add to favorites</button>";
-            			})->rawColumns(['activate_deactivate' => 'activate_deactivate', 'action' => 'action', 'image' => 'image', 'is_favorite' => 'is_favorite'])->make(true);
+            			})->rawColumns(['activate_deactivate' => 'activate_deactivate', 'action' => 'action', 'image' => 'image', 'is_favorite_listing' => 'is_favorite_listing'])->make(true);
     }
 
     public function addListing()
@@ -85,7 +90,7 @@ class ListingController extends Controller
 
             $file->move('public/images/listings',$filename);
 
-        	return redirect()->route('listings')->with(['status' => 'success' , 'message' => 'Listing added successfully.']);
+        	return redirect()->route('listings')->with(['status' => 'success' , 'message' => 'Listing has been successfully submitted for approval.']);
         }
         catch(\Exception $e)
         {
@@ -118,6 +123,20 @@ class ListingController extends Controller
     	return view('seller.edit_listing')->with(['categories' => $categories, 'listing_data' => $listing_data]);
     }
 
+    public function removeListingImage($id)
+    {
+        $listing = Listings::find($id);
+
+        if(file_exists(public_path('images/listings/'.$listing->image)))
+        {   
+            $del_pic = unlink(public_path('images/listings/'.$listing->image));
+            $listing->image = null;
+            $listing->save();
+            return response()->json(['status' => 'success','message' => 'Listing Image removed successfully']);
+        }
+        return response()->json(['status' => 'danger','message' => 'Something went wrong. Please try again later.']);
+    }
+
     public function updateListing(Request $request)
     {
     	$validator = Validator::make($request->all(),[
@@ -127,7 +146,7 @@ class ListingController extends Controller
             'price' => ['required', 'numeric'],  
             'category' => ['required'],  
             'status' => ['required'],
-            'image' => ['required', 'image', 'mimes:jpg,jpeg,png'],  
+            'image' => ['image', 'mimes:jpg,jpeg,png'],  
         ]);
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
@@ -143,10 +162,6 @@ class ListingController extends Controller
         	$listing->status = $request->status;
 
         	if($request->hasFile('image')){
-        		if (file_exists(public_path('images/listings/'.$listing->image)))
-				{
-	            	$del_previous_pic = unlink(public_path('images/listings/'.$listing->image));
-	            }
         		$file = $request->file('image');
             	$filename = 'listing-'.time().'.'.$file->getClientOriginalExtension();
             	$file->move('public/images/listings',$filename);
@@ -169,14 +184,18 @@ class ListingController extends Controller
     	try
         {
             $listing = Listings::find($id);
+            $listing->deleted_by = Auth::user()->id;
+            $listing->save();
+            $listing->delete();
 
-            if (file_exists(public_path('images/listings/'.$listing->image)))
-			{
-            	$del_image = unlink(public_path('images/listings/'.$listing->image));
-            	$listing->delete();
-            	return response()->json(['status' => 'success','message' => 'Listing deleted successfully.']);
-            }
-            return response()->json(['status' => 'danger','message' => 'Listing cannot be deleted!']);  
+            return response()->json(['status' => 'success','message' => 'Listing deleted successfully.']);
+   //          if (file_exists(public_path('images/listings/'.$listing->image)))
+			// {
+   //          	$del_image = unlink(public_path('images/listings/'.$listing->image));
+   //          	$listing->delete();
+   //          	return response()->json(['status' => 'success','message' => 'Listing deleted successfully.']);
+   //          }
+   //          return response()->json(['status' => 'danger','message' => 'Listing cannot be deleted!']);  
         }
         catch(\Exception $e)
         {

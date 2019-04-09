@@ -1,11 +1,10 @@
-@extends('layouts.sellerLayout.sellerApp')
+@extends('layouts.adminLayout.adminApp')
 
 @section('pageCss')
 <style type="text/css">
-  #add-listing-button{margin:1em auto;font-size:20px;padding:0.3em 1.5em;}
-  .filters{display:flex;justify-content:center;align-items:center;padding-bottom:20px;}
-  .filters label{margin-right:30px;}
+  .box{border:none;}
   .toolbar{float:left;height:35px;margin-top:5px;}
+  .filters{margin-bottom:20px;}
 </style>
 @stop
 
@@ -25,27 +24,16 @@
       @endif
         <div class="row">
             <div class="col-xs-12">
-              <div class="pull-right">
-                <a id="add-listing-button" href="{{ url('/seller/listings/add-listing') }}" class="btn btn-block btn-primary"><i class="fa fa-plus-circle"></i></a>
-              </div>
-            </div>
-            <div class="col-xs-12">
-              <div class="box">
+                <div class="box">
                 <div class="box-header">
                   <h3 class="box-title">All Listings</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                  <div class="filters text-center">
-                    <label>Filters:</label>
-                    <button id="all" class="btn btn-primary" style="margin:auto 3px 0px;">ALL</button>
-                    <div style="margin-right:50px;">
-                      <button id="active" class="btn btn-primary">ACTIVE</button>
-                      <button id="inactive" class="btn btn-primary">INACTIVE</button>
-                    </div>
-                    <div>
-                      <button id="favorites" class="btn btn-danger">FAVORITES</button>
-                    </div>
+                  <div class="text-center filters">
+                    <button id="all" class="btn btn-primary">ALL</button>
+                    <button id="approved" class="btn btn-primary">APPROVED</button>
+                    <button id="unapproved" class="btn btn-primary">UNAPPROVED</button>
                   </div>
                   <table id="listings_list" class="table table-bordered table-striped">
                     <thead>
@@ -57,9 +45,9 @@
                           <th>Category</th>
                           <th>Status</th>
                           <th>Image</th>
-                          <th>Activate/Deactivate</th>
+                          <th>Approve/Unapprove</th>
                           <th>Action</th>
-                          <th></th>
+                          <th>Approval Status</th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -71,9 +59,9 @@
                           <th>Category</th>
                           <th>Status</th>
                           <th>Image</th>
-                          <th>Activate/Deactivate</th>
+                          <th>Approve/Unapprove</th>
                           <th>Action</th>
-                          <th></th>
+                          <th>Approval Status</th>
                         </tr>
                     </tfoot>
                   </table>
@@ -84,18 +72,19 @@
         </div>
     </section>
 </div>
+
 @endsection
 
 @section('pageJs')
 <script>
-$(function() {
+  $(document).ready(function(){     
     var table = $('#listings_list').DataTable({
         processing: true,
         serverSide: true,
         lengthMenu: [10,25,50,100],
         dom: "<'row'<'col-md-2'l><'col-md-2 toolbar'><'col-md-8'Bf>>" + "<'row'<'col-md-4'><'col-md-4'>>" + "<'row'<'col-md-12't>><'row'<'col-md-12'ip>>",
         ajax: {
-          "url": '{!! url("seller/listings/get-listings") !!}',
+          "url": '{!! url("admin/listings/get-listings") !!}',
           "type": 'GET',
           "data": function (data) {
                 data.title = "{{ (!empty($title))? $title : null }}";
@@ -103,7 +92,6 @@ $(function() {
                 data.location = "{{ (!empty($location)) ? $location : null }}";
                 data.price = "{{ (!empty($price))? $price : null }}";
                 data.category = "{{ (!empty($category))? $category : null }}";
-                // data.status = "{{ (!empty($status))? $status : null }}";
           }
         },
         columns: [
@@ -112,12 +100,11 @@ $(function() {
             { data: 'location', name: 'location' },
             { data: 'price', name: 'price' },
             { data: 'category', name: 'category' },
-            { data: 'status', name: 'status', orderable: false, visible:false },
+            { data: 'status', name: 'status', orderable: false },
             { data: 'image', name: 'image', orderable: false },
-            { data: 'activate_deactivate', name: 'activate_deactivate', orderable: false },
+            { data: 'approved_unapproved', name: 'approved_unapproved', orderable: false },
             { data: 'action', name: 'action', orderable: false },
-            { data: 'is_favorite_listing', name: 'is_favorite_listing', orderable: false },
-            { data: 'is_favorite', name: 'is_favorite', orderable: false, visible:false },
+            { data: 'is_approved', name: 'is_approved', orderable: false, visible: false },
         ],
         oLanguage: {
           "sInfoEmpty" : "Showing 0 to 0 of 0 entries",
@@ -142,79 +129,40 @@ $(function() {
     });
 
     $('#all').on('click', function () {
-        table.columns(5).search("").columns(10).search("").draw();
+        table.columns(9).search("").draw();
     });
 
-    $('#active').on('click', function () {
-        regExSearch = "^" + "Active" +"$";
-        table.columns(5).search(regExSearch, true, false, false).draw();
+    $('#approved').on('click', function () {
+        regExSearch = "^" + "Approved" +"$";
+        table.columns(9).search(regExSearch, true, false, false).draw();
     });
 
-    $('#inactive').on('click', function () {
-        table.columns(5).search("Deactive").draw();
+    $('#unapproved').on('click', function () {
+        table.columns(9).search("Unapproved").draw();
     });
 
-    $('#favorites').on('click', function () {
-        regexEx = "^" + "Favorite" +"$";
-        table.columns(10).search(regexEx, true, false, false).draw();
-    });
-
-    $(document).on("click", "button.active-deactive", function(){
+    $(document).on("click", "button.approve-unapprove", function(){
       var id = $(this).attr('data-id');
 
       if($(this).hasClass("btn-danger")){
-        status_data = 1;
+        approval_data = 1;
       }
       if($(this).hasClass("btn-default")){
-        status_data = 0;
+        approval_data = 0;
       }
 
       $.ajax({
-        'url'      : '{{ url("seller/listings/change-status") }}/'+id+"/"+status_data,
+        'url'      : '{{ url("admin/listings/change-approval") }}/'+id+"/"+approval_data,
         'method'   : 'get',
         'dataType' : 'json',
         success    : function(data){
           if(data.status == 'success'){
-            if(data.listing_status == 1){
-              $(".active-deactive[data-id="+id+"]").removeClass("btn-danger").addClass("btn-default").text("Deactivate");
-              // $(".active-deactive[data-id="+id+"]").closest("tr").find("td:eq(5)").text("Active");
+            if(data.listing_approval_status == 1){
+              $(".approve-unapprove[data-id="+id+"]").removeClass("btn-danger").addClass("btn-default").text("Unapprove");
             }
-            if(data.listing_status == 0){
-              $(".active-deactive[data-id="+id+"]").removeClass("btn-default").addClass("btn-danger").text("Activate");
-              // $(".active-deactive[data-id="+id+"]").closest("tr").find("td:eq(5)").text("Deactive");
+            if(data.listing_approval_status == 0){
+              $(".approve-unapprove[data-id="+id+"]").removeClass("btn-default").addClass("btn-danger").text("Approve");
             }
-          }  
-        } 
-      });
-      return false;
-    });
-
-    $(document).on("click", "button.is-favorite", function(){
-      var id = $(this).attr('data-id');
-
-      if($(this).hasClass("btn-danger")){
-        fav = 1
-      }
-      if($(this).hasClass("btn-default")){
-        fav = 0;
-      }
-      $("#loading").toggleClass("hide");
-      $.ajax({
-        'url'      : '{{ url("seller/listings/change-favorite-status") }}/'+id+"/"+fav,
-        'method'   : 'get',
-        'dataType' : 'json',
-        success    : function(data){
-          if(data.status == 'success'){
-            // if(data.fav_status == 1){
-            //   $(".is-favorite[data-id="+id+"]").removeClass("btn-danger").addClass("btn-default").text("Remove from favorites");
-            // }
-            // if(data.fav_status == 0){
-            //   $(".is-favorite[data-id="+id+"]").removeClass("btn-default").addClass("btn-danger").text("Add to favorites");
-            // }
-            $("#loading").toggleClass("hide");
-            setTimeout(function(){ 
-                location.reload();
-            });
           }  
         } 
       });
@@ -235,7 +183,7 @@ $(function() {
       },
       function(){
         $.ajax({
-          'url'      : '{{ url("seller/listings/delete-listing") }}/'+id,
+          'url'      : '{{ url("admin/listings/delete-listing") }}/'+id,
           'method'   : 'get',
           'dataType' : 'json',
           success    : function(data){
@@ -255,7 +203,7 @@ $(function() {
         });
       });
       return false;
-    });    
-});
+    });
+  });
 </script>
 @stop

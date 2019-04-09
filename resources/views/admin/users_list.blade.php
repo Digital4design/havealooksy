@@ -13,7 +13,7 @@
                   <table id="user_list" class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                          <th>First Name</th>
+                          <th>Name</th>
                           <th>Last Name</th>
                           <th>Username</th>
                           <th>Email</th>
@@ -24,7 +24,7 @@
                     </thead>
                     <tfoot>
                         <tr>
-                          <th>First Name</th>
+                          <th>Name</th>
                           <th>Last Name</th>
                           <th>Username</th>
                           <th>Email</th>
@@ -63,8 +63,12 @@ $(function() {
           }
         },
         columns: [
-            { data: 'first_name', name: 'first_name' },
-            { data: 'last_name', name: 'last_name' },
+            { data: 'first_name', name: 'first_name', 
+                render: function (data, type, row) {
+                    return data +' '+ row.last_name;
+                }, 
+            },
+            { data: 'last_name', name: 'last_name', visible: false },
             { data: 'user_name', name: 'user_name' },
             { data: 'email', name: 'email' },
             { data: 'postal_code', name: 'postal_code' },

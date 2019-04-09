@@ -1,4 +1,4 @@
-@extends('layouts.sellerLayout.sellerApp')
+@extends('layouts.adminLayout.adminApp')
 
 @section('pageCss')
 <style type="text/css">
@@ -17,7 +17,7 @@
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            <form class="form-horizontal" method="POST" action="{{ url('/seller/listings/update-listing') }}" enctype="multipart/form-data">
+            <form class="form-horizontal" method="POST" action="{{ url('/admin/listings/update-listing') }}" enctype="multipart/form-data">
               @csrf
               <input type="hidden" name="listing_id" value="{{ $listing_data['id'] }}">
               <div class="box-body">
@@ -96,23 +96,6 @@
 
                   </div>
                 </div>
-                <div class="form-group">
-                  <label for="status" class="col-sm-2 control-label">Status</label>
-                  <div class="col-sm-10">
-                    <select id="status" name="status" class="form-control">
-                      <option value="">Select Status</option>
-                      <option value="1" {{ ($listing_data['status']==1) ? 'selected':'' }}>Active</option>
-                      <option value="0" {{ ($listing_data['status']==0) ? 'selected':'' }}>Deactive</option>
-                    </select>
-
-                    @if ($errors->has('status'))
-                      <span class="invalid-feedback" role="alert">
-                          <strong>{{ $errors->first('status') }}</strong>
-                      </span>
-                    @endif
-
-                  </div>
-                </div>
                 @if($listing_data['image'])
                 <div class="form-group">
                   <label for="image" class="col-sm-2 control-label">Image</label>
@@ -158,7 +141,7 @@
       $("#loading").toggleClass("hide");
 
       $.ajax({
-        'url'        : '{{ url("seller/listings/remove-listing-image") }}/'+id,
+        'url'        : '{{ url("admin/listings/remove-listing-image") }}/'+id,
         'method'     : 'get',
         'dataType'   : 'json',
         success    : function(resp){

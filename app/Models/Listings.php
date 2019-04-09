@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Listings extends Model
 {
-    protected $fillable = ['title', 'description', 'location', 'image', 'price', 'category_id', 'status', 'user_id'];
+	use SoftDeletes;
+    protected $fillable = ['title', 'description', 'location', 'image', 'price', 'category_id', 'status', 'user_id', 'deleted_by'];
 
     public function getCategory()
     {

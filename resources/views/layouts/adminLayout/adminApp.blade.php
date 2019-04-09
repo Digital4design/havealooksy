@@ -35,6 +35,26 @@
     #header-pic-link:hover{background-color: transparent;}
     .change-pic-link:hover img.img-circle{opacity:0.7;background-color:rgba(0,0,0,0.7);}
     .error{color:red;}
+    .loader {
+      border: 8px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 8px solid #3498db;
+      width: 50px;
+      height: 50px;
+      -webkit-animation: spin 2s linear infinite; /* Safari */
+      animation: spin 2s linear infinite;
+    }
+    .hide{display:none;}
+
+    /* Safari */
+    @-webkit-keyframes spin {
+      0% { -webkit-transform: rotate(0deg); }
+      100% { -webkit-transform: rotate(360deg); }
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
   @yield('pageCss')
 </head>
@@ -65,18 +85,6 @@
               <li>
                 <!-- inner menu: contains the actual data -->
                 <ul class="menu" id="conversations_list">
-                  <!-- <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="{{asset('public/adminPanelAssets')}}/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Support Team
-                        <small><i class="fa fa-clock-o"></i> 5 mins</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li> -->
                 </ul>
               </li>
               <li class="footer"><a href="{{ url('admin/chat') }}">See All Messages</a></li>
@@ -122,84 +130,6 @@
                 </ul>
               </li>
               <li class="footer"><a href="#">View all</a></li>
-            </ul>
-          </li>
-          <!-- Tasks: style can be found in dropdown.less -->
-          <li class="dropdown tasks-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-flag-o"></i>
-              <span class="label label-danger">9</span>
-            </a>
-            <ul class="dropdown-menu">
-              <li class="header">You have 9 tasks</li>
-              <li>
-                <!-- inner menu: contains the actual data -->
-                <ul class="menu">
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <h3>
-                        Design some buttons
-                        <small class="pull-right">20%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar"
-                             aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">20% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <!-- end task item -->
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <h3>
-                        Create a nice theme
-                        <small class="pull-right">40%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-green" style="width: 40%" role="progressbar"
-                             aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">40% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <!-- end task item -->
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <h3>
-                        Some task I need to do
-                        <small class="pull-right">60%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-red" style="width: 60%" role="progressbar"
-                             aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">60% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <!-- end task item -->
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <h3>
-                        Make beautiful transitions
-                        <small class="pull-right">80%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-yellow" style="width: 80%" role="progressbar"
-                             aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">80% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <!-- end task item -->
-                </ul>
-              </li>
-              <li class="footer">
-                <a href="#">View all tasks</a>
-              </li>
             </ul>
           </li>
           <!-- User Account: style can be found in dropdown.less -->
@@ -275,6 +205,11 @@
             <i class="fa fa-list"></i> <span>Categories</span>
           </a>
         </li>
+        <li class="{{ Request::is('admin/listings') ? 'active' : '' }}">
+          <a href="{{ url('admin/listings') }}">
+            <i class="fa fa-list-alt"></i> <span>Listings</span>
+          </a>
+        </li>
         <li class="{{ Request::is('admin/chat') ? 'active' : '' }}">
           <a href="{{ url('admin/chat') }}">
             <i class="fa fa-commenting"></i> <span>Messages</span><span class="pull-right" style="margin-right:5px;">{{ ($unreadCount != 0) ? $unreadCount : '' }}</span>
@@ -336,6 +271,9 @@
     </div>
   </div>
 </div>
+<div id="loading" class="hide" style="position:absolute;top:50%;left:50%;z-index:1111;">
+  <div class="loader"></div>
+</div>
 <!-- End Modals -->
 
 <!-- jQuery 3 -->
@@ -381,6 +319,7 @@ $(document).ready(function(){
   });
   $("#profile_picture_form").submit(function(){
     var formData = new FormData(this);
+    $("#loading").toggleClass("hide");
     $.ajax({
       'url'        : '{{ url("admin/change-profile-picture") }}',
       'method'     : 'post',
@@ -392,6 +331,7 @@ $(document).ready(function(){
       success    : function(resp){
         
           if(resp.status == 'success'){
+            $("#loading").toggleClass("hide");
             $("#change-picture").modal("toggle");
             swal({
               title: "Success",
@@ -426,6 +366,7 @@ $(document).ready(function(){
   });
 
   $("#remove-profile-picture").on("click", function(){
+    $("#loading").toggleClass("hide");
     $.ajax({
       'url'        : '{{ url("admin/remove-profile-picture") }}',
       'method'     : 'get',
@@ -433,6 +374,7 @@ $(document).ready(function(){
       success    : function(resp){
         
           if(resp.status == 'success'){
+            $("#loading").toggleClass("hide");
             swal({
               title: "Success",
               text: resp.message,

@@ -29,12 +29,11 @@
   <style type="text/css">
     #profile-button:hover, #logout-button:hover{color:#fff;background-color: #d33724;border-color: #f39c12;}
     .navbar-nav>.user-menu>.dropdown-menu>.user-footer{background-color:#357ca5;}
-    .user-panel img.img-circle{width:100%;height:auto;max-width:50px;min-height:50px;}
-    .user-header img.img-circle{z-index: 5;border: 3px solid;width:90px;height:90px;border-color: rgba(255,255,255,0.2);}
-    .change-pic-link{position:relative;}
-    #header-pic-link:hover{background-color: transparent;}
-    .change-pic-link:hover img.img-circle{opacity:0.7;background-color:rgba(0,0,0,0.7);}
     #see_all_messages:hover{color:#000;background-color:silver;}.error{color:red;}
+    a.change-picture{letter-spacing:0.5px;font-size:0.75em;padding:5px;}
+    a.change-picture:hover{text-decoration:underline;color:rgba(137,43,225,1);}
+    a.change-picture-link{visibility:hidden;letter-spacing:0.5px;font-size:1em;color:#fff !important;position:absolute;top:40px;left:95px;padding:35px 20px;}
+    a.change-picture-link:hover{color:rgba(0,0,0,0.8);}
     .loader {
       border: 8px solid #f3f3f3;
       border-radius: 50%;
@@ -84,18 +83,6 @@
               <li class="header">You have {{ $unreadCount }} unread messages</li>
               <li>
                 <ul class="menu" id="conversations_list">
-                  <!-- <li>
-                    <a href="{{ url('seller/chat/get-chat/') }}">
-                      <div class="pull-left">
-                        <img src="{{asset('public/adminPanelAssets')}}/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Support Team
-                        <small><i class="fa fa-clock-o"></i> 5 mins</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li> -->
                 </ul>
               </li>
               <li class="footer"><a id="see_all_messages" href="{{ url('seller/chat') }}">See All Messages</a></li>
@@ -143,84 +130,6 @@
               <li class="footer"><a href="#">View all</a></li>
             </ul>
           </li>
-          <!-- Tasks: style can be found in dropdown.less -->
-          <li class="dropdown tasks-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-flag-o"></i>
-              <span class="label label-danger">9</span>
-            </a>
-            <ul class="dropdown-menu">
-              <li class="header">You have 9 tasks</li>
-              <li>
-                <!-- inner menu: contains the actual data -->
-                <ul class="menu">
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <h3>
-                        Design some buttons
-                        <small class="pull-right">20%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar"
-                             aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">20% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <!-- end task item -->
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <h3>
-                        Create a nice theme
-                        <small class="pull-right">40%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-green" style="width: 40%" role="progressbar"
-                             aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">40% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <!-- end task item -->
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <h3>
-                        Some task I need to do
-                        <small class="pull-right">60%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-red" style="width: 60%" role="progressbar"
-                             aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">60% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <!-- end task item -->
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <h3>
-                        Make beautiful transitions
-                        <small class="pull-right">80%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-yellow" style="width: 80%" role="progressbar"
-                             aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">80% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <!-- end task item -->
-                </ul>
-              </li>
-              <li class="footer">
-                <a href="#">View all tasks</a>
-              </li>
-            </ul>
-          </li>
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -229,12 +138,10 @@
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
-              <li class="user-header">
-                <a id="header-pic-link" href="#" data-target="#change-picture" data-toggle="modal" class="change-pic-link" style="display:unset;padding:0;">
-                  <img src="{{ (Auth::user()->profile_picture) ? asset('public/images/profile_pictures/'.Auth::user()->profile_picture) : asset('public/images/default-pic.svg') }}" class="img-circle" alt="User Image">
-                  <span class="change-pic" style="display:none;font-size:1.2em;position:absolute;top:2px;left:30px;color:#fff;">{{ (Auth::user()->profile_picture) ? 'Edit' : 'Add' }}</span>
-                </a>
-
+              <li class="user-header" style="position:relative;">
+                <img src="{{ (Auth::user()->profile_picture) ? asset('public/images/profile_pictures/'.Auth::user()->profile_picture) : asset('public/images/default-pic.svg') }}" class="img-circle" alt="User Image">
+                <div class="change-picture-div" style="position:absolute;padding:45px;top:10px;left:95px;"></div>
+                <a class="change-picture-link" href="#" data-target="#change-picture" data-toggle="modal">Change</a>
                 <p>
                   {{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}
                   <small>Member since {{ Auth::user()->created_at->format('d/m/Y') }}</small>
@@ -264,14 +171,13 @@
     <section class="sidebar">
       <!-- Sidebar user panel -->
       <div class="user-panel">
-        <div class="pull-left image col-md-3" style="padding:0px;">
-          <a href="#" data-target="#change-picture" data-toggle="modal" class="change-pic-link">
-            <img src="{{ (Auth::user()->profile_picture) ? asset('public/images/profile_pictures/'.Auth::user()->profile_picture) : asset('public/images/default-pic.svg') }}" class="img-circle" alt="User Image">
-            <span class="change-pic" style="display:none;font-size:0.9em;position:absolute;top:3px;left:15px;">{{ (Auth::user()->profile_picture) ? 'Edit' : 'Add' }}</span>
-          </a>
-          
+        <div class="pull-left image">
+            <img src="{{ (Auth::user()->profile_picture) ? asset('public/images/profile_pictures/'.Auth::user()->profile_picture) : asset('public/images/default-pic.svg') }}" class="img-circle" alt="User Image" style="margin-bottom:5px;">
+            <div style="display:block;">
+              <a class="change-picture" href="#" data-target="#change-picture" data-toggle="modal">Change</a>
+            </div>
         </div>
-        <div class="pull-left info col-md-9">
+        <div class="pull-left info">
           <p>{{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}</p>
           <p>{{ Auth::user()->roles->first()->display_name }}</p>
           <!-- <a href="#"><i class="fa fa-circle text-success"></i> Online</a> -->
@@ -351,7 +257,7 @@
     </div>
   </div>
 </div>
-<div id="loading" class="hide" style="position:absolute;top:50%;left:50%;z-index:1;">
+<div id="loading" class="hide" style="position:absolute;top:50%;left:50%;z-index:1111;">
   <div class="loader"></div>
 </div>
 <!-- End Modals -->
@@ -376,11 +282,11 @@
 <script src="{{asset('public/js/sweetalert/sweetalert.min.js')}}"></script>
 <script type="text/javascript">
   $(document).ready(function(){
-    $(".change-pic-link").mouseover(function(){
-      $(".change-pic").css("display", "block");
+    $("div.change-picture-div").mouseover(function(){
+      $("a.change-picture-link").css("visibility", "visible");
     });
-    $(".change-pic-link").mouseout(function(){
-      $(".change-pic").css("display", "none");
+    $("div.change-picture-div").mouseout(function(){
+      $("a.change-picture-link").css("visibility", "hidden");
     });
     $(document).on("click", "#get_unread_conversations", function(){
       $.ajax({

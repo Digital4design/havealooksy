@@ -34,18 +34,19 @@
                 </div>
 
                 <!-- Search Form -->
-                <div class="col-sm-6">
+                <div class="col-sm-5">
                     <div class="search_form_container">
-                        <form action="#" method="post" novalidate="novalidate">
+                        <form action="{{ url('/search') }}" method="post" novalidate="novalidate">
+                            @csrf
                             <div class="row">
                                 <div class="col-sm-4 col-xs-4 search_form_input">
-                                    <input type="text" class="form-control search-slt" placeholder="Industry">
+                                    <input type="text" name="industry" class="form-control search-slt" placeholder="Industry">
                                 </div>
                                 <div class="col-sm-4 col-xs-4 search_form_input">
-                                    <input type="text" class="form-control search-slt" placeholder="City , State , Country">
+                                    <input type="text" name="location" class="form-control search-slt" placeholder="City , State , Country">
                                 </div>                                    
                                 <div class="col-sm-4 col-xs-4 search_form_input">
-                                    <button type="button" class="btn btn-danger wrn-btn"> <i class="fa fa-search"></i> Search</button>
+                                    <button type="submit" class="btn btn-danger wrn-btn"> <i class="fa fa-search"></i> Search</button>
                                 </div>
                             </div>
                         </form>
@@ -53,7 +54,7 @@
                 </div>
 
                 <!-- login signupbtns -->
-                <div class="menu float-right col-lg-3">
+                <div class="menu float-right col-lg-4">
                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
@@ -61,8 +62,9 @@
                     <span class="icon-bar"></span>
                     </button>
                     <ul class="nav navbar-right"> 
+                      <li class="cart"><a href="{{ url('/cart') }}"> <span class="glyphicon glyphicon-shopping-cart"></span></a></li>
                       <li class="login"><a href="{{ url('/login') }}"> Login</a></li>
-                      <li class="signup"><a href="{{ url('/register') }}"> Signup</a></li>               
+                      <li class="signup"><a href="{{ url('/register') }}"> Signup</a></li>           
                     </ul>               
                 </div>
                 

@@ -40,11 +40,11 @@
                         <div class="qty-main">
 							<div class="qty">
 								<div class="btn-minus"><span class="glyphicon glyphicon-minus"></span></div>
-								<input value="1" />
+								<input name="quantity" value="1" />
 								<div class="btn-plus"><span class="glyphicon glyphicon-plus"></span></div>
 							</div>
 							<div class="action">
-								<a href="{{ route('login') }}" class="add-to-cart btn btn-default">BOOK NOW</a>							
+								<a href="{{ url('/cart') }}" class="add-to-cart btn btn-default">BOOK NOW</a>							
 							</div>
 						</div>
 						<p class="vote">CATEGORY : {{ $listing_data['getCategory']['name'] }}</p>
@@ -97,3 +97,20 @@
 	</div><!-- end container -->
 </section>
 @endsection
+
+@section('pageJs')
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(".btn-plus").on("click", function(){
+			var quantity = parseInt($("input[name=quantity]").val());
+			$("input[name=quantity]").val(quantity+1);
+		});
+		$(".btn-minus").on("click", function(){
+			var quantity = parseInt($("input[name=quantity]").val());
+			if(quantity != 1){
+				$("input[name=quantity]").val(quantity-1);
+			}
+		});
+	});
+</script>
+@stop

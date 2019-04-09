@@ -23,8 +23,11 @@ Auth::routes(['verify' => true]);
 Route::get('/get-products/{id}', 'HomeController@getProducts');
 Route::get('/get-products/product-details/{id}', 'HomeController@getProductDetails');
 Route::post('/get-products/apply-filters', 'HomeController@applyFilters');
+Route::get('/cart', 'HomeController@viewCart');
+Route::get('/checkout', 'HomeController@checkoutPage')->middleware('auth');
 Route::get('/messages', 'HomeController@messagesView')->middleware('auth');
 Route::get('/messages/chat/{id}', 'HomeController@messagesChatView')->middleware('auth');
+Route::post('/search', 'HomeController@searchWebsite');
 
 // Route::group(['prefix' => 'home'], function(){
 //     Route::get('/', 'HomeController@index')->name('home');
@@ -62,6 +65,16 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth', 'verified']
         Route::get('/remove-image/{id}', 'Admin\DashboardController@removeCategoryImage');
     });
 
+    Route::group(['prefix' => 'listings', 'middleware' => ['admin', 'auth']], function() {
+        Route::get('/', ['as' => 'listingsAdmin', 'uses' => 'Admin\ListingController@getListingsView']);
+        Route::get('/get-listings', 'Admin\ListingController@getAllListings');
+        Route::get('/change-approval/{id}/{status}', 'Admin\ListingController@changeApprovalSetting');
+        Route::get('/edit-listing/{id}', ['as' => 'editListingAdmin', 'uses' => 'Admin\ListingController@editListingView']);
+        Route::get('/remove-listing-image/{id}', 'Admin\ListingController@removeListingImage');
+        Route::post('/update-listing', 'Admin\ListingController@updateListing');
+        Route::get('/delete-listing/{id}', 'Admin\ListingController@deleteListing');
+    });
+
     Route::group(['prefix' => 'chat', 'middleware' => ['admin', 'auth']], function(){
         Route::get('/', 'Admin\ChatController@getAllConversations');
         Route::get('/get-chat/{id}', 'Admin\ChatController@getChat');
@@ -87,6 +100,7 @@ Route::group(['prefix' => 'seller', 'middleware' => ['seller', 'auth', 'verified
         Route::get('/change-status/{id}/{status}', 'Seller\ListingController@changeStatus');
         Route::get('/change-favorite-status/{id}/{status}', 'Seller\ListingController@changeFavoriteStatus'); 
         Route::get('/edit-listing/{id}', ['as' => 'editListing', 'uses' => 'Seller\ListingController@editListingView']);
+        Route::get('/remove-listing-image/{id}', 'Seller\ListingController@removeListingImage');
         Route::post('/update-listing', 'Seller\ListingController@updateListing'); 
         Route::get('/delete-listing/{id}', 'Seller\ListingController@deleteListing'); 
     });

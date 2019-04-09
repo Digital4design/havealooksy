@@ -66,7 +66,7 @@
                                     <figcaption>
                                         <h2>{{ $value['title'] }}</h2>
                                         <p>{{ $value['description'] }}</p>
-                                        <a href="{{ url('get-products/product-details/'.$value['id']) }}" style="padding:180px 50px;">View more</a>
+                                        <a href="{{ url('get-products/product-details/'.$value['id']) }}" style="padding:180px 50px;" target="_blank">View more</a>
                                     </figcaption>
                                 </figure>
                             </div>
@@ -166,7 +166,7 @@
                         @foreach($new_listings as $val)
                         <!-- team member item -->
                         <div class="col-md-3">
-                            <a href="{{ url('get-products/product-details/'.$val['id']) }}">
+                            <a href="{{ url('get-products/product-details/'.$val['id']) }}" target="_blank">
                                 <div class="team-item">
                                     <div class="team-image">
                                         <img src="{{ asset('public/images/listings/'.$val['image']) }}" alt="{{ $val['title'] }}" class="img-responsive">

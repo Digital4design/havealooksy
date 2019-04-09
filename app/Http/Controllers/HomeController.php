@@ -30,8 +30,11 @@ class HomeController extends Controller
         if(Auth::guest())
         {
             $categories = Categories::where('status', '1')->get();
-            $fav_listings = Listings::where('is_favorite', '1')->where('status', '1')->get();
+            $fav_listings = Listings::where('is_favorite', '1')->where('status', '1')
+                                    ->where('is_approved', '1')
+                                    ->get();
             $new_listings = Listings::where('status', '1')
+                                    ->where('is_approved', '1')
                                     ->take(4)->orderBy('created_at', 'desc')
                                     ->get();
             return view('index')->with(['categories' => $categories, 'fav_listings' => $fav_listings, 'new_listings' => $new_listings]);
@@ -64,7 +67,7 @@ class HomeController extends Controller
     /* Get Products of a category */
     public function getProducts($id)
     {
-        $listings = Listings::where('category_id', $id)->where('status', '1')->get();
+        $listings = Listings::where('category_id', $id)->where('status', '1')->where('is_approved', '1')->get();
         $category = Categories::where('id', $id)->first();
 
         return view('frontapp.product-page')->with(['listings' => $listings, 'category' => $category]);
@@ -76,7 +79,8 @@ class HomeController extends Controller
         $listing_data = Listings::with(['getCategory', 'getListerRole'])->where('id', $id)->first();
 
         $all_listings_of_category = Listings::where('category_id', $listing_data['category_id'])
-                                            ->where('status', '1')->where('id', '<>', $id)->get();
+                                            ->where('status', '1')->where('id', '<>', $id)
+                                            ->where('is_approved', '1')->get();
 
         return view('frontapp.product-details')->with(['listing_data' => $listing_data, 'all_listings' => $all_listings_of_category]);
     }
@@ -122,5 +126,46 @@ class HomeController extends Controller
             return redirect(Auth::user()->roles->first()->name.'/chat');
         }
         return redirect(Auth::user()->roles->first()->name.'/chat/get-chat/'.$id);
-    } 
+    }
+
+    public function viewCart()
+    {
+        return view('frontapp.cart');
+    }
+
+    public function searchWebsite(Request $request)
+    {
+        $industry = $request->industry;
+        $location = $request->location;
+
+        if($industry != "" && $location != "")
+        {
+            $listings = Listings::with(['getCategory'])
+                            ->whereHas('getCategory', function($q) use($industry){
+                                $q->where('name', 'like', '%'.$industry.'%');
+                            })->orWhere('location', 'like', '%'.$location.'%')
+                            ->where('status', '1')
+                            ->where('is_approved', '1')
+                            ->get();
+        }
+        elseif ($industry != "") 
+        {
+            $listings = Listings::with(['getCategory'])
+                            ->whereHas('getCategory', function($q) use($industry){
+                                $q->where('name', 'like', '%'.$industry.'%');
+                            })->where('status', '1')
+                            ->where('is_approved', '1')
+                            ->get();
+        }
+        elseif ($location != "") 
+        {
+            $listings = Listings::where('location', 'like', '%'.$location.'%')->where('status', '1')->where('is_approved', '1')->get();
+        }
+        else
+        {
+            $listings = Listings::where('status', '1')->where('is_approved', '1')->get();
+        }
+
+        return view('frontapp.search-results-view')->with(['listings' => $listings]);
+    }
 }

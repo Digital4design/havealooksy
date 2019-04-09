@@ -86,7 +86,7 @@
 					@foreach($listings as $val)
 					<!-- team member item -->
 					<div class="col-md-3 product-link grid_view">
-						<a href="{{ url('get-products/product-details/'.$val['id']) }}">
+						<a href="{{ url('get-products/product-details/'.$val['id']) }}" target="_blank">
 							<div class="team-item">
 								<div class="team-image">
 									<img src="{{ asset('public/images/listings/'.$val['image']) }}" class="img-responsive" alt="author">

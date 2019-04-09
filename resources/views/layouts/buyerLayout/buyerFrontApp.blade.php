@@ -20,7 +20,7 @@
         <script src="{{asset('public/looksyassets/js/ie-emulation-modes-warning.js')}}"></script>
         <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
         <style type="text/css">
-            #hoverable{background-color:transparent;}
+            #hoverable{background-color:transparent;margin-left:0;}
             #hoverable a{border-radius:5px;}
             #hoverable a:hover{background:none;border-radius:0px;}
             #hoverable a.user_name:hover{background:none;border-bottom:2px solid #761dc9;border-radius:0px;}
@@ -82,7 +82,8 @@
                                 <a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a>
                             </li>
                         </ul>
-                      </li> --> 
+                      </li> -->
+                      <li class="cart"><a href=""> <span class="glyphicon glyphicon-shopping-cart"></span></a></li> 
                       <li id="hoverable"><a class="user_name">{{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}</a></li>
                       <ul class="dropdown-items">
                           <li class="dropdown-item"><a href="{{ url('buyer/dashboard') }}">Dashboard</a></li>
