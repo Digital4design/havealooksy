@@ -62,7 +62,7 @@
                     <span class="icon-bar"></span>
                     </button>
                     <ul class="nav navbar-right"> 
-                      <li class="cart"><a href="{{ url('/cart') }}"> <span class="glyphicon glyphicon-shopping-cart"></span></a></li>
+                      <li class="cart"><a href="{{ url('/cart') }}"><span class="glyphicon glyphicon-shopping-cart"><span class="label" style="position:absolute;background-color:rgba(137,43,225,0.6);border-radius:50%;font-weight:normal;top:-10px;left:16px;">0</span></span></a></li>
                       <li class="login"><a href="{{ url('/login') }}"> Login</a></li>
                       <li class="signup"><a href="{{ url('/register') }}"> Signup</a></li>           
                     </ul>               

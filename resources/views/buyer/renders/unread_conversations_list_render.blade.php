@@ -3,7 +3,7 @@
     <li style="background-color:#d6f5f5;box-shadow:1px 1px 5px #ccc;">
       <a href="{{ url('buyer/chat/get-chat/'.$val['user']['id']) }}">
         <div class="pull-left">
-          <img src="{{ $val['user']['profile_picture'] ? asset('public/images/profile_pictures/'.$val['user']['profile_picture']) : asset('public/images/default-pic.svg')}}" class="img-circle" style="border:2px solid #ccc;">
+          <img src="{{ $val['user']['profile_picture'] ? asset('public/images/profile_pictures/'.$val['user']['profile_picture']) : asset('public/images/default-pic.png')}}" class="img-circle" style="border:2px solid #ccc;">
         </div>
         <h4>
           {{ $val['user']['first_name'] }} {{ $val['user']['last_name'] }}

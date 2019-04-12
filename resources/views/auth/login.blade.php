@@ -20,12 +20,12 @@
             <form  method="POST" class="login100-form validate-form" action="{{ route('login') }}">
                     @csrf
                 <div class="wrap-input100 validate-input">
-                    <input class="input100 validate-form{{ $errors->has('email') ? ' is-invalid' : '' }}" type="text" name="email" placeholder="Email Address"> 
-                     @if ($errors->has('email'))
-                         <span class="invalid-feedback" role="alert">
-                             <strong>{{ $errors->first('email') }}</strong>
-                         </span>
-                    @endif
+                    <input class="input100 validate-form{{ $errors->has('email') ? ' is-invalid' : '' }}" type="text" name="email" placeholder="Username or Email Address"> 
+                    <!-- @if ($errors->has('email'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('email') }}</strong>
+                        </span>
+                    @endif -->
                 </div>
                 <div class="wrap-input100 validate-input{{ $errors->has('password') ? ' is-invalid' : '' }}">
                     <input class="input100" type="password" name="password" placeholder="Password">
@@ -33,6 +33,16 @@
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $errors->first('password') }}</strong>
                     </span>
+                    @endif
+                    @if ($errors->has('email'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('email') }}</strong>
+                        </span>
+                    @endif
+                    @if ($errors->has('user_name'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('user_name') }}</strong>
+                        </span>
                     @endif
                 </div>
                 <div class="text-left p-t-8 p-b-31">

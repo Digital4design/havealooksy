@@ -83,7 +83,7 @@
                             </li>
                         </ul>
                       </li> -->
-                      <li class="cart"><a href=""> <span class="glyphicon glyphicon-shopping-cart"></span></a></li> 
+                      <li class="cart"><a href=""><span class="glyphicon glyphicon-shopping-cart"><span class="label" style="position:absolute;background-color:rgba(137,43,225,0.6);border-radius:50%;font-weight:normal;top:-10px;left:16px;">0</span></span></a></li> 
                       <li id="hoverable"><a class="user_name">{{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}</a></li>
                       <ul class="dropdown-items">
                           <li class="dropdown-item"><a href="{{ url('buyer/dashboard') }}">Dashboard</a></li>

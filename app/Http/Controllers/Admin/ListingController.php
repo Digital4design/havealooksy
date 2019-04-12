@@ -38,16 +38,15 @@ class ListingController extends Controller
                                         ->pluck('name')->first();
                         })->addColumn('approved_unapproved', function ($all_listings){
                             if($all_listings['is_approved'] == 1){
-                                $status = 'Unapprove';
-                                $btn_color = 'default';
+                                $approval_class = "text-green fa-check-square-o";   
                             }
                             if($all_listings['is_approved'] == 0){
-                                $status = 'Approve';
-                                $btn_color = 'danger';
+                                $approval_class = "text-red fa-square-o";
                             }
-                            return "<button type='button' data-id='".$all_listings['id']."' class='btn btn-".$btn_color." approve-unapprove' type='button'>".$status."</button>";
+                            return "<a href='#' data-id='".$all_listings['id']."' class='approve-unapprove'><i class='fa ".$approval_class."'</i></a>";
+
                         })->addColumn('action', function ($all_listings){
-                            return "<a href='".route('editListingAdmin', $all_listings['id'])."' class='btn btn-info' style='margin-right:1em;'><i class='fa fa-edit'></i></a><button type='button' data-id='".$all_listings['id']."' class='btn btn-warning button_delete'><i class='fa fa-trash-o'></i></button>";
+                            return "<a href='".route('editListingAdmin', $all_listings['id'])."' class='btn btn-info' style='margin-right:5px;'><i class='fa fa-edit'></i></a><button type='button' data-id='".$all_listings['id']."' class='btn btn-warning button_delete'><i class='fa fa-trash-o'></i></button>";
                         })->editColumn('image', function ($all_listings){
                             return "<a href='".asset('public/images/listings/'.$all_listings['image'])."' style='font-size:1.3em;' target='_blank'><i class='fa fa-eye'></i></a>";
                         })->rawColumns(['approved_unapproved' => 'approved_unapproved', 'action' => 'action', 'image' => 'image'])->make(true);

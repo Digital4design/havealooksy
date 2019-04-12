@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="{{asset('public/adminPanelAssets')}}/bower_components/Ionicons/css/ionicons.min.css">
   <!-- DataTables -->
   <link rel="stylesheet" href="{{asset('public/adminPanelAssets')}}/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+  <link rel="stylesheet" href="{{asset('public/css')}}/buttons.dataTables.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('public/adminPanelAssets')}}/dist/css/AdminLTE.min.css">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -29,11 +30,12 @@
   <style type="text/css">
     #profile-button:hover, #logout-button:hover{color:#fff;background-color: #d33724;border-color: #f39c12;}
     .navbar-nav>.user-menu>.dropdown-menu>.user-footer{background-color:#357ca5;}
+    .user-panel img.img-circle{width:100%;height:auto;max-width:50px;min-height:50px;}
+    .user-header img.img-circle{z-index: 5;border: 3px solid;width:90px;height:90px;border-color: rgba(255,255,255,0.2);}
+    .change-pic-link{position:relative;}
+    #header-pic-link:hover{background-color: transparent;}
+    .change-pic-link:hover img.img-circle{opacity:0.7;background-color:rgba(0,0,0,0.7);}
     #see_all_messages:hover{color:#000;background-color:silver;}.error{color:red;}
-    a.change-picture{letter-spacing:0.5px;font-size:0.75em;padding:5px;}
-    a.change-picture:hover{text-decoration:underline;color:rgba(137,43,225,1);}
-    a.change-picture-link{visibility:hidden;letter-spacing:0.5px;font-size:1em;color:#fff !important;position:absolute;top:40px;left:95px;padding:35px 20px;}
-    a.change-picture-link:hover{color:rgba(0,0,0,0.8);}
     .loader {
       border: 8px solid #f3f3f3;
       border-radius: 50%;
@@ -133,15 +135,17 @@
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="{{ (Auth::user()->profile_picture) ? asset('public/images/profile_pictures/'.Auth::user()->profile_picture) : asset('public/images/default-pic.svg') }}" class="user-image" alt="User Image">
+              <img src="{{ (Auth::user()->profile_picture) ? asset('public/images/profile_pictures/'.Auth::user()->profile_picture) : asset('public/images/default-pic.png') }}" class="user-image" alt="User Image">
               <span class="hidden-xs">{{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
-              <li class="user-header" style="position:relative;">
-                <img src="{{ (Auth::user()->profile_picture) ? asset('public/images/profile_pictures/'.Auth::user()->profile_picture) : asset('public/images/default-pic.svg') }}" class="img-circle" alt="User Image">
-                <div class="change-picture-div" style="position:absolute;padding:45px;top:10px;left:95px;"></div>
-                <a class="change-picture-link" href="#" data-target="#change-picture" data-toggle="modal">Change</a>
+              <li class="user-header">
+                <a id="header-pic-link" href="#" data-target="#change-picture" data-toggle="modal" class="change-pic-link" style="display:unset;padding:0;">
+                  <img src="{{ (Auth::user()->profile_picture) ? asset('public/images/profile_pictures/'.Auth::user()->profile_picture) : asset('public/images/default-pic.png') }}" class="img-circle" alt="User Image">
+                  <span class="change-pic" style="display:none;font-size:1.2em;position:absolute;top:2px;left:30px;color:#fff;">{{ (Auth::user()->profile_picture) ? 'Edit' : 'Add' }}</span>
+                </a>
+
                 <p>
                   {{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}
                   <small>Member since {{ Auth::user()->created_at->format('d/m/Y') }}</small>
@@ -171,11 +175,12 @@
     <section class="sidebar">
       <!-- Sidebar user panel -->
       <div class="user-panel">
-        <div class="pull-left image">
-            <img src="{{ (Auth::user()->profile_picture) ? asset('public/images/profile_pictures/'.Auth::user()->profile_picture) : asset('public/images/default-pic.svg') }}" class="img-circle" alt="User Image" style="margin-bottom:5px;">
-            <div style="display:block;">
-              <a class="change-picture" href="#" data-target="#change-picture" data-toggle="modal">Change</a>
-            </div>
+        <div class="pull-left image" style="padding:0px;">
+          <a href="#" data-target="#change-picture" data-toggle="modal" class="change-pic-link">
+            <img src="{{ (Auth::user()->profile_picture) ? asset('public/images/profile_pictures/'.Auth::user()->profile_picture) : asset('public/images/default-pic.png') }}" class="img-circle" alt="User Image" style="transition: min-height 0.1s ease-in-out;">
+            <span class="change-pic" style="display:none;font-size:0.9em;position:absolute;top:3px;left:15px;">{{ (Auth::user()->profile_picture) ? 'Edit' : 'Add' }}</span>
+          </a>
+          
         </div>
         <div class="pull-left info">
           <p>{{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}</p>
@@ -277,16 +282,30 @@
 <!-- DataTables -->
 <script src="{{asset('public/adminPanelAssets')}}/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="{{asset('public/adminPanelAssets')}}/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{{asset('public/js')}}/dataTables.buttons.min.js"></script>
+<script src="{{asset('public/js')}}/buttons.colVis.min.js"></script>
 <!-- AdminLTE App -->
 <script src="{{asset('public/adminPanelAssets')}}/dist/js/adminlte.min.js"></script>
 <script src="{{asset('public/js/sweetalert/sweetalert.min.js')}}"></script>
 <script type="text/javascript">
   $(document).ready(function(){
-    $("div.change-picture-div").mouseover(function(){
-      $("a.change-picture-link").css("visibility", "visible");
+    $(".change-pic-link").mouseover(function(){
+      $(".change-pic").css("display", "block");
     });
-    $("div.change-picture-div").mouseout(function(){
-      $("a.change-picture-link").css("visibility", "hidden");
+    $(".change-pic-link").mouseout(function(){
+      $(".change-pic").css("display", "none");
+    });
+    $("a.sidebar-toggle").on("click", function(){
+      // $(".user-panel img").toggleClass("fix-height");
+
+      if($(".user-panel img").hasClass("fix-height")){
+        $(".user-panel img").removeClass("fix-height");
+        $(".user-panel img").animate({minHeight: "50px"}, 0, 'easeInOutQuad');
+      }
+      else{
+        $(".user-panel img").addClass("fix-height");
+        $(".user-panel img").animate({minHeight: "30px"}, 300, 'easeInOutQuart');
+      }
     });
     $(document).on("click", "#get_unread_conversations", function(){
       $.ajax({
@@ -371,7 +390,7 @@
               });
               $("#uploaded_profile_pic").css("display", "none");
               $("#remove_profile_pic_button").css("display", "none");
-              $("img").attr("src", "{{ url('public/images/default-pic.svg') }}")
+              $("img").attr("src", "{{ url('public/images/default-pic.png') }}")
             }
             else if(resp.status == 'danger'){
               swal("Error", resp.message, "warning");

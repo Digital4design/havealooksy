@@ -51,6 +51,14 @@ class LoginController extends Controller
         return view('auth.login');        
     }
 
+    public function username()
+    {
+        $login = request()->input('email');
+        $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
+        request()->merge([$field => $login]);
+        return $field;
+    }
+
     /**
      * The user has been authenticated.
      *
@@ -95,6 +103,7 @@ class LoginController extends Controller
         if ($user && Hash::check($request->password, $user->password) && $user->status != 1) {
             $errors = [$this->username() => 'Your account is blocked.'];
         }
+        
         if ($request->expectsJson()) {
             return response()->json($errors, 422);
         }

@@ -11,6 +11,12 @@
 .conv-profile_pic img{width:100%;border-radius:50%;position: absolute;top:-30px;left:15px;height: 60px;width: 70%;border: 2px solid #ccc;}
 .small-box>.inner.no_conversation:hover{background-color:transparent;color:#333;}
 .unread{color:orange;position:relative;font-size:22px;}
+@media (max-width: 767px){
+  .conv_data{text-align:left;}
+  .conv-profile_pic img{width:60% !important;}
+  .new_conv_pic{width:18% !important;}
+  .new_conv_pic img{float:left;}
+}
 </style>
 @stop
 
@@ -32,10 +38,10 @@
                 @foreach($conversations as $val)
                   <div class="small-box conv" style="margin-bottom:10px;border-radius:5px;box-shadow:1px 1px 5px #ccc;">
                       <a href="{{ url('admin/chat/get-chat/'.$val['user']['id']) }}" class="inner conv_link" style="padding:10px;">
-                          <div class="col-lg-1 conv-profile_pic">
-                            <img src="{{ $val['user']['profile_picture'] ? asset('public/images/profile_pictures/'.$val['user']['profile_picture']) : asset('public/images/default-pic.svg')}}">
+                          <div class="col-lg-1 col-xs-4 conv-profile_pic">
+                            <img src="{{ $val['user']['profile_picture'] ? asset('public/images/profile_pictures/'.$val['user']['profile_picture']) : asset('public/images/default-pic.png')}}">
                           </div>
-                          <div class="col-lg-11" style="display:flex;flex-direction:column;">
+                          <div class="col-lg-11 col-xs-8 conv_data" style="display:flex;flex-direction:column;">
                             <h4>{{ $val['user']['first_name'] }} {{ $val['user']['last_name'] }}<div class="pull-right">
                               @if($val['unread_count'] != 0)
                               <i class="fa fa-circle unread"><span style="font-size:15px;color:#fff;position:absolute;left:2px;top:3px;">&nbsp;{{ $val['unread_count'] }}</span></i>
@@ -73,10 +79,10 @@
             @foreach($users as $usr)
               <div class="small-box user" style="box-shadow:1px 1px 5px #ccc;">
                   <a href="{{ url('admin/chat/get-chat/'.$usr['id']) }}" class="inner">
-                      <div class="col-lg-1" style="position:relative;height:52px;width:9.9%;">
-                        <img src="{{ $usr['profile_picture'] ? asset('public/images/profile_pictures/'.$usr['profile_picture']) : asset('public/images/default-pic.svg')}}" style="position:absolute;height:100%;width:100%;top:0px;left:0;border-radius:50%;border:2px solid #ccc;">
+                      <div class="col-lg-1 col-xs-3 new_conv_pic" style="position:relative;height:52px;width:9.9%;">
+                        <img src="{{ $usr['profile_picture'] ? asset('public/images/profile_pictures/'.$usr['profile_picture']) : asset('public/images/default-pic.png')}}" style="position:absolute;height:100%;width:100%;top:0px;left:0;border-radius:50%;border:2px solid #ccc;">
                       </div>
-                      <div class="col-lg-11">
+                      <div class="col-lg-11 col-xs-9 conv_data">
                         <p style="margin-bottom:0px;">{{ $usr['first_name'] }} {{ $usr['last_name'] }}<span class="pull-right" style="font-size:12px;color:#999;">&nbsp;({{$usr['getRole']['display_name']}})</span></p>
                       </div>
                   </a>

@@ -7,3 +7,73 @@
 .wrap-login100-form-btn button:hover{
 	background-color:#4e1485;
 }
+
+/* Datatables ColVis Buttons Css */
+.dt-button.buttons-collection.buttons-colvis{
+	display: block;
+    width: 100%;
+	padding: 6px 12px;
+	box-shadow: none;
+	outline: none;
+	border: 1px solid transparent;
+	background: #00c0ef;
+    border-color: #00acd6;
+	border-radius: 3px;
+	color: #fff;
+}
+.dt-button.buttons-collection.buttons-colvis:hover{
+	color: #fff;
+    background: #269abc;
+    border-color: #1b6d85;
+}
+.dt-button-collection.fixed.two-column{
+	background: rgba(0,0,0,0.5);
+	padding: 5px;
+}
+a.dt-button.buttons-columnVisibility.active{
+	display: block;
+    width: 100%;
+	padding: 6px 12px;
+	box-shadow: inset 1px 1px 5px #333 !important;
+	outline: none;
+	background: #605ca8 !important;
+	border: 1px solid transparent;
+	border-color: #9c4ee4;
+	border-radius: 3px;
+	color: #fff;
+}
+a.dt-button.buttons-columnVisibility{
+	display: block;
+    width: 100%;
+	padding: 6px 12px;
+	outline: none;
+	background: #f4f4f4 !important;
+	border: 1px solid transparent;
+    border-color: #ddd;
+	border-radius: 3px;
+	color: #444;
+}
+/* Description Details Css */
+td.details-control{position:relative;}
+.description_table {height:10px;}
+.description_table td{padding:2px 10px;}
+td.details-control:before {
+  content: "\f0fe";
+  font-family: FontAwesome;
+  left:5px;
+  position:absolute;
+  top:8px;
+  cursor: pointer;
+  font-size:16px;
+  color: rgba(137,43,225,1);
+}
+tr.shown td.details-control:before {
+  content: "\f146";
+  font-family: FontAwesome;
+  left:5px;
+  position:absolute;
+  top:8px;
+  cursor: pointer;
+  font-size:16px;
+  color: rgba(137,43,225,1);
+}

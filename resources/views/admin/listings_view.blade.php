@@ -5,6 +5,8 @@
   .box{border:none;}
   .toolbar{float:left;height:35px;margin-top:5px;}
   .filters{margin-bottom:20px;}
+  .btn.button_delete, .btn-info{display:inline;}
+  .approve-unapprove{vertical-align:-webkit-baseline-middle;}
 </style>
 @stop
 
@@ -38,29 +40,31 @@
                   <table id="listings_list" class="table table-bordered table-striped">
                     <thead>
                         <tr>
+                          <th></th>
                           <th>Title</th>
-                          <th>Description</th>
+                          <!-- <th>Description</th> -->
                           <th>Location</th>
                           <th>Price</th>
                           <th>Category</th>
                           <th>Status</th>
                           <th>Image</th>
-                          <th>Approve/Unapprove</th>
                           <th>Action</th>
+                          <th></th>
                           <th>Approval Status</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
+                          <th></th>
                           <th>Title</th>
-                          <th>Description</th>
+                          <!-- <th>Description</th> -->
                           <th>Location</th>
                           <th>Price</th>
                           <th>Category</th>
                           <th>Status</th>
                           <th>Image</th>
-                          <th>Approve/Unapprove</th>
                           <th>Action</th>
+                          <th></th>
                           <th>Approval Status</th>
                         </tr>
                     </tfoot>
@@ -82,7 +86,16 @@
         processing: true,
         serverSide: true,
         lengthMenu: [10,25,50,100],
-        dom: "<'row'<'col-md-2'l><'col-md-2 toolbar'><'col-md-8'Bf>>" + "<'row'<'col-md-4'><'col-md-4'>>" + "<'row'<'col-md-12't>><'row'<'col-md-12'ip>>",
+        responsive: true,
+        order: [ 1, "asc" ],
+        dom: "<'row'<'col-md-2'l><'col-md-2'B><'col-md-8'f>>" + "<'row'<'col-md-4'><'col-md-4'>>" + "<'row'<'col-md-12't>><'row'<'col-md-12'ip>>",
+        buttons: [
+          {
+            extend: 'colvis',
+            collectionLayout: 'fixed two-column',
+            columns: [1, 2, 3, 4, 5]
+          }
+        ],
         ajax: {
           "url": '{!! url("admin/listings/get-listings") !!}',
           "type": 'GET',
@@ -95,15 +108,16 @@
           }
         },
         columns: [
+            {className: 'details-control', orderable: false, data: null, defaultContent: '' },
             { data: 'title', name: 'title' },
-            { data: 'description', name: 'description', visible: false },
+            // { data: 'description', name: 'description', visible: false },
             { data: 'location', name: 'location' },
             { data: 'price', name: 'price' },
             { data: 'category', name: 'category' },
             { data: 'status', name: 'status', orderable: false },
             { data: 'image', name: 'image', orderable: false },
-            { data: 'approved_unapproved', name: 'approved_unapproved', orderable: false },
             { data: 'action', name: 'action', orderable: false },
+            { data: 'approved_unapproved', name: 'approved_unapproved', orderable: false },
             { data: 'is_approved', name: 'is_approved', orderable: false, visible: false },
         ],
         oLanguage: {
@@ -111,22 +125,69 @@
           "sZeroRecords": "No matching records found",
           "sEmptyTable": "No data available in table",
         },
+        initComplete: function () {
+          var filterColumns = [1, 2, 3, 4, 5];
+
+          this.api().columns(filterColumns).every(function(){
+                var column = this;
+                var select = $('<select class="form-control" style="font-weight:normal;"><option value="">Select</option></select>')
+                    .appendTo($(column.footer()).empty())
+                    .on('change', function(){
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+
+                        val = String(val).replace(/&/g, '&amp;');
+ 
+                        column.search(val ? '^'+val+'$' : '', true, false, false).draw();
+                    });
+ 
+                column.data().unique().sort().each(function(d, j){
+                    select.append('<option value="'+d+'">'+d+'</option>')
+                });
+            });
+        },
     });
 
-    $("div.toolbar").html('<a href class="description_hide_show" data-column="1"><span id="show-hide">Show</span> Description</a>');
+    function format(d){
+      return '<table class="description_table">'+
+                '<tr>'+
+                    '<td><b>Description:<b></td>'+
+                    '<td>'+d.description+'</td>'+
+                '</tr>'+
+              '</table>';
+    }
 
-    $("a.description_hide_show").on("click", function(e){
-      e.preventDefault();
-      var column = table.column($(this).attr('data-column'));
-      column.visible(!column.visible());
-
-      if($(this).text() == "Show Description"){
-        $("#show-hide").text("Hide");
-      }
-      else if($(this).text() == "Hide Description"){
-        $("#show-hide").text("Show");
-      }
+    $('#listings_list tbody').on('click', 'td.details-control', function(){
+        var tr = $(this).closest('tr');
+        var row = table.row(tr);
+ 
+        if (row.child.isShown()){
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            // Open this row
+            row.child(format(row.data()) ).show();
+            tr.addClass('shown');
+        }
     });
+
+    // $("div.toolbar").html('<a href class="description_hide_show" data-column="1"><span id="show-hide">Show</span> Description</a>');
+
+    // $("a.description_hide_show").on("click", function(e){
+    //   e.preventDefault();
+    //   var column = table.column($(this).attr('data-column'));
+    //   column.visible(!column.visible());
+
+    //   if($(this).text() == "Show Description"){
+    //     $("#show-hide").text("Hide");
+    //   }
+    //   else if($(this).text() == "Hide Description"){
+    //     $("#show-hide").text("Show");
+    //   }
+    // });
 
     $('#all').on('click', function () {
         table.columns(9).search("").draw();
@@ -141,28 +202,38 @@
         table.columns(9).search("Unapproved").draw();
     });
 
-    $(document).on("click", "button.approve-unapprove", function(){
+    $(document).on("click", "a.approve-unapprove", function(){
       var id = $(this).attr('data-id');
+      var that = this;
 
-      if($(this).hasClass("btn-danger")){
+      if($(this).find(".fa").hasClass("fa-square-o")){
+        $(this).find(".fa").removeClass("text-red fa-square-o")
+        newclass = "text-green fa-check-square-o";
+        message = "Approved";
         approval_data = 1;
       }
-      if($(this).hasClass("btn-default")){
+      if($(this).find(".fa").hasClass("fa-check-square-o")){
+        $(this).find(".fa").removeClass("text-green fa-check-square-o")
+        newclass = "text-red fa-square-o";
+        message = "Unapproved";
         approval_data = 0;
       }
-
+      $("#loading").toggleClass("hide");
       $.ajax({
         'url'      : '{{ url("admin/listings/change-approval") }}/'+id+"/"+approval_data,
         'method'   : 'get',
         'dataType' : 'json',
         success    : function(data){
           if(data.status == 'success'){
-            if(data.listing_approval_status == 1){
-              $(".approve-unapprove[data-id="+id+"]").removeClass("btn-danger").addClass("btn-default").text("Unapprove");
-            }
-            if(data.listing_approval_status == 0){
-              $(".approve-unapprove[data-id="+id+"]").removeClass("btn-default").addClass("btn-danger").text("Approve");
-            }
+            $(that).find(".fa").addClass(newclass);
+            $("#loading").toggleClass("hide");
+            swal({
+                title: "Success",
+                text: "Listing has been "+message+"!",
+                timer: 2000,
+                type: "success",
+                showConfirmButton: false
+            });
           }  
         } 
       });

@@ -41,14 +41,14 @@ class ListingController extends Controller
                             }
                             return "<button type='button' data-id='".$all_listings['id']."' class='btn btn-".$btn_color." active-deactive' type='button'>".$status."</button>";
                         })->addColumn('action', function ($all_listings){
-                            return "<a href='".route('editListing', $all_listings['id'])."' class='btn btn-info' style='margin-right:1em;'><i class='fa fa-edit'></i></a><button type='button' data-id='".$all_listings['id']."' class='btn btn-warning button_delete'><i class='fa fa-trash-o'></i></button>";
+                            return "<a href='".route('editListing', $all_listings['id'])."' class='btn btn-info' style='margin-right:5px;'><i class='fa fa-edit'></i></a><button type='button' data-id='".$all_listings['id']."' class='btn btn-warning button_delete'><i class='fa fa-trash-o'></i></button>";
                         })->editColumn('image', function ($all_listings){
                             return "<a href='".asset('public/images/listings/'.$all_listings['image'])."' style='font-size:1.3em;' target='_blank'><i class='fa fa-eye'></i></a>";
                         })->addColumn('is_favorite_listing', function ($all_listings){
                             if($all_listings['is_favorite'] == 1)
-                                return "<button data-id='".$all_listings['id']."' class='btn btn-default is-favorite'>Remove from favorites</button>";
+                                return "<a href='#' data-id='".$all_listings['id']."' class='is-favorite'><i class='fa text-yellow fa-star'></i></a>";
                             if($all_listings['is_favorite'] == 0)
-                                return "<button data-id='".$all_listings['id']."' class='btn btn-danger is-favorite'>Add to favorites</button>";
+                                return "<a href='#' data-id='".$all_listings['id']."' class='is-favorite'><i class='fa text-yellow fa-star-o'></i></a>";
             			})->rawColumns(['activate_deactivate' => 'activate_deactivate', 'action' => 'action', 'image' => 'image', 'is_favorite_listing' => 'is_favorite_listing'])->make(true);
     }
 

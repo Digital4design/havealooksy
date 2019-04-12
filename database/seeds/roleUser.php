@@ -21,6 +21,10 @@ class roleUser extends Seeder
     			'user_id'	=>	2,
     			'role_id'	=>	2,
     		),
+			array(
+                'user_id'   =>  3,
+                'role_id'   =>  3,
+            ),
     	);
     	DB::table('role_user')->insert($userRole);
     }
