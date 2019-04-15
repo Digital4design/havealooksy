@@ -113,30 +113,37 @@
 
                   </div>
                 </div>
-                @if($listing_data['image'])
-                <div class="form-group">
-                  <label for="image" class="col-sm-2 control-label">Image</label>
-                  <div class="col-sm-3">
-                    <img id="listing_image" src="{{ asset('public/images/listings/'.$listing_data['image']) }}">
-                    <a id="remove_image" data-id="{{ $listing_data['id'] }}" style="margin-top: 10px;" class="btn btn-block btn-info">Remove</a>
-                  </div>
-                </div>
-                @else
                 <div class="form-group" id="add_image_section">
-                  <label for="image" class="col-sm-2 control-label">Image</label>
+                  <label for="image" class="col-sm-2 control-label">Add Images</label>
                   <div class="col-sm-10">
-                    <input id="image" name="image" type="file" class="form-control" required>
+                    <input id="image" name="images[]" type="file" class="form-control" multiple>
                     <p class="help-block">Only .jpeg, .jpg, .png are supported.</p>
 
-                    @if ($errors->has('image'))
+                    @if ($errors->has('images'))
                       <span class="invalid-feedback" role="alert">
-                          <strong>{{ $errors->first('image') }}</strong>
+                          <strong>{{ $errors->first('images') }}</strong>
                       </span>
                     @endif
 
                   </div>
                 </div>
-                @endif
+                <div class="form-group">
+                  <label for="image" class="col-sm-2 control-label">Uploaded Images</label>
+                  <div class="col-sm-10">
+                    <div id="image-box">
+                      @foreach($listing_data['getImages'] as $val)
+                      <div class='edit_image_container'>
+                        <a href="{{ asset('public/images/listings/'.$val['name']) }}" data-lightbox="{{ $val['listing_id'] }}">
+                          <img src="{{ asset('public/images/listings/'.$val['name']) }}">
+                        </a>
+                        <a href="#" class="remove_image" data-id="{{ $val['id'] }}" style="display:block;">Remove</a>
+                      </div>
+                      @endforeach
+                    </div>
+                    <!-- <img id="listing_image" src="{{ asset('public/images/listings/'.$listing_data['image']) }}">
+                    <a id="remove_image" data-id="{{ $listing_data['id'] }}" style="margin-top: 10px;" class="btn btn-block btn-info">Remove</a> -->
+                  </div>
+                </div>
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
@@ -153,7 +160,7 @@
 
 @section('pageJs')
 <script type="text/javascript">
-  $("a#remove_image").on("click", function(){
+  $("a.remove_image").on("click", function(){
       var id = $(this).attr('data-id');
       $("#loading").toggleClass("hide");
 

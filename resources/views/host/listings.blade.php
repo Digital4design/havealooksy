@@ -8,7 +8,6 @@
   .toolbar{float:left;height:35px;margin-top:5px;}
   .btn.button_delete, .btn-info, .btn.active-deactive, .is-favorite{padding:6px 10px;}
   .btn.button_delete, .btn-info{display:inline;}
-  .is-favorite{vertical-align:-webkit-baseline-middle;}
 </style>
 @stop
 
@@ -46,9 +45,6 @@
                       <button id="active" class="btn btn-primary">ACTIVE</button>
                       <button id="inactive" class="btn btn-primary">INACTIVE</button>
                     </div>
-                    <div>
-                      <button id="favorites" class="btn btn-danger">FAVORITES</button>
-                    </div>
                   </div>
                   <table id="listings_list" class="table table-bordered table-striped">
                     <thead>
@@ -59,10 +55,9 @@
                           <th>Price</th>
                           <th>Category</th>
                           <th>Status</th>
-                          <th>Image</th>
+                          <th>Images</th>
                           <th>Activate/Deactivate</th>
                           <th>Action</th>
-                          <th></th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -73,10 +68,9 @@
                           <th>Price</th>
                           <th>Category</th>
                           <th>Status</th>
-                          <th>Image</th>
+                          <th>Images</th>
                           <th>Activate/Deactivate</th>
                           <th>Action</th>
-                          <th></th>
                         </tr>
                     </tfoot>
                   </table>
@@ -86,6 +80,22 @@
             </div>
         </div>
     </section>
+</div>
+<div class="modal fade" id="image-modal" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span></button>
+          <h4 class="modal-title">Images</h4>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 @endsection
 
@@ -126,11 +136,9 @@ $(function() {
             { data: 'price', name: 'price' },
             { data: 'category', name: 'category' },
             { data: 'status', name: 'status', orderable: false, visible:false },
-            { data: 'image', name: 'image', orderable: false },
+            { data: 'images', name: 'images', orderable: false },
             { data: 'activate_deactivate', name: 'activate_deactivate', orderable: false },
             { data: 'action', name: 'action', orderable: false },
-            { data: 'is_favorite_listing', name: 'is_favorite_listing', orderable: false },
-            { data: 'is_favorite', name: 'is_favorite', orderable: false, visible:false },
         ],
         oLanguage: {
           "sInfoEmpty" : "Showing 0 to 0 of 0 entries",
@@ -169,6 +177,22 @@ $(function() {
               '</table>';
     }
 
+    $(document).on("click", "a.listing_images", function(){
+      var id = $(this).attr("data-id");
+      $("#image-modal .modal-body").html("");
+      $.ajax({
+        'url'      : '{{ url("host/listings/get-images") }}/'+id,
+        'method'   : 'get',
+        'dataType' : 'json',
+        success    : function(data){
+          if(data.status == 'success'){
+            $("#image-modal .modal-body").html(data.images);
+          }  
+        } 
+      });
+      return false;
+    });
+
     $('#listings_list tbody').on('click', 'td.details-control', function(){
         var tr = $(this).closest('tr');
         var row = table.row(tr);
@@ -186,21 +210,16 @@ $(function() {
     });
 
     $('#all').on('click', function () {
-        table.columns(5).search("").columns(10).search("").draw();
+        table.columns(5).search("").draw();
     });
 
     $('#active').on('click', function () {
         regExSearch = "^" + "Active" +"$";
-        table.columns(5).search(regExSearch, true, false, false).columns(10).search("").draw();
+        table.columns(5).search(regExSearch, true, false, false).draw();
     });
 
     $('#inactive').on('click', function () {
-        table.columns(5).search("Deactive").columns(10).search("").draw();
-    });
-
-    $('#favorites').on('click', function () {
-        regexEx = "^" + "Favorite" +"$";
-        table.columns(10).search(regexEx, true, false, false).columns(5).search("").draw();
+        table.columns(5).search("Deactive").draw();
     });
 
     $(document).on("click", "button.active-deactive", function(){
@@ -227,43 +246,6 @@ $(function() {
               $(".active-deactive[data-id="+id+"]").removeClass("btn-default").addClass("btn-danger").text("Activate");
               // $(".active-deactive[data-id="+id+"]").closest("tr").find("td:eq(5)").text("Deactive");
             }
-          }  
-        } 
-      });
-      return false;
-    });
-
-    $(document).on("click", "a.is-favorite", function(){
-      var id = $(this).attr('data-id');
-      var that = this;
-      if($(this).find(".fa").hasClass("fa-star-o")){
-        $(this).find(".fa").removeClass("fa-star-o");
-        newclass = "fa-star";
-        message = "added to";
-        fav = 1;
-      }
-      else if($(this).find(".fa").hasClass("fa-star")){
-        $(this).find(".fa").removeClass("fa-star");
-        newclass = "fa-star-o";
-        message = "removed from";
-        fav = 0;
-      }
-      $("#loading").toggleClass("hide");
-      $.ajax({
-        'url'      : '{{ url("host/listings/change-favorite-status") }}/'+id+"/"+fav,
-        'method'   : 'get',
-        'dataType' : 'json',
-        success    : function(data){
-          if(data.status == 'success'){
-            $(that).find(".fa").addClass(newclass);
-            $("#loading").toggleClass("hide");
-            swal({
-                title: "Success",
-                text: "Listing "+message+" Favorites!",
-                timer: 2000,
-                type: "success",
-                showConfirmButton: false
-            });
           }  
         } 
       });

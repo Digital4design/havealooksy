@@ -16,12 +16,17 @@
 				<div class="wrapper row">
 					<div class="preview col-md-6">
 						<div class="preview-pic tab-content">
-						  <div class="tab-pane active" id="pic-1" style="position:relative;width:100%;height:600px;"><img src="{{ asset('public/images/listings/'.$listing_data['image']) }}" style="position:absolute;height:100%;width:100%;" /></div>
+						  	<div class="tab-pane active" id="pic-{{$listing_data['getImages'][0]['id']}}" style="position:relative;width:100%;height:600px;"><img src="{{ asset('public/images/listings/'.$listing_data['getImages'][0]['name']) }}" style="position:absolute;height:100%;width:100%;" /></div>
+						  	@foreach($listing_data['getImages'] as $img)
+						  		<div class="tab-pane" id="pic-{{$img['id']}}" style="position:relative;width:100%;height:600px;"><img src="{{ asset('public/images/listings/'.$img['name']) }}" style="position:absolute;height:100%;width:100%;" /></div>
+						  	@endforeach
 
 						  <!-- <div class="tab-pane active" id="pic-1"><img src="{{ asset('public/images/listings/'.$listing_data['image']) }}" /></div> -->
 						</div>
 						<ul class="preview-thumbnail nav nav-tabs">
-						  <li class="active"><a data-target="#pic-1" data-toggle="tab"><img src="{{ asset('public/images/listings/'.$listing_data['image']) }}" /></a></li>
+							@foreach($listing_data['getImages'] as $img)
+						  		<li class="active" style="margin-bottom:5px;"><a href="#" data-target="#pic-{{$img['id']}}" data-toggle="tab"><img src="{{ asset('public/images/listings/'.$img['name']) }}" /></a></li>
+						  	@endforeach
 						</ul>	
 					</div>
 					<div class="details col-md-6">
@@ -77,7 +82,7 @@
 						<div class="item">
 							<div class="ot-portfolio-item">
 								<figure class="effect-bubba">
-									<img src="{{ asset('public/images/listings/'.$val['image']) }}" alt="img02" class="img-responsive" />
+									<img src="{{ asset('public/images/listings/'.$val['getImages'][0]['name']) }}" alt="img02" class="img-responsive" />
 									<figcaption>
 										<h2>{{ $val['title'] }}</h2>
 										<p>{{ $val['description'] }}</p>

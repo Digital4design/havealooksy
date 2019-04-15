@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Yajra\Datatables\Datatables;
 use App\Models\Categories;
+use App\Models\Listings;
 use Validator;
 use App\User;
 use Auth;
@@ -15,7 +16,13 @@ class DashboardController extends Controller
 {
     public function index()
     {
-    	return view('admin.dashboard');
+        $users = User::with(['getRole'])
+                        ->whereHas('roles', function($q){
+                            $q->where('name', 'shopper')->orWhere('name', 'host');
+                        })->get()->count();
+        $categories = Categories::get()->count();
+        $listings = Listings::get()->count();
+    	return view('admin.dashboard')->with(['users' => $users, 'categories' => $categories, 'listings' => $listings]);
     }
 
     public function profile()

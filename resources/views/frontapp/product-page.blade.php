@@ -89,7 +89,7 @@
 						<a href="{{ url('get-products/product-details/'.$val['id']) }}" target="_blank">
 							<div class="team-item">
 								<div class="team-image">
-									<img src="{{ asset('public/images/listings/'.$val['image']) }}" class="img-responsive" alt="author">
+									<img src="{{ asset('public/images/listings/'.$val['getImages'][0]['name']) }}" class="img-responsive" alt="author">
 								</div>
 								<div class="team-text">
 								    <div class="team-name">RESTAURANT</div> 
@@ -103,7 +103,7 @@
 						<a href="{{ url('get-products/product-details/'.$val['id']) }}">
 							<div class="team-item">
 								<div class="team-image" style="width:30%;">
-									<img src="{{ asset('public/images/listings/'.$val['image']) }}" class="img-responsive" alt="author">
+									<img src="{{ asset('public/images/listings/'.$val['getImages'][0]['name']) }}" class="img-responsive" alt="author">
 								</div>
 								<div class="team-text"  style="width:60%;margin-left:20px;">
 								    <div class="team-name" style="margin-bottom:12px;">RESTAURANT</div> 

@@ -47,7 +47,7 @@
                           <th>Price</th>
                           <th>Category</th>
                           <th>Status</th>
-                          <th>Image</th>
+                          <th>Images</th>
                           <th>Action</th>
                           <th></th>
                           <th>Approval Status</th>
@@ -62,7 +62,7 @@
                           <th>Price</th>
                           <th>Category</th>
                           <th>Status</th>
-                          <th>Image</th>
+                          <th>Images</th>
                           <th>Action</th>
                           <th></th>
                           <th>Approval Status</th>
@@ -76,7 +76,22 @@
         </div>
     </section>
 </div>
-
+<div class="modal fade" id="image-modal" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span></button>
+          <h4 class="modal-title">Images</h4>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 @endsection
 
 @section('pageJs')
@@ -115,7 +130,7 @@
             { data: 'price', name: 'price' },
             { data: 'category', name: 'category' },
             { data: 'status', name: 'status', orderable: false },
-            { data: 'image', name: 'image', orderable: false },
+            { data: 'images', name: 'images', orderable: false },
             { data: 'action', name: 'action', orderable: false },
             { data: 'approved_unapproved', name: 'approved_unapproved', orderable: false },
             { data: 'is_approved', name: 'is_approved', orderable: false, visible: false },
@@ -158,6 +173,22 @@
               '</table>';
     }
 
+    $(document).on("click", "a.listing_images", function(){
+      var id = $(this).attr("data-id");
+      $("#image-modal .modal-body").html("");
+      $.ajax({
+        'url'      : '{{ url("admin/listings/get-images") }}/'+id,
+        'method'   : 'get',
+        'dataType' : 'json',
+        success    : function(data){
+          if(data.status == 'success'){
+            $("#image-modal .modal-body").html(data.images);
+          }  
+        } 
+      });
+      return false;
+    });
+
     $('#listings_list tbody').on('click', 'td.details-control', function(){
         var tr = $(this).closest('tr');
         var row = table.row(tr);
@@ -173,21 +204,6 @@
             tr.addClass('shown');
         }
     });
-
-    // $("div.toolbar").html('<a href class="description_hide_show" data-column="1"><span id="show-hide">Show</span> Description</a>');
-
-    // $("a.description_hide_show").on("click", function(e){
-    //   e.preventDefault();
-    //   var column = table.column($(this).attr('data-column'));
-    //   column.visible(!column.visible());
-
-    //   if($(this).text() == "Show Description"){
-    //     $("#show-hide").text("Hide");
-    //   }
-    //   else if($(this).text() == "Hide Description"){
-    //     $("#show-hide").text("Show");
-    //   }
-    // });
 
     $('#all').on('click', function () {
         table.columns(9).search("").draw();

@@ -62,7 +62,7 @@
                         <div class="item ">
                             <div class="ot-portfolio-item">
                                 <figure class="effect-bubba">
-                                    <img src="{{ asset('public/images/listings/'.$value['image']) }}" alt="{{ $value['title'] }}" class="img-responsive" />
+                                    <img src="{{ asset('public/images/listings/'.$value['getImages'][0]['name']) }}" alt="{{ $value['title'] }}" class="img-responsive" />
                                     <figcaption>
                                         <h2>{{ $value['title'] }}</h2>
                                         <p>{{ $value['description'] }}</p>
@@ -169,7 +169,7 @@
                             <a href="{{ url('get-products/product-details/'.$val['id']) }}" target="_blank">
                                 <div class="team-item">
                                     <div class="team-image">
-                                        <img src="{{ asset('public/images/listings/'.$val['image']) }}" alt="{{ $val['title'] }}" class="img-responsive">
+                                        <img src="{{ asset('public/images/listings/'.$val['getImages'][0]['name']) }}" alt="{{ $val['title'] }}" class="img-responsive">
                                     </div>
                                     <div class="team-text">
                                         <div class="team-name">{{ $val['title'] }}</div> 

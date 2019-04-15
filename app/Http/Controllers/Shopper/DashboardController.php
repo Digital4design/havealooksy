@@ -18,7 +18,7 @@ class DashboardController extends Controller
     public function index()
     {
     	$categories = Categories::where('status', '1')->get();
-        $fav_listings = Listings::where('is_favorite', '1')->where('status', '1')->get();
+        $fav_listings = Listings::where('status', '1')->get();
         $new_listings = Listings::where('status', '1')
                                     ->take(4)->orderBy('created_at', 'desc')
                                     ->get();

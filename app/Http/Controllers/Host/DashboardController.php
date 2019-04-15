@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Host;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Listings;
 use Validator;
 use App\User;
 use Auth;
@@ -13,7 +14,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
-    	return view('host.dashboard');
+        $listings = Listings::where('user_id', Auth::user()->id)->get()->count();
+    	return view('host.dashboard')->with('listings', $listings);
     }
 
     public function profile()

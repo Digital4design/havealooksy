@@ -30,10 +30,10 @@ class HomeController extends Controller
         if(Auth::guest())
         {
             $categories = Categories::where('status', '1')->get();
-            $fav_listings = Listings::where('is_favorite', '1')->where('status', '1')
+            $fav_listings = Listings::with(['getImages'])->where('status', '1')
                                     ->where('is_approved', '1')
                                     ->get();
-            $new_listings = Listings::where('status', '1')
+            $new_listings = Listings::with(['getImages'])->where('status', '1')
                                     ->where('is_approved', '1')
                                     ->take(4)->orderBy('created_at', 'desc')
                                     ->get();
@@ -67,7 +67,7 @@ class HomeController extends Controller
     /* Get Products of a category */
     public function getProducts($id)
     {
-        $listings = Listings::where('category_id', $id)->where('status', '1')->where('is_approved', '1')->get();
+        $listings = Listings::with(['getImages'])->where('category_id', $id)->where('status', '1')->where('is_approved', '1')->get();
         $category = Categories::where('id', $id)->first();
 
         return view('frontapp.product-page')->with(['listings' => $listings, 'category' => $category]);
@@ -76,7 +76,7 @@ class HomeController extends Controller
     /* Get Product Details */
     public function getProductDetails($id)
     {
-        $listing_data = Listings::with(['getCategory', 'getListerRole'])->where('id', $id)->first();
+        $listing_data = Listings::with(['getCategory', 'getListerRole', 'getImages'])->where('id', $id)->first();
 
         $all_listings_of_category = Listings::where('category_id', $listing_data['category_id'])
                                             ->where('status', '1')->where('id', '<>', $id)
@@ -140,7 +140,7 @@ class HomeController extends Controller
 
         if($industry != "" && $location != "")
         {
-            $listings = Listings::with(['getCategory'])
+            $listings = Listings::with(['getCategory', 'getImages'])
                             ->whereHas('getCategory', function($q) use($industry){
                                 $q->where('name', 'like', '%'.$industry.'%');
                             })->orWhere('location', 'like', '%'.$location.'%')
@@ -150,7 +150,7 @@ class HomeController extends Controller
         }
         elseif ($industry != "") 
         {
-            $listings = Listings::with(['getCategory'])
+            $listings = Listings::with(['getCategory', 'getImages'])
                             ->whereHas('getCategory', function($q) use($industry){
                                 $q->where('name', 'like', '%'.$industry.'%');
                             })->where('status', '1')
@@ -163,7 +163,7 @@ class HomeController extends Controller
         }
         else
         {
-            $listings = Listings::where('status', '1')->where('is_approved', '1')->get();
+            $listings = Listings::with(['getImages'])->where('status', '1')->where('is_approved', '1')->get();
         }
 
         return view('frontapp.search-results-view')->with(['listings' => $listings]);

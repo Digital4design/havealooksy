@@ -68,6 +68,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth', 'verified']
     Route::group(['prefix' => 'listings', 'middleware' => ['admin', 'auth']], function() {
         Route::get('/', ['as' => 'listingsAdmin', 'uses' => 'Admin\ListingController@getListingsView']);
         Route::get('/get-listings', 'Admin\ListingController@getAllListings');
+        Route::get('/get-images/{id}', 'Admin\ListingController@getListingImages');
         Route::get('/change-approval/{id}/{status}', 'Admin\ListingController@changeApprovalSetting');
         Route::get('/edit-listing/{id}', ['as' => 'editListingAdmin', 'uses' => 'Admin\ListingController@editListingView']);
         Route::get('/remove-listing-image/{id}', 'Admin\ListingController@removeListingImage');
@@ -95,10 +96,10 @@ Route::group(['prefix' => 'host', 'middleware' => ['host', 'auth', 'verified']],
     Route::group(['prefix' => 'listings', 'middleware' => ['host', 'auth']], function() {
         Route::get('/', ['as' => 'listings', 'uses' => 'Host\DashboardController@getListingsView']);
         Route::get('/get-listings', 'Host\ListingController@getListings');
+        Route::get('/get-images/{id}', 'Host\ListingController@getListingImages');
         Route::get('/add-listing', 'Host\ListingController@addListing');
         Route::post('/save-listing', 'Host\ListingController@saveListing');
-        Route::get('/change-status/{id}/{status}', 'Host\ListingController@changeStatus');
-        Route::get('/change-favorite-status/{id}/{status}', 'Host\ListingController@changeFavoriteStatus'); 
+        Route::get('/change-status/{id}/{status}', 'Host\ListingController@changeStatus'); 
         Route::get('/edit-listing/{id}', ['as' => 'editListing', 'uses' => 'Host\ListingController@editListingView']);
         Route::get('/remove-listing-image/{id}', 'Host\ListingController@removeListingImage');
         Route::post('/update-listing', 'Host\ListingController@updateListing'); 

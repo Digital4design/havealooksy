@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Yajra\Datatables\Datatables;
+use App\Models\ListingImages;
 use App\Models\Categories;
 use App\Models\Listings;
 use Validator;
@@ -47,9 +48,16 @@ class ListingController extends Controller
 
                         })->addColumn('action', function ($all_listings){
                             return "<a href='".route('editListingAdmin', $all_listings['id'])."' class='btn btn-info' style='margin-right:5px;'><i class='fa fa-edit'></i></a><button type='button' data-id='".$all_listings['id']."' class='btn btn-warning button_delete'><i class='fa fa-trash-o'></i></button>";
-                        })->editColumn('image', function ($all_listings){
-                            return "<a href='".asset('public/images/listings/'.$all_listings['image'])."' style='font-size:1em;padding:10px;' data-lightbox='".$all_listings['title']."'><i class='glyphicon glyphicon-picture'></i></a>";
-                        })->rawColumns(['approved_unapproved' => 'approved_unapproved', 'action' => 'action', 'image' => 'image'])->make(true);
+                        })->addColumn('images', function ($all_listings){
+                            return "<a href='#' data-toggle='modal' data-target='#image-modal' class='listing_images' data-id='".$all_listings['id']."' style='font-size:1em;padding:10px;'><i class='glyphicon glyphicon-picture'></i></a>";
+                        })->rawColumns(['approved_unapproved' => 'approved_unapproved', 'action' => 'action', 'images' => 'images'])->make(true);
+    }
+
+    public function getListingImages($id)
+    {
+        $get_images = ListingImages::where('listing_id', $id)->get();
+        $images = view('host.renders.listing_images_render')->with('get_images', $get_images)->render();
+        return response()->json(['status' => 'success', 'images' => $images]);
     }
 
     public function changeApprovalSetting($id, $status)
@@ -64,19 +72,18 @@ class ListingController extends Controller
     public function editListingView($id)
     {
         $categories = Categories::with(['childCategories'])->where('status', '1')->where('parent_id', '0')->get();
-        $listing_data = Listings::where('id', $id)->first();
+        $listing_data = Listings::with(['getImages'])->where('id', $id)->first();
         return view('admin.edit_listing')->with(['categories' => $categories, 'listing_data' => $listing_data]);
     }
 
     public function removeListingImage($id)
     {
-        $listing = Listings::find($id);
+        $listing_image = ListingImages::find($id);
 
-        if(file_exists(public_path('images/listings/'.$listing->image)))
+        if(file_exists(public_path('images/listings/'.$listing_image->name)))
         {   
-            $del_pic = unlink(public_path('images/listings/'.$listing->image));
-            $listing->image = null;
-            $listing->save();
+            $del_pic = unlink(public_path('images/listings/'.$listing_image->name));
+            $listing_image->delete();
             return response()->json(['status' => 'success','message' => 'Listing Image removed successfully']);
         }
         return response()->json(['status' => 'danger','message' => 'Something went wrong. Please try again later.']);
@@ -90,8 +97,8 @@ class ListingController extends Controller
             'location' => ['required', 'string'],  
             'price' => ['required', 'numeric'],  
             'category' => ['required'],  
-            'image' => ['image', 'mimes:jpg,jpeg,png'],  
-        ]);
+            'images' => ['image', 'mimes:jpg,jpeg,png'],  
+        ], ['images.image' => 'Only images can be uploaded with extensions - .jpg, .jpeg, .png']);
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
@@ -103,16 +110,21 @@ class ListingController extends Controller
             $listing->location = $request->location;
             $listing->price = $request->price;
             $listing->category_id = $request->category;
-
-            if($request->hasFile('image')){
-                $file = $request->file('image');
-                $filename = 'listing-'.time().'.'.$file->getClientOriginalExtension();
-                $file->move('public/images/listings',$filename);
-
-                $listing->image = $filename;
-            }
-
             $listing->save();
+
+            if($request->hasFile('images')){
+                foreach($request->file('images') as $file)
+                {
+                    $filename = 'listing-'.time().uniqid().'.'.$file->getClientOriginalExtension();
+
+                    ListingImages::create([
+                        'name' => $filename,
+                        'listing_id' => $request->listing_id,
+                    ]);
+
+                    $file->move('public/images/listings',$filename);
+                }
+            }
 
             return redirect()->route('listingsAdmin')->with(['status' => 'success' , 'message' => 'Listing updated successfully.']);
         }

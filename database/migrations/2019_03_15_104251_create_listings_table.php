@@ -18,7 +18,6 @@ class CreateListingsTable extends Migration
             $table->string('title');
             $table->longText('description');
             $table->text('location');
-            $table->text('image')->nullable();
             $table->double('price');
             $table->bigInteger('category_id')->unsigned()->nullable();
             $table->foreign('category_id')->references('id')->on('categories')

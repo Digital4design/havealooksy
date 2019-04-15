@@ -108,12 +108,12 @@
                 <div class="form-group">
                   <label for="image" class="col-sm-2 control-label">Image</label>
                   <div class="col-sm-10">
-                    <input id="image" name="image" type="file" class="form-control">
-                    <p class="help-block">Only .jpeg, .jpg, .png are supported.</p>
+                    <input id="image" name="images[]" type="file" class="form-control" multiple>
+                    <p class="help-block">You can select multiple files. Only .jpeg, .jpg, .png are supported.</p>
 
-                    @if ($errors->has('image'))
+                    @if ($errors->has('images'))
                       <span class="invalid-feedback" role="alert">
-                          <strong>{{ $errors->first('image') }}</strong>
+                          <strong>{{ $errors->first('images') }}</strong>
                       </span>
                     @endif
 

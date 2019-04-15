@@ -17,7 +17,6 @@ class AddFieldToListingsTable extends Migration
             $table->integer('user_id')->unsigned()->nullable()->after('category_id');
             $table->foreign('user_id')->references('id')->on('users')
                     ->onUpdate('cascade')->onDelete('cascade');
-            $table->enum('is_favorite', ['1', '0'])->default('0')->comment('1 = Yes; 0 = No')->after('status');
         });
     }
 
@@ -30,7 +29,6 @@ class AddFieldToListingsTable extends Migration
     {
         Schema::table('listings', function (Blueprint $table) {
             $table->dropColumn('user_id');
-            $table->dropColumn('is_favorite');
         });
     }
 }

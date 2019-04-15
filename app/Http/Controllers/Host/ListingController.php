@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Host;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Yajra\Datatables\Datatables;
+use App\Models\ListingImages;
 use App\Models\Categories;
 use App\Models\Listings;
 use Validator;
@@ -14,7 +15,7 @@ class ListingController extends Controller
 {
     public function getListings()
     {
-    	$all_listings = Listings::where('user_id', Auth::user()->id)->where('is_approved', 1)->get();
+    	$all_listings = Listings::with(['getImages'])->where('user_id', Auth::user()->id)->where('is_approved', 1)->get();
 
         return Datatables::of($all_listings)
         				->editColumn('status', function ($all_listings){
@@ -40,16 +41,18 @@ class ListingController extends Controller
                                 $btn_color = 'danger';
                             }
                             return "<button type='button' data-id='".$all_listings['id']."' class='btn btn-".$btn_color." active-deactive' type='button'>".$status."</button>";
+                        })->addColumn('images', function ($all_listings){
+                            return "<a href='#' data-toggle='modal' data-target='#image-modal' class='listing_images' data-id='".$all_listings['id']."' style='font-size:1em;padding:10px;'><i class='glyphicon glyphicon-picture'></i></a>";
                         })->addColumn('action', function ($all_listings){
                             return "<a href='".route('editListing', $all_listings['id'])."' class='btn btn-info' style='margin-right:5px;'><i class='fa fa-edit'></i></a><button type='button' data-id='".$all_listings['id']."' class='btn btn-warning button_delete'><i class='fa fa-trash-o'></i></button>";
-                        })->editColumn('image', function ($all_listings){
-                            return "<a href='".asset('public/images/listings/'.$all_listings['image'])."' style='font-size:1em;padding:10px;' data-lightbox='".$all_listings['title']."'><i class='glyphicon glyphicon-picture'></i></a>";
-                        })->addColumn('is_favorite_listing', function ($all_listings){
-                            if($all_listings['is_favorite'] == 1)
-                                return "<a href='#' data-id='".$all_listings['id']."' class='is-favorite'><i class='fa text-yellow fa-star'></i></a>";
-                            if($all_listings['is_favorite'] == 0)
-                                return "<a href='#' data-id='".$all_listings['id']."' class='is-favorite'><i class='fa text-yellow fa-star-o'></i></a>";
-            			})->rawColumns(['activate_deactivate' => 'activate_deactivate', 'action' => 'action', 'image' => 'image', 'is_favorite_listing' => 'is_favorite_listing'])->make(true);
+            			})->rawColumns(['activate_deactivate' => 'activate_deactivate', 'action' => 'action', 'images' => 'images'])->make(true);
+    }
+
+    public function getListingImages($id)
+    {
+        $get_images = ListingImages::where('listing_id', $id)->get();
+        $images = view('host.renders.listing_images_render')->with('get_images', $get_images)->render();
+        return response()->json(['status' => 'success', 'images' => $images]);
     }
 
     public function addListing()
@@ -67,28 +70,35 @@ class ListingController extends Controller
             'price' => ['required', 'numeric'],  
             'category' => ['required'],  
             'status' => ['required'],
-            'image' => ['required', 'image', 'mimes:jpg,jpeg,png'],  
-        ]);
+            'images' => ['required'],  
+            'images.*' => ['image', 'mimes:jpg,jpeg,png'],  
+        ], ['images.image' => 'Only images can be uploaded with extensions - .jpg, .jpeg, .png']);
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
         try
         {
-        	$file = $request->file('image');
-            $filename = 'listing-'.time().'.'.$file->getClientOriginalExtension();
-
-        	Listings::create([
+        	$listing = Listings::create([
                 'title' => $request->title,
                 'description' => $request->description,
                 'location' => $request->location,
                 'price' => $request->price,
                 'category_id' => $request->category,
                 'status' => $request->status,
-                'image' => $filename,
                 'user_id' => Auth::user()->id,
             ]);
 
-            $file->move('public/images/listings',$filename);
+            foreach($request->file('images') as $file)
+            {
+                $filename = 'listing-'.time().uniqid().'.'.$file->getClientOriginalExtension();
+
+                ListingImages::create([
+                    'name' => $filename,
+                    'listing_id' => $listing->id,
+                ]);
+
+                $file->move('public/images/listings',$filename);
+            }
 
         	return redirect()->route('listings')->with(['status' => 'success' , 'message' => 'Listing has been successfully submitted for approval.']);
         }
@@ -107,31 +117,21 @@ class ListingController extends Controller
         return response()->json(['status' => 'success', 'listing_status' => $status]);
     }
 
-    public function changeFavoriteStatus($id, $status)
-    {
-        $fav_status = Listings::find($id);
-        $fav_status->is_favorite = $status;
-        $fav_status->save();
-
-        return response()->json(['status' => 'success', 'fav_status' => $status]);
-    }
-
     public function editListingView($id)
     {
     	$categories = Categories::with(['childCategories'])->where('status', '1')->where('parent_id', '0')->get();
-    	$listing_data = Listings::where('id', $id)->first();
+    	$listing_data = Listings::with(['getImages'])->where('id', $id)->first();
     	return view('host.edit_listing')->with(['categories' => $categories, 'listing_data' => $listing_data]);
     }
 
     public function removeListingImage($id)
     {
-        $listing = Listings::find($id);
+        $listing_image = ListingImages::find($id);
 
-        if(file_exists(public_path('images/listings/'.$listing->image)))
+        if(file_exists(public_path('images/listings/'.$listing_image->name)))
         {   
-            $del_pic = unlink(public_path('images/listings/'.$listing->image));
-            $listing->image = null;
-            $listing->save();
+            $del_pic = unlink(public_path('images/listings/'.$listing_image->name));
+            $listing_image->delete();
             return response()->json(['status' => 'success','message' => 'Listing Image removed successfully']);
         }
         return response()->json(['status' => 'danger','message' => 'Something went wrong. Please try again later.']);
@@ -146,8 +146,8 @@ class ListingController extends Controller
             'price' => ['required', 'numeric'],  
             'category' => ['required'],  
             'status' => ['required'],
-            'image' => ['image', 'mimes:jpg,jpeg,png'],  
-        ]);
+            'images' => ['image', 'mimes:jpg,jpeg,png'],  
+        ], ['images.image' => 'Only images can be uploaded with extensions - .jpg, .jpeg, .png']);
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
@@ -160,16 +160,21 @@ class ListingController extends Controller
         	$listing->price = $request->price;
         	$listing->category_id = $request->category;
         	$listing->status = $request->status;
+            $listing->save();
 
-        	if($request->hasFile('image')){
-        		$file = $request->file('image');
-            	$filename = 'listing-'.time().'.'.$file->getClientOriginalExtension();
-            	$file->move('public/images/listings',$filename);
+        	if($request->hasFile('images')){
+                foreach($request->file('images') as $file)
+                {
+                    $filename = 'listing-'.time().uniqid().'.'.$file->getClientOriginalExtension();
 
-            	$listing->image = $filename;
-        	}
+                    ListingImages::create([
+                        'name' => $filename,
+                        'listing_id' => $request->listing_id,
+                    ]);
 
-        	$listing->save();
+                    $file->move('public/images/listings',$filename);
+                }
+        	}        	
 
         	return redirect()->route('listings')->with(['status' => 'success' , 'message' => 'Listing updated successfully.']);
         }
