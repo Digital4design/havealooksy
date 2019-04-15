@@ -3,7 +3,7 @@
 @endguest
 
 @auth
-  @php $layout = 'layouts.buyerLayout.buyerFrontApp' @endphp
+  @php $layout = 'layouts.shopperLayout.shopperFrontApp' @endphp
 @endauth
 
 @extends($layout)

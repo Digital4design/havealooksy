@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Shopper;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -13,7 +13,7 @@ use Chat;
 
 class ChatController extends Controller
 {
-	/* Get All Conversations */
+    /* Get All Conversations */
 	public function getAllConversations()
 	{
 		$conversations = Chat::conversations()->for(Auth::user())->get();
@@ -33,10 +33,10 @@ class ChatController extends Controller
 		}
 		
 		$users = User::with(['getRole'])->whereHas('roles', function($q){
-        			$q->where('name', 'host')->orWhere('name', 'shopper');
+        			$q->where('name', 'admin')->orWhere('name', 'host');
         		 })->get();
 
-		return view('admin.conversations')->with(['conversations' => $conversations, 'users' => $users]);
+		return view('shopper.conversations')->with(['conversations' => $conversations, 'users' => $users]);
 	}
 
 	/* Get all messages of chat */
@@ -66,7 +66,7 @@ class ChatController extends Controller
 
         $conv_with_user = User::with(['getRole'])->where('id', $id)->first();
 
-		return view('admin.chat_view')->with(['messages' => $messages, 'conv_with_user' => $conv_with_user]);
+		return view('shopper.chat_view')->with(['messages' => $messages, 'conv_with_user' => $conv_with_user]);
     }
 
     /* Send message */
@@ -109,22 +109,22 @@ class ChatController extends Controller
         
         if($conversations)
         {
-        	foreach($conversations as $conv)
-	        {
-	            $unreadCount = Chat::conversation($conv)->for(Auth::user())->unreadCount();
+            foreach($conversations as $conv)
+            {
+                $unreadCount = Chat::conversation($conv)->for(Auth::user())->unreadCount();
 
-	            $conv['unread'] = $unreadCount;
+                $conv['unread'] = $unreadCount;
 
-	            $get_receiver_id = MessageNotification::where('conversation_id', $conv['id'])->where('user_id', '<>', Auth::user()->id)->first();
+                $get_receiver_id = MessageNotification::where('conversation_id', $conv['id'])->where('user_id', '<>', Auth::user()->id)->first();
 
-	            $user = User::where('id', $get_receiver_id['user_id'])->first();
+                $user = User::where('id', $get_receiver_id['user_id'])->first();
 
-	            $conv['user'] = $user;
-	        }
+                $conv['user'] = $user;
+            }
 
-	        $unread_list = view('admin.renders.unread_conversations_list_render')->with('conversations', $conversations)->render();
-	        
-	        return response()->json(['status' => 'success', 'conversations' => $unread_list]);
+            $unread_list = view('shopper.renders.unread_conversations_list_render')->with('conversations', $conversations)->render();
+            
+            return response()->json(['status' => 'success', 'conversations' => $unread_list]);
         }
         return response()->json(['status' => 'success', 'conversations' => '']);
     }

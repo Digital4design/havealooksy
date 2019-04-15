@@ -37,7 +37,7 @@
     .change-pic-link{position:relative;}
     #header-pic-link:hover{background-color: transparent;}
     .change-pic-link:hover img.img-circle{opacity:0.7;background-color:rgba(0,0,0,0.7);}
-    .error{color:red;}
+    #see_all_messages:hover{color:#000;background-color:silver;}.error{color:red;}
   </style>
   @yield('pageCss')
 </head>
@@ -66,11 +66,10 @@
             <ul class="dropdown-menu">
               <li class="header">You have {{ $unreadCount }} unread messages</li>
               <li>
-                <!-- inner menu: contains the actual data -->
                 <ul class="menu" id="conversations_list">
                 </ul>
               </li>
-              <li class="footer"><a href="{{ url('admin/chat') }}">See All Messages</a></li>
+              <li class="footer"><a id="see_all_messages" href="{{ url('host/chat') }}">See All Messages</a></li>
             </ul>
           </li>
           <!-- Notifications: style can be found in dropdown.less -->
@@ -137,7 +136,7 @@
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="{{ url('/admin/profile') }}" id="profile-button" class="btn btn-default btn-flat">Profile</a>
+                  <a href="{{ url('/host/profile') }}" id="profile-button" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
                   <a href="{{ route('logout') }}" id="logout-button" class="btn btn-default btn-flat" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Sign out</a>
@@ -163,6 +162,7 @@
             <img src="{{ (Auth::user()->profile_picture) ? asset('public/images/profile_pictures/'.Auth::user()->profile_picture) : asset('public/images/default-pic.png') }}" class="img-circle" alt="User Image" style="transition: min-height 0.1s ease-in-out;">
             <span class="change-pic" style="display:none;font-size:0.9em;position:absolute;top:3px;left:15px;">{{ (Auth::user()->profile_picture) ? 'Edit' : 'Add' }}</span>
           </a>
+          
         </div>
         <div class="pull-left info">
           <p>{{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}</p>
@@ -173,33 +173,23 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
-        <li class="{{ Request::is('admin') ? 'active' : '' }}">
-          <a href="{{ url('/admin') }}">
+        <li class="{{ Request::is('host') ? 'active' : '' }}">
+          <a href="{{ url('host') }}">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
           </a>
         </li>
-        <li class="{{ Request::is('admin/users') ? 'active' : '' }}">
-          <a href="{{ url('admin/users') }}">
-            <i class="fa fa-users"></i> <span>Users</span>
-          </a>
-        </li>
-        <li class="{{ Request::is('admin/categories') ? 'active' : '' }}">
-          <a href="{{ url('admin/categories') }}">
-            <i class="fa fa-list"></i> <span>Categories</span>
-          </a>
-        </li>
-        <li class="{{ Request::is('admin/listings') ? 'active' : '' }}">
-          <a href="{{ url('admin/listings') }}">
+        <li class="{{ Request::is('host/listings') ? 'active' : '' }}">
+          <a href="{{ url('host/listings') }}">
             <i class="fa fa-list-alt"></i> <span>Listings</span>
           </a>
         </li>
-        <li class="{{ Request::is('admin/chat') ? 'active' : '' }}">
-          <a href="{{ url('admin/chat') }}">
+		    <li class="{{ Request::is('host/chat') ? 'active' : '' }}">
+          <a href="{{ url('host/chat') }}">
             <i class="fa fa-commenting"></i> <span>Messages</span><span class="pull-right" style="margin-right:5px;">{{ ($unreadCount != 0) ? $unreadCount : '' }}</span>
           </a>
         </li>
-        <li class="{{ Request::is('admin/change-password') ? 'active' : '' }}">
-          <a href="{{ url('admin/change-password') }}">
+        <li class="{{ Request::is('host/change-password') ? 'active' : '' }}">
+          <a href="{{ url('host/change-password') }}">
             <i class="fa fa-unlock"></i> <span>Change Password</span>
           </a>
         </li>
@@ -223,8 +213,8 @@
 <!-- Modals -->
 <div class="modal fade" id="change-picture" style="display: none;">
   <div class="modal-dialog">
-    <div class="modal-content" style="max-height:90vh;overflow-y:scroll;">
-      <form id="profile_picture_form" method="POST" enctype="multipart/form-data">
+    <div class="modal-content">
+      <form method="POST" id="profile_picture_form" enctype="multipart/form-data">
         @csrf
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -243,7 +233,7 @@
             <img src="{{ asset('public/images/profile_pictures/'.Auth::user()->profile_picture) }}" style="height:auto;width:100%;">
           </div>
           <div class="form-group" id="remove_profile_pic_button">
-            <a id="remove-profile-picture" href="{{ url('admin/remove-profile-picture') }}" class="btn btn-block btn-warning" style="margin-top:10px;">Remove Profile Picture</a>
+            <a id="remove-profile-picture" href="{{ url('host/remove-profile-picture') }}" class="btn btn-block btn-warning" style="margin-top:10px;">Remove Profile Picture</a>
           </div>
           @endif
         </div>
@@ -282,14 +272,14 @@
 <script src="{{asset('public/adminPanelAssets')}}/dist/js/adminlte.min.js"></script>
 <script src="{{asset('public/js/sweetalert/sweetalert.min.js')}}"></script>
 <script type="text/javascript">
-$(document).ready(function(){
-  $(".change-pic-link").mouseover(function(){
-    $(".change-pic").css("display", "block");
-  });
-  $(".change-pic-link").mouseout(function(){
-    $(".change-pic").css("display", "none");
-  });
-  $("a.sidebar-toggle").on("click", function(){
+  $(document).ready(function(){
+    $(".change-pic-link").mouseover(function(){
+      $(".change-pic").css("display", "block");
+    });
+    $(".change-pic-link").mouseout(function(){
+      $(".change-pic").css("display", "none");
+    });
+    $("a.sidebar-toggle").on("click", function(){
       // $(".user-panel img").toggleClass("fix-height");
 
       if($(".user-panel img").hasClass("fix-height")){
@@ -300,99 +290,100 @@ $(document).ready(function(){
         $(".user-panel img").addClass("fix-height");
         $(".user-panel img").animate({minHeight: "30px"}, 300, 'easeInOutQuart');
       }
-  });
-  $(document).on("click", "#get_unread_conversations", function(){
-    $.ajax({
-      'url'      : '{{ url("admin/get-unread-conversations") }}',
-      'method'   : 'get',
-      'dataType' : 'json',
-      success    : function(resp){
-        
-          if(resp.status == 'success'){
-            if(resp.conversations !=""){
-              $("#conversations_list").append(resp.conversations);
-            }
-          }
-      } 
     });
-  });
-  $("#profile_picture_form").submit(function(){
-    var formData = new FormData(this);
-    $("#loading").toggleClass("hide");
-    $.ajax({
-      'url'        : '{{ url("admin/change-profile-picture") }}',
-      'method'     : 'post',
-      'dataType'   : 'json',
-      'data'       : formData,
-      'cache'      : false,
-      'contentType': false,
-      'processData': false,
-      success    : function(resp){
-        
-          if(resp.status == 'success'){
-            $("#loading").toggleClass("hide");
-            $("#change-picture").modal("toggle");
-            swal({
-              title: "Success",
-              text: resp.message,
-              timer: 2000,
-              type: "success",
-              showConfirmButton: false
-            });
-            setTimeout(function(){ 
-                location.reload();
-            }, 1000);
-          }
-          else if(resp.status == 'danger'){
-            swal("Error", resp.message, "warning");
-          }
-          else{
-            console.log(resp);
-
-            $('.error').html('');
-            $('.error').parent().removeClass('has-error');
-            $.each(resp,function(key,value){
-              if(value != ""){
-                $("#error-"+key).text(value);
-                $("#error-"+key).parent().addClass('has-error');
-                $("#error-"+key).parent().find('.help-block').css('color', '#737373');
+    $(document).on("click", "#get_unread_conversations", function(){
+      $.ajax({
+        'url'      : '{{ url("host/get-unread-conversations") }}',
+        'method'   : 'get',
+        'dataType' : 'json',
+        success    : function(resp){
+          
+            if(resp.status == 'success'){
+              if(resp.conversations !=""){
+                $("#conversations_list").append(resp.conversations);
               }
-            });
-          }
-      } 
+            }
+        } 
+      });
     });
-    return false;
-  });
 
-  $("#remove-profile-picture").on("click", function(){
-    $("#loading").toggleClass("hide");
-    $.ajax({
-      'url'        : '{{ url("admin/remove-profile-picture") }}',
-      'method'     : 'get',
-      'dataType'   : 'json',
-      success    : function(resp){
-        
-          if(resp.status == 'success'){
-            $("#loading").toggleClass("hide");
-            swal({
-              title: "Success",
-              text: resp.message,
-              timer: 1000,
-              type: "success",
-              showConfirmButton: false
-            });
-            $("#uploaded_profile_pic").css("display", "none");
-            $("#remove_profile_pic_button").css("display", "none");
-            $("img").attr("src", "{{ url('public/images/default-pic.png') }}")
-          }
-          else if(resp.status == 'danger'){
-            swal("Error", resp.message, "warning");
-          }
-      } 
+    $("#profile_picture_form").submit(function(){
+      var formData = new FormData(this);
+      $("#loading").toggleClass("hide");
+      $.ajax({
+        'url'        : '{{ url("host/change-profile-picture") }}',
+        'method'     : 'post',
+        'dataType'   : 'json',
+        'data'       : formData,
+        'cache'      : false,
+        'contentType': false,
+        'processData': false,
+        success    : function(resp){
+          
+            if(resp.status == 'success'){
+              $("#loading").toggleClass("hide");
+              $("#change-picture").modal("toggle");
+              swal({
+                title: "Success",
+                text: resp.message,
+                timer: 2000,
+                type: "success",
+                showConfirmButton: false
+              });
+              setTimeout(function(){ 
+                  location.reload();
+              }, 1000);
+            }
+            else if(resp.status == 'danger'){
+              swal("Error", resp.message, "warning");
+            }
+            else{
+              console.log(resp);
+
+              $('.error').html('');
+              $('.error').parent().removeClass('has-error');
+              $.each(resp,function(key,value){
+                if(value != ""){
+                  $("#error-"+key).text(value);
+                  $("#error-"+key).parent().addClass('has-error');
+                  $("#error-"+key).parent().find('.help-block').css('color', '#737373');
+                }
+              });
+            }
+        } 
+      });
+      return false;
     });
-    return false;
-  });
-}); 
+
+    $("#remove-profile-picture").on("click", function(){
+      $("#loading").toggleClass("hide");
+      $.ajax({
+        'url'        : '{{ url("host/remove-profile-picture") }}',
+        'method'     : 'get',
+        'dataType'   : 'json',
+        success    : function(resp){
+          
+            if(resp.status == 'success'){
+              $("#loading").toggleClass("hide");
+              swal({
+                title: "Success",
+                text: resp.message,
+                timer: 1000,
+                type: "success",
+                showConfirmButton: false
+              });
+              $("#uploaded_profile_pic").css("display", "none");
+              $("#remove_profile_pic_button").css("display", "none");
+              $("img").attr("src", "{{ url('public/images/default-pic.png') }}")
+            }
+            else if(resp.status == 'danger'){
+              swal("Error", resp.message, "warning");
+            }
+        } 
+      });
+      return false;
+    });
+  }); 
 </script>
 @yield('pageJs')
 </body>

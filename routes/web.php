@@ -82,51 +82,51 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth', 'verified']
     }); 
 });
 
-Route::group(['prefix' => 'seller', 'middleware' => ['seller', 'auth', 'verified']], function() {
-    Route::get('/', 'Seller\DashboardController@index');
-    Route::get('/profile', 'Seller\DashboardController@profile');  
-    Route::post('/edit-profile', 'Seller\DashboardController@editProfile');
-    Route::get('/change-password', 'Seller\DashboardController@changePassword');  
-    Route::post('/save-password', 'Seller\DashboardController@savePassword');
-    Route::post('/change-profile-picture', 'Seller\DashboardController@changeProfilePicture');
-    Route::get('/remove-profile-picture', 'Seller\DashboardController@removeProfilePicture');
-    Route::get('/get-unread-conversations', 'Seller\ChatController@getUnreadConversations');
+Route::group(['prefix' => 'host', 'middleware' => ['host', 'auth', 'verified']], function() {
+    Route::get('/', 'Host\DashboardController@index');
+    Route::get('/profile', 'Host\DashboardController@profile');  
+    Route::post('/edit-profile', 'Host\DashboardController@editProfile');
+    Route::get('/change-password', 'Host\DashboardController@changePassword');  
+    Route::post('/save-password', 'Host\DashboardController@savePassword');
+    Route::post('/change-profile-picture', 'Host\DashboardController@changeProfilePicture');
+    Route::get('/remove-profile-picture', 'Host\DashboardController@removeProfilePicture');
+    Route::get('/get-unread-conversations', 'Host\ChatController@getUnreadConversations');
 
-    Route::group(['prefix' => 'listings', 'middleware' => ['seller', 'auth']], function() {
-        Route::get('/', ['as' => 'listings', 'uses' => 'Seller\DashboardController@getListingsView']);
-        Route::get('/get-listings', 'Seller\ListingController@getListings');
-        Route::get('/add-listing', 'Seller\ListingController@addListing');
-        Route::post('/save-listing', 'Seller\ListingController@saveListing');
-        Route::get('/change-status/{id}/{status}', 'Seller\ListingController@changeStatus');
-        Route::get('/change-favorite-status/{id}/{status}', 'Seller\ListingController@changeFavoriteStatus'); 
-        Route::get('/edit-listing/{id}', ['as' => 'editListing', 'uses' => 'Seller\ListingController@editListingView']);
-        Route::get('/remove-listing-image/{id}', 'Seller\ListingController@removeListingImage');
-        Route::post('/update-listing', 'Seller\ListingController@updateListing'); 
-        Route::get('/delete-listing/{id}', 'Seller\ListingController@deleteListing'); 
+    Route::group(['prefix' => 'listings', 'middleware' => ['host', 'auth']], function() {
+        Route::get('/', ['as' => 'listings', 'uses' => 'Host\DashboardController@getListingsView']);
+        Route::get('/get-listings', 'Host\ListingController@getListings');
+        Route::get('/add-listing', 'Host\ListingController@addListing');
+        Route::post('/save-listing', 'Host\ListingController@saveListing');
+        Route::get('/change-status/{id}/{status}', 'Host\ListingController@changeStatus');
+        Route::get('/change-favorite-status/{id}/{status}', 'Host\ListingController@changeFavoriteStatus'); 
+        Route::get('/edit-listing/{id}', ['as' => 'editListing', 'uses' => 'Host\ListingController@editListingView']);
+        Route::get('/remove-listing-image/{id}', 'Host\ListingController@removeListingImage');
+        Route::post('/update-listing', 'Host\ListingController@updateListing'); 
+        Route::get('/delete-listing/{id}', 'Host\ListingController@deleteListing'); 
     });
 
-    Route::group(['prefix' => 'chat', 'middleware' => ['seller', 'auth']], function(){
-        Route::get('/', 'Seller\ChatController@getAllConversations');
-        Route::get('/get-chat/{id}', 'Seller\ChatController@getChat');
-        Route::post('/send-message', 'Seller\ChatController@sendMessage');
+    Route::group(['prefix' => 'chat', 'middleware' => ['host', 'auth']], function(){
+        Route::get('/', 'Host\ChatController@getAllConversations');
+        Route::get('/get-chat/{id}', 'Host\ChatController@getChat');
+        Route::post('/send-message', 'Host\ChatController@sendMessage');
     });    
 });
 
-Route::group(['prefix' => 'buyer', 'middleware' => ['auth', 'buyer', 'verified']], function() {
-    Route::get('/', 'Buyer\DashboardController@index');
-    Route::get('/dashboard', 'Buyer\DashboardController@dashboardView');
-    Route::get('/profile', 'Buyer\DashboardController@profile');  
-    Route::post('/edit-profile', 'Buyer\DashboardController@editProfile');
-    Route::get('/change-password', 'Buyer\DashboardController@changePassword');  
-    Route::post('/save-password', 'Buyer\DashboardController@savePassword');
-    Route::post('/change-profile-picture', 'Buyer\DashboardController@changeProfilePicture');
-    Route::get('/remove-profile-picture', 'Buyer\DashboardController@removeProfilePicture');
-    Route::get('/get-unread-conversations', 'Buyer\ChatController@getUnreadConversations');
+Route::group(['prefix' => 'shopper', 'middleware' => ['auth', 'shopper', 'verified']], function() {
+    Route::get('/', 'Shopper\DashboardController@index');
+    Route::get('/dashboard', 'Shopper\DashboardController@dashboardView');
+    Route::get('/profile', 'Shopper\DashboardController@profile');  
+    Route::post('/edit-profile', 'Shopper\DashboardController@editProfile');
+    Route::get('/change-password', 'Shopper\DashboardController@changePassword');  
+    Route::post('/save-password', 'Shopper\DashboardController@savePassword');
+    Route::post('/change-profile-picture', 'Shopper\DashboardController@changeProfilePicture');
+    Route::get('/remove-profile-picture', 'Shopper\DashboardController@removeProfilePicture');
+    Route::get('/get-unread-conversations', 'Shopper\ChatController@getUnreadConversations');
 
-    Route::group(['prefix' => 'chat', 'middleware' => ['buyer', 'auth']], function(){
-        Route::get('/', 'Buyer\ChatController@getAllConversations');
-        Route::get('/get-chat/{id}', 'Buyer\ChatController@getChat');
-        Route::post('/send-message', 'Buyer\ChatController@sendMessage');
+    Route::group(['prefix' => 'chat', 'middleware' => ['shopper', 'auth']], function(){
+        Route::get('/', 'Shopper\ChatController@getAllConversations');
+        Route::get('/get-chat/{id}', 'Shopper\ChatController@getChat');
+        Route::post('/send-message', 'Shopper\ChatController@sendMessage');
     });    
 });
 

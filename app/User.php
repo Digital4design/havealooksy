@@ -54,27 +54,27 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Check Roles seller here 
+     * Check Roles for Host here 
      *
      * @var array
      */
-    public function isSeller(){
+    public function isHost(){
         $role = Role::join('role_user','roles.id','=','role_user.role_id')
                       ->where('user_id',Auth::user()->id)
                       ->first();
-        return $role->name == 'seller' ? true : false;   
+        return $role->name == 'host' ? true : false;   
     }
 
     /**
-     * Check Roles seller here 
+     * Check Roles for Shopper here 
      *
      * @var array
      */
-    public function isBuyer(){
+    public function isShopper(){
         $role = Role::join('role_user','roles.id','=','role_user.role_id')
                       ->where('user_id',Auth::user()->id)
                       ->first();
-        return $role->name == 'buyer' ? true : false;   
+        return $role->name == 'shopper' ? true : false;   
     }
 
     public function getRole()

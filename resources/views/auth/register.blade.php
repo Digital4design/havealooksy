@@ -38,18 +38,18 @@
                 <!-- <div class="wrap-input100 validate-input">
                     <select class="select_input form-control" name="user_type">
                         <option value="" selected>Select User Type</option>
-                        <option value="buyer">Buyer</option>
-                        <option value="seller">Seller</option>
+                        <option value="shopper">Shopper</option>
+                        <option value="host">Host</option>
                     </select>                         
                 </div> -->
                 <div class="wrap-input100 validate-input user_select">
                     <div class="user_select_container btn btn-default">
-                        <input id="buyer" type="radio" value="buyer" class="form-control" name="user_type">
-                        <label for="buyer">Buyer</label>
+                        <input id="shopper" type="radio" value="shopper" class="form-control" name="user_type">
+                        <label for="shopper">Shopper</label>
                     </div>
                     <div class="user_select_container btn btn-default">
-                        <input id="seller" type="radio" value="seller" class="form-control" name="user_type">
-                        <label for="seller">Seller</label>
+                        <input id="host" type="radio" value="host" class="form-control" name="user_type">
+                        <label for="host">Host</label>
                     </div>
                 </div>
                 <div class="wrap-input100 validate-input">

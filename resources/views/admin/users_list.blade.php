@@ -1,4 +1,11 @@
 @extends('layouts.adminLayout.adminApp')
+
+@section('pageCss')
+  <style type="text/css">
+    .filters{margin-bottom:20px;}
+  </style>
+@stop
+
 @section('content')
 <div class="content-wrapper">
     <section class="content">
@@ -10,6 +17,12 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
+                  <div class="text-center filters">
+                    <label style="margin-right:20px;">Filters : </label>
+                    <button id="all" class="btn btn-primary">ALL</button>
+                    <button id="active" class="btn btn-primary">ACTIVE</button>
+                    <button id="blocked" class="btn btn-primary">BLOCKED</button>
+                  </div>
                   <table id="user_list" class="table table-bordered table-striped">
                     <thead>
                         <tr>
@@ -19,6 +32,7 @@
                           <th>Email</th>
                           <th>Postal Code</th>
                           <th>User Type</th>
+                          <th>Status</th>
                           <th>Block/Unblock</th>
                         </tr>
                     </thead>
@@ -30,6 +44,7 @@
                           <th>Email</th>
                           <th>Postal Code</th>
                           <th>User Type</th>
+                          <th>Status</th>
                           <th>Block/Unblock</th>
                         </tr>
                     </tfoot>
@@ -46,7 +61,7 @@
 @section('pageJs')
 <script>
 $(function() {
-    $('#user_list').DataTable({
+    var table = $('#user_list').DataTable({
         processing: true,
         serverSide: true,
         lengthMenu: [10,25,50,100],
@@ -73,6 +88,7 @@ $(function() {
             { data: 'email', name: 'email' },
             { data: 'postal_code', name: 'postal_code' },
             { data: 'user_type', name: 'user_type' },
+            { data: 'status', name: 'status', orderable: false, visible: false },
             { data: 'block_unblock', name: 'block_unblock', orderable: false },
         ],
         oLanguage: {
@@ -80,6 +96,18 @@ $(function() {
           "sZeroRecords": "No matching records found",
           "sEmptyTable": "No data available in table",
         },
+    });
+
+    $('#all').on('click', function () {
+        table.columns(6).search("").draw();
+    });
+
+    $('#active').on('click', function () {
+        table.columns(6).search("Active").draw();
+    });
+
+    $('#blocked').on('click', function () {
+        table.columns(6).search("Blocked").draw();
     });
 
     $(document).on("click", "button", function(){

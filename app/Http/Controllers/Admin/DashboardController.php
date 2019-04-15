@@ -141,12 +141,19 @@ class DashboardController extends Controller
     {
     	$all_users = User::with(['getRole'])
     					->whereHas('roles', function($q){
-    						$q->where('name', 'buyer')->orWhere('name', 'seller');
+    						$q->where('name', 'shopper')->orWhere('name', 'host');
     					})->get();
 
         return Datatables::of($all_users)
                         ->addColumn('user_type', function ($all_users){
                             return $all_users['getRole']['display_name'];
+                        })->editColumn('status', function($all_users){
+                            if($all_users['status'] == 1){
+                                return 'Active';
+                            }
+                            if($all_users['status'] == 0){
+                                return 'Blocked';
+                            }
                         })->addColumn('block_unblock', function ($all_users){
                             if($all_users['status'] == 1){
                                 $status = 'Block';
@@ -201,10 +208,10 @@ class DashboardController extends Controller
                             }
                             return "<button type='button' data-id='".$all_categories['id']."' class='btn btn-".$btn_color." active-deactive' type='button'>".$status."</button>";
                         })->addColumn('action', function ($all_categories){
-                            return "<button type='button' data-id='".$all_categories['id']."' class='btn btn-info button_edit' style='margin-right:1em;' data-toggle='modal' data-target='#edit-category'><i class='fa fa-edit'></i></button><button type='button' data-id='".$all_categories['id']."' class='btn btn-warning button_delete'><i class='fa fa-trash-o'></i></button>";
+                            return "<button type='button' data-id='".$all_categories['id']."' class='btn btn-info button_edit' style='margin-right:5px;' data-toggle='modal' data-target='#edit-category'><i class='fa fa-edit'></i></button><button type='button' data-id='".$all_categories['id']."' class='btn btn-warning button_delete'><i class='fa fa-trash-o'></i></button>";
                         })->editColumn('image', function ($all_categories){
                             if($all_categories['image'] != "")
-                                return "<a href='".asset('public/images/categories/'.$all_categories['image'])."' style='font-size:1.3em;' target='_blank'><i class='fa fa-eye'></i></a>";
+                                return "<a href='".asset('public/images/categories/'.$all_categories['image'])."' style='font-size:1em;padding:10px;' data-lightbox='".$all_categories['name']."'><i class='glyphicon glyphicon-picture'></i></a>";
                             else
                                 return "<p>-</p>";
                         })->rawColumns(['activate_deactivate' => 'activate_deactivate', 'image' => 'image','action' => 'action'])->make(true);

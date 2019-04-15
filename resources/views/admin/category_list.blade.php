@@ -4,6 +4,7 @@
 <style type="text/css">
   #add-category-button{margin:1em auto;font-size:20px;padding:0.3em 1.5em;}
   #add_category_form{padding:1em 2rem;}
+  .btn.button_delete, .btn-info{display:inline;}
   .error{color:red;}
 </style>
 @stop
@@ -122,8 +123,8 @@
             <p id="error-image" class="error"></p>
           </div>
           <div class="form-group" id="category_image" style="display:none;">
-            <img style="height:auto;width:50%;"><br>
-            <button type="button" id="image_remove_button" class="btn btn-warning" style="margin-top:10px;margin-left:55px;">Remove Category Image</button>
+            <img style="height:auto;width:auto;"><br>
+            <button type="button" id="image_remove_button" class="btn btn-warning" style="margin-top:10px;">Remove Category Image</button>
           </div>
         </div>
         <div class="modal-footer">
