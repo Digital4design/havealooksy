@@ -449,6 +449,7 @@ class ComposerStaticInitf8ecced294d53b32b2c9dba207998d33
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
         'App\\Models\\Categories' => __DIR__ . '/../..' . '/app/Models/Categories.php',
+        'App\\Models\\ListingImages' => __DIR__ . '/../..' . '/app/Models/ListingImages.php',
         'App\\Models\\Listings' => __DIR__ . '/../..' . '/app/Models/Listings.php',
         'App\\Models\\UserRoleRelation' => __DIR__ . '/../..' . '/app/Models/UserRoleRelation.php',
         'App\\Permission' => __DIR__ . '/../..' . '/app/Permission.php',

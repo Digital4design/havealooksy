@@ -18,6 +18,7 @@ class AddFieldsToListingsTable extends Migration
             $table->integer('deleted_by')->unsigned()->nullable()->last();
             $table->foreign('deleted_by')->references('id')->on('users')
                     ->onUpdate('cascade')->onDelete('set null');
+            $table->enum('founder_pick', ['1', '0'])->default('0')->comment('1 = Yes; 0 = No')->after('is_approved');
             $table->softDeletes();
         });
     }

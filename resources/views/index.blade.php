@@ -20,8 +20,8 @@
             <div class="container">             
                 <div class="row">
                     <div class="col-lg-12 text-center slider-cat">
-                        <div class="owl-carousel">
-                            @if(!$categories->isEmpty())
+                        @if(!$categories->isEmpty())
+                            <div class="owl-carousel">
                                 @foreach($categories as $value)
                                     <a href="{{ url('get-products/'.$value['id']) }}" class="item" target="_blank">
                                         @if($value['image'] != "")
@@ -32,10 +32,10 @@
                                         <div class="partner-text">{{ $value['name'] }}</div>
                                     </a>
                                 @endforeach
-                            @else
-                                <p class="text-center">No Category Available!</p>
-                            @endif
-                        </div>
+                            </div>
+                        @else
+                            <p class="text-center">No Category Available!</p>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -55,9 +55,9 @@
             </div>
             <div class="row">
               <div class="col-lg-12 text-center slider-cat">
-                <div class="owl-carousel">
-                <!-- start portfolio item -->
                 @if(!$fav_listings->isEmpty())
+                    <div class="owl-carousel">
+                    <!-- start portfolio item -->
                     @foreach($fav_listings as $value)
                         <div class="item ">
                             <div class="ot-portfolio-item">
@@ -72,12 +72,12 @@
                             </div>
                         </div>
                     @endforeach
+                    <!-- end portfolio item -->
+                    </div>
                 @else
-                    <p class="text-center">No favorite Listing Available!</p>
+                    <p class="text-center">No Favorite Listing Available!</p>
                 @endif
-                <!-- end portfolio item -->
-                </div>
-                </div>
+              </div>
             </div>
             
             </div><!-- end container -->
@@ -93,62 +93,28 @@
                     </div>
                 </div>
                 <div class="row">
-                    <!-- team member item -->
-                    <div class="col-md-3">
-                        <div class="team-item">
-                            <div class="team-image">
-                                <img src="{{ asset('public/looksyassets/images/cat1.jpg') }}" class="img-responsive" alt="author">
-                            </div>
-                            <div class="team-text">
-                                <div class="team-name">RESTAURANT</div> 
-                                <h3>Katz's Delicatessen</h3>
-                                <p>$125 per person</p>
-                            </div>
+                    @if(!$founder_picks->isEmpty())
+                        @foreach($founder_picks as $val)
+                        <!-- team member item -->
+                        <div class="col-md-3">
+                            <a href="{{ url('get-products/product-details/'.$val['id']) }}" target="_blank">
+                                <div class="team-item">
+                                    <div class="team-image">
+                                        <img src="{{ asset('public/images/listings/'.$val['getImages'][0]['name']) }}" class="img-responsive"  alt="{{ $val['title'] }}">
+                                    </div>
+                                    <div class="team-text">
+                                        <div class="team-name">{{ $val['getCategory']['name'] }}</div> 
+                                        <h3>{{ $val['title'] }}</h3>
+                                        <p>${{ $val['price'] }}</p>
+                                    </div>
+                                </div>
+                            </a>
                         </div>
-                    </div>
-                    <!-- end team member item -->
-                    <!-- team member item -->
-                    <div class="col-md-3">
-                        <div class="team-item">
-                            <div class="team-image">
-                                <img src="{{ asset('public/looksyassets/images/cat2.jpg') }}" class="img-responsive" alt="author">
-                            </div>
-                            <div class="team-text">
-                                <div class="team-name">RESTAURANT</div> 
-                                <h3>Katz's Delicatessen</h3>
-                                <p>$125 per person</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end team member item -->
-                    <!-- team member item -->
-                    <div class="col-md-3">
-                        <div class="team-item">
-                            <div class="team-image">
-                                <img src="{{ asset('public/looksyassets/images/cat3.jpg') }}" class="img-responsive" alt="author">
-                            </div>
-                            <div class="team-text">
-                                <div class="team-name">RESTAURANT</div> 
-                                <h3>Katz's Delicatessen</h3>
-                                <p>$125 per person</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end team member item -->
-                    <!-- team member item -->
-                    <div class="col-md-3">
-                        <div class="team-item">
-                            <div class="team-image">
-                                <img src="{{ asset('public/looksyassets/images/cat4.jpg') }}" class="img-responsive" alt="author">
-                            </div>
-                            <div class="team-text">
-                                <div class="team-name">RESTAURANT</div> 
-                                <h3>Katz's Delicatessen</h3>
-                                <p>$125 per person</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end team member item -->
+                        <!-- end team member item -->
+                        @endforeach
+                    @else
+                        <p class="text-center">No Founders Picks Available!</p>
+                    @endif
                 </div>
             </div>
         </section>
@@ -172,8 +138,8 @@
                                         <img src="{{ asset('public/images/listings/'.$val['getImages'][0]['name']) }}" alt="{{ $val['title'] }}" class="img-responsive">
                                     </div>
                                     <div class="team-text">
-                                        <div class="team-name">{{ $val['title'] }}</div> 
-                                        <h3>{{ $val['description'] }}</h3>
+                                        <div class="team-name">{{ $val['getCategory']['name'] }}</div> 
+                                        <h3>{{ $val['title'] }}</h3>
                                         <p>${{ $val['price'] }}</p>
                                     </div>
                                 </div>

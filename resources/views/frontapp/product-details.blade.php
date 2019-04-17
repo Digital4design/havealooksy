@@ -17,15 +17,18 @@
 					<div class="preview col-md-6">
 						<div class="preview-pic tab-content">
 						  	<div class="tab-pane active" id="pic-{{$listing_data['getImages'][0]['id']}}" style="position:relative;width:100%;height:600px;"><img src="{{ asset('public/images/listings/'.$listing_data['getImages'][0]['name']) }}" style="position:absolute;height:100%;width:100%;" /></div>
-						  	@foreach($listing_data['getImages'] as $img)
+						  	@foreach($listing_data['getImages'] as $key => $img)
 						  		<div class="tab-pane" id="pic-{{$img['id']}}" style="position:relative;width:100%;height:600px;"><img src="{{ asset('public/images/listings/'.$img['name']) }}" style="position:absolute;height:100%;width:100%;" /></div>
 						  	@endforeach
 
 						  <!-- <div class="tab-pane active" id="pic-1"><img src="{{ asset('public/images/listings/'.$listing_data['image']) }}" /></div> -->
 						</div>
 						<ul class="preview-thumbnail nav nav-tabs">
-							@foreach($listing_data['getImages'] as $img)
-						  		<li class="active" style="margin-bottom:5px;"><a href="#" data-target="#pic-{{$img['id']}}" data-toggle="tab"><img src="{{ asset('public/images/listings/'.$img['name']) }}" /></a></li>
+							<li class="active" style="margin-bottom:5px;"><a href="#" data-target="#pic-{{$listing_data['getImages'][0]['id']}}" data-toggle="tab"><img src="{{ asset('public/images/listings/'.$listing_data['getImages'][0]['name']) }}" /></a></li>
+							@foreach($listing_data['getImages'] as $key => $img)
+								@if($key != 0)
+							        <li style="margin-bottom:5px;"><a href="#" data-target="#pic-{{$img['id']}}" data-toggle="tab"><img src="{{ asset('public/images/listings/'.$img['name']) }}" /></a></li>
+							    @endif
 						  	@endforeach
 						</ul>	
 					</div>
@@ -49,7 +52,7 @@
 								<div class="btn-plus"><span class="glyphicon glyphicon-plus"></span></div>
 							</div>
 							<div class="action">
-								<a href="{{ url('/cart') }}" class="add-to-cart btn btn-default">BOOK NOW</a>							
+								<a href="#" data-toggle="modal" data-target="#booking-calendar" class="add-to-cart btn btn-default">BUY THIS PRODUCT</a>							
 							</div>
 						</div>
 						<p class="vote">CATEGORY : {{ $listing_data['getCategory']['name'] }}</p>
@@ -75,8 +78,8 @@
 		</div>
 		<div class="row">
 		  	<div class="col-lg-12 text-center slider-cat">
-				<div class="owl-carousel">
-					@if(!$all_listings->isEmpty())
+		  		@if(!$all_listings->isEmpty())
+		  			<div class="owl-carousel">
 						@foreach($all_listings as $val)
 						<!-- start portfolio item -->
 						<div class="item">
@@ -93,14 +96,37 @@
 						</div>
 						<!-- end portfolio item -->
 						@endforeach
-					@else
-						<p>No matches found.</p>
-					@endif
-				</div>
+					</div>
+				@else
+					<p>No matches found.</p>
+				@endif
 			</div>
 		</div>
 	</div><!-- end container -->
 </section>
+<div class="modal fade" id="booking-calendar" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="booking_options" method="POST">
+        @csrf
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span></button>
+          <h4 class="modal-title">Choose Booking Details</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Add To Cart</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 @endsection
 
 @section('pageJs')

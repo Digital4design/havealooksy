@@ -28,16 +28,21 @@ class HomeController extends Controller
     public function index()
     {
         if(Auth::guest())
-        {
+        {   
             $categories = Categories::where('status', '1')->get();
-            $fav_listings = Listings::with(['getImages'])->where('status', '1')
+            $fav_listings = Listings::with(['getImages', 'getCategory'])->where('status', '1')
                                     ->where('is_approved', '1')
                                     ->get();
-            $new_listings = Listings::with(['getImages'])->where('status', '1')
+            $new_listings = Listings::with(['getImages', 'getCategory'])->where('status', '1')
                                     ->where('is_approved', '1')
                                     ->take(4)->orderBy('created_at', 'desc')
                                     ->get();
-            return view('index')->with(['categories' => $categories, 'fav_listings' => $fav_listings, 'new_listings' => $new_listings]);
+            $founder_picks = Listings::with(['getImages', 'getCategory'])->where('status', '1')
+                                    ->where('is_approved', '1')
+                                    ->where('founder_pick', '1')
+                                    ->take(4)->orderBy('created_at', 'desc')
+                                    ->get();
+            return view('index')->with(['categories' => $categories, 'fav_listings' => $fav_listings, 'new_listings' => $new_listings, 'founder_picks' => $founder_picks]);
         }
         else
         {

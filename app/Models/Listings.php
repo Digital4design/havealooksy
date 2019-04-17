@@ -24,4 +24,14 @@ class Listings extends Model
     {
         return $this->hasMany('App\Models\ListingImages', 'listing_id');
     }
+
+    public function getGuests()
+    {
+        return $this->hasOne('App\Models\ListingGuests', 'listing_id');
+    }
+
+    public function getTimes()
+    {
+        return $this->hasMany('App\Models\ListingTimes', 'listing_id');
+    }
 }

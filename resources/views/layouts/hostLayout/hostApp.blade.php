@@ -12,6 +12,8 @@
   <link rel="stylesheet" href="{{asset('public/adminPanelAssets')}}/bower_components/font-awesome/css/font-awesome.min.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="{{asset('public/adminPanelAssets')}}/bower_components/Ionicons/css/ionicons.min.css">
+  <!-- TimePicker -->
+  <link rel="stylesheet" href="{{asset('public/adminPanelAssets')}}/plugins/timepicker/bootstrap-timepicker.min.css">
   <!-- DataTables -->
   <link rel="stylesheet" href="{{asset('public/adminPanelAssets')}}/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
   <link rel="stylesheet" href="{{asset('public/css/datatables')}}/buttons.dataTables.min.css">
@@ -261,6 +263,8 @@
 <script src="{{asset('public/adminPanelAssets')}}/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- Bootstrap WYSIHTML5 -->
 <script src="{{asset('public/adminPanelAssets')}}/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+<!-- TimePicker -->
+<script src="{{asset('public/adminPanelAssets')}}/plugins/timepicker/bootstrap-timepicker.min.js"></script>
 <!-- DataTables -->
 <script src="{{asset('public/adminPanelAssets')}}/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="{{asset('public/adminPanelAssets')}}/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
@@ -278,6 +282,9 @@
     });
     $(".change-pic-link").mouseout(function(){
       $(".change-pic").css("display", "none");
+    });
+    $('.timepicker').timepicker({
+      showInputs: false, showMeridian:false, defaultTime: ''
     });
     $("a.sidebar-toggle").on("click", function(){
       // $(".user-panel img").toggleClass("fix-height");

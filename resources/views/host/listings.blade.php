@@ -135,7 +135,7 @@ $(function() {
             { data: 'location', name: 'location' },
             { data: 'price', name: 'price' },
             { data: 'category', name: 'category' },
-            { data: 'status', name: 'status', orderable: false, visible:false },
+            { data: 'status', name: 'status', orderable: false},
             { data: 'images', name: 'images', orderable: false },
             { data: 'activate_deactivate', name: 'activate_deactivate', orderable: false },
             { data: 'action', name: 'action', orderable: false },
@@ -146,7 +146,7 @@ $(function() {
           "sEmptyTable": "No data available in table",
         },
         initComplete: function () {
-          var filterColumns = [1, 2, 3, 4, 5];
+          var filterColumns = [1, 2, 3, 4];
           this.api().columns(filterColumns).every(function(){
                 var column = this;
                 var select = $('<select class="form-control" style="font-weight:normal;"><option value="">Select</option></select>')
@@ -169,10 +169,22 @@ $(function() {
     });
 
     function format(d){
-      return '<table class="description_table">'+
+      return '<table class="listing_details_table">'+
                 '<tr>'+
                     '<td><b>Description:<b></td>'+
                     '<td>'+d.description+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td><b>Guests Allowed:<b></td>'+
+                    '<td>'+d.guests+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td><b>Guests Count:<b></td>'+
+                    '<td>'+d.guest_count+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td><b>Time Slots:<b></td>'+
+                    '<td>'+d.time_slots+'</td>'+
                 '</tr>'+
               '</table>';
     }

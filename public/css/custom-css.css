@@ -77,8 +77,8 @@ a.dt-button.buttons-columnVisibility{
 }
 /* Description Details Css */
 td.details-control{position:relative;}
-.description_table {height:10px;}
-.description_table td{padding:2px 10px;}
+.listing_details_table {height:10px;}
+.listing_details_table td{padding:2px 10px;}
 td.details-control:before {
   content: "\f0fe";
   font-family: FontAwesome;
@@ -123,4 +123,18 @@ tr.shown td.details-control:before {
     width: auto;
     border: 1px solid #ccc;
     box-shadow: 2px 2px 3px #999;
+}
+
+/* Capitalise Team Name for Listing */
+.team-name{
+	text-transform: uppercase;
+}
+
+/* Checkboxes */
+.form_checkbox{
+	padding: 5px 0px;
+	display: flex;
+}
+.form_checkbox .checkbox-label{
+	margin-left:10px;
 }

@@ -70,6 +70,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth', 'verified']
         Route::get('/get-listings', 'Admin\ListingController@getAllListings');
         Route::get('/get-images/{id}', 'Admin\ListingController@getListingImages');
         Route::get('/change-approval/{id}/{status}', 'Admin\ListingController@changeApprovalSetting');
+        Route::get('/founder-pick/{id}/{status}', 'Admin\ListingController@changeFounderPickStatus');
         Route::get('/edit-listing/{id}', ['as' => 'editListingAdmin', 'uses' => 'Admin\ListingController@editListingView']);
         Route::get('/remove-listing-image/{id}', 'Admin\ListingController@removeListingImage');
         Route::post('/update-listing', 'Admin\ListingController@updateListing');

@@ -36,6 +36,7 @@
                     <button id="all" class="btn btn-primary">ALL</button>
                     <button id="approved" class="btn btn-primary">APPROVED</button>
                     <button id="unapproved" class="btn btn-primary">UNAPPROVED</button>
+                    <button id="founders_pick" class="btn btn-danger">FOUNDER PICKS</button>
                   </div>
                   <table id="listings_list" class="table table-bordered table-striped">
                     <thead>
@@ -48,9 +49,11 @@
                           <th>Category</th>
                           <th>Status</th>
                           <th>Images</th>
+                          <th>Founder's Pick</th>
                           <th>Action</th>
                           <th></th>
                           <th>Approval Status</th>
+                          <th></th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -63,9 +66,11 @@
                           <th>Category</th>
                           <th>Status</th>
                           <th>Images</th>
+                          <th>Founder's Pick</th>
                           <th>Action</th>
                           <th></th>
                           <th>Approval Status</th>
+                          <th></th>
                         </tr>
                     </tfoot>
                   </table>
@@ -129,11 +134,13 @@
             { data: 'location', name: 'location' },
             { data: 'price', name: 'price' },
             { data: 'category', name: 'category' },
-            { data: 'status', name: 'status', orderable: false },
+            { data: 'status', name: 'status', orderable: false, visible: false },
             { data: 'images', name: 'images', orderable: false },
+            { data: 'founder_pick_button', name: 'founder_pick_button', orderable: false },
             { data: 'action', name: 'action', orderable: false },
             { data: 'approved_unapproved', name: 'approved_unapproved', orderable: false },
             { data: 'is_approved', name: 'is_approved', orderable: false, visible: false },
+            { data: 'founder_pick', name: 'founder_pick', orderable: false, visible: false },
         ],
         oLanguage: {
           "sInfoEmpty" : "Showing 0 to 0 of 0 entries",
@@ -165,10 +172,22 @@
     });
 
     function format(d){
-      return '<table class="description_table">'+
+      return '<table class="listing_details_table">'+
                 '<tr>'+
                     '<td><b>Description:<b></td>'+
                     '<td>'+d.description+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td><b>Guests Allowed:<b></td>'+
+                    '<td>'+d.guests+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td><b>Guests Count:<b></td>'+
+                    '<td>'+d.guest_count+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td><b>Time Slots:<b></td>'+
+                    '<td>'+d.time_slots+'</td>'+
                 '</tr>'+
               '</table>';
     }
@@ -206,16 +225,53 @@
     });
 
     $('#all').on('click', function () {
-        table.columns(9).search("").draw();
+        table.columns(10).search("").columns(11).search("").draw();
     });
 
     $('#approved').on('click', function () {
         regExSearch = "^" + "Approved" +"$";
-        table.columns(9).search(regExSearch, true, false, false).draw();
+        table.columns(10).search(regExSearch, true, false, false).columns(11).search("").draw();
     });
 
     $('#unapproved').on('click', function () {
-        table.columns(9).search("Unapproved").draw();
+        table.columns(10).search("Unapproved").columns(11).search("").draw();
+    });
+
+    $('#founders_pick').on('click', function () {
+        table.columns(11).search("Yes").columns(10).search("").draw();
+    });
+
+    $(document).on("click", "a.founder_pick_btn", function(){
+      var id = $(this).attr('data-id');
+      var that = this;
+
+      if($(this).hasClass("bg-olive")){
+        $(this).removeClass("bg-olive");
+        newclass = "btn-default";
+        label = "Remove";
+        new_data = 1;
+      }
+      if($(this).hasClass("btn-default")){
+        $(this).removeClass("btn-default");
+        newclass = "bg-olive";
+        label = "Add";
+        new_data = 0;
+      }
+
+      $("#loading").toggleClass("hide");
+      $.ajax({
+        'url'      : '{{ url("admin/listings/founder-pick") }}/'+id+"/"+new_data,
+        'method'   : 'get',
+        'dataType' : 'json',
+        success    : function(data){
+          if(data.status == 'success'){
+            $(that).addClass(newclass);
+            $(that).text(label);
+            $("#loading").toggleClass("hide");
+          }  
+        } 
+      });
+      return false;
     });
 
     $(document).on("click", "a.approve-unapprove", function(){

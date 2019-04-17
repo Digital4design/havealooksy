@@ -9,6 +9,17 @@
 @section('content')
 <div class="content-wrapper">
     <section class="content">
+      @if(Session::get('status') == "success")
+      <div class="alert alert-success alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+          <i class="icon fa fa-check"></i>{{ Session::get('message') }}
+      </div>
+      @elseif(Session::get('status') == "danger")
+      <div class="alert alert-danger alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+          <i class="icon fa fa-ban"></i>{{ Session::get('message') }}
+      </div>
+      @endif
       <div class="row">
         <div class="col-xs-12">
           <div class="box box-info">
@@ -96,23 +107,6 @@
 
                   </div>
                 </div>
-                <div class="form-group">
-                  <label for="status" class="col-sm-2 control-label">Status</label>
-                  <div class="col-sm-10">
-                    <select id="status" name="status" class="form-control">
-                      <option value="">Select Status</option>
-                      <option value="1" {{ ($listing_data['status']==1) ? 'selected':'' }}>Active</option>
-                      <option value="0" {{ ($listing_data['status']==0) ? 'selected':'' }}>Deactive</option>
-                    </select>
-
-                    @if ($errors->has('status'))
-                      <span class="invalid-feedback" role="alert">
-                          <strong>{{ $errors->first('status') }}</strong>
-                      </span>
-                    @endif
-
-                  </div>
-                </div>
                 <div class="form-group" id="add_image_section">
                   <label for="image" class="col-sm-2 control-label">Add Images</label>
                   <div class="col-sm-10">
@@ -127,7 +121,8 @@
 
                   </div>
                 </div>
-                <div class="form-group">
+                @if(isset($listing_data['getImages'][0]))
+                <div class="form-group" id="uploaded_images">
                   <label for="image" class="col-sm-2 control-label">Uploaded Images</label>
                   <div class="col-sm-10">
                     <div id="image-box">
@@ -140,8 +135,103 @@
                       </div>
                       @endforeach
                     </div>
-                    <!-- <img id="listing_image" src="{{ asset('public/images/listings/'.$listing_data['image']) }}">
-                    <a id="remove_image" data-id="{{ $listing_data['id'] }}" style="margin-top: 10px;" class="btn btn-block btn-info">Remove</a> -->
+                  </div>
+                </div>
+                @endif
+                <div class="form-group">
+                  <label for="people_allowed" class="col-sm-2 control-label">People Allowed</label>
+                  <div class="col-sm-10">
+                    <div class="form_checkbox">
+                      <input id="people_allowed" name="people_allowed[]" type="checkbox" value="Adults" required {{ ($listing_data['getGuests']['adults']==1) ? 'checked':'' }}><span class="checkbox-label">Adults</span>
+                    </div>
+                    <div class="form_checkbox">
+                      <input id="people_allowed" name="people_allowed[]" type="checkbox" value="Children" {{ ($listing_data['getGuests']['children']==1) ? 'checked':'' }}><span class="checkbox-label">Children</span>
+                    </div>
+                    <div class="form_checkbox">
+                      <input id="people_allowed" name="people_allowed[]" type="checkbox" value="Infants" {{ ($listing_data['getGuests']['infants']==1) ? 'checked':'' }}><span class="checkbox-label">Infants</span>
+                    </div>
+
+                    @if ($errors->has('people_allowed'))
+                      <span class="invalid-feedback" role="alert">
+                          <strong>{{ $errors->first('people_allowed') }}</strong>
+                      </span>
+                    @endif
+
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="people_count" class="col-sm-2 control-label">People Count<small style="display: block;color:#777;">(Per Time Slot)</small></label>
+                  <div class="col-sm-10">
+                    <input id="people_count" name="people_count" type="number" class="form-control" placeholder="People Count" value="{{ $errors->has('people_count') ? old('people_count') : $listing_data['getGuests']['total_count'] }}" min="0">
+
+                    @if ($errors->has('people_count'))
+                      <span class="invalid-feedback" role="alert">
+                          <strong>{{ $errors->first('people_count') }}</strong>
+                      </span>
+                    @endif
+
+                  </div>
+                </div>
+                <div class="bootstrap-timepicker">
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Time Slot 1<small style="display: block;color:#777;">(Per Day)</small></label>
+                    <div class="col-sm-5">
+                      <label>Start Time</label>
+                      <input type="text" name="start_time1" class="form-control timepicker" value="{{ $listing_data['getTimes'][0]['start_time'] }}">
+                      @if ($errors->has('start_time1'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('start_time1') }}</strong>
+                        </span>
+                      @endif
+                    </div>
+                    <div class="col-sm-5">
+                      <label>End Time</label>
+                      <input type="text" name="end_time1" class="form-control timepicker" value="{{ $listing_data['getTimes'][0]['end_time'] }}">
+                      @if ($errors->has('end_time1'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('end_time1') }}</strong>
+                        </span>
+                      @endif
+                    </div>
+                  </div>
+                </div>
+                <div id="second_time_slot" class="bootstrap-timepicker">
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Time Slot 2<small style="display: block;color:#777;">(Per Day)</small></label>
+                    <div class="col-sm-5">
+                      <label>Start Time</label>
+                      <input type="text" name="start_time2" class="form-control timepicker" value="{{ isset($listing_data['getTimes'][1]) ? $listing_data['getTimes'][1]['start_time'] : '' }}" placeholder="0:00">
+                    </div>
+                    <div class="col-sm-5">
+                      <label>End Time</label>
+                      <input type="text" name="end_time2" class="form-control timepicker" value="{{ isset($listing_data['getTimes'][1]) ? $listing_data['getTimes'][1]['end_time'] : '' }}" placeholder="0:00">
+                    </div>
+                  </div>
+                </div>
+                <div id="third_time_slot" class="bootstrap-timepicker">
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Time Slot 3<small style="display: block;color:#777;">(Per Day)</small></label>
+                    <div class="col-sm-5">
+                      <label>Start Time</label>
+                      <input type="text" name="start_time3" class="form-control timepicker" value="{{ isset($listing_data['getTimes'][2]) ? $listing_data['getTimes'][2]['start_time'] : '' }}" placeholder="0:00">
+                    </div>
+                    <div class="col-sm-5">
+                      <label>End Time</label>
+                      <input type="text" name="end_time3" class="form-control timepicker" value="{{ isset($listing_data['getTimes'][2]) ? $listing_data['getTimes'][2]['end_time'] : '' }}" placeholder="0:00">
+                    </div>
+                  </div>
+                </div>
+                <div id="fourth_time_slot" class="bootstrap-timepicker">
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Time Slot 4<small style="display: block;color:#777;">(Per Day)</small></label>
+                    <div class="col-sm-5">
+                      <label>Start Time</label>
+                      <input type="text" name="start_time4" class="form-control timepicker" value="{{ isset($listing_data['getTimes'][3]) ? $listing_data['getTimes'][3]['start_time'] : '' }}" placeholder="0:00">
+                    </div>
+                    <div class="col-sm-5">
+                      <label>End Time</label>
+                      <input type="text" name="end_time4" class="form-control timepicker" value="{{ isset($listing_data['getTimes'][3]) ? $listing_data['getTimes'][3]['end_time'] : '' }}" placeholder="0:00">
+                    </div>
                   </div>
                 </div>
               </div>
@@ -163,6 +253,7 @@
   $("a.remove_image").on("click", function(){
       var id = $(this).attr('data-id');
       $("#loading").toggleClass("hide");
+      var that = this;
 
       $.ajax({
         'url'        : '{{ url("host/listings/remove-listing-image") }}/'+id,
@@ -172,6 +263,13 @@
           
             if(resp.status == 'success'){
               $("#loading").toggleClass("hide");
+              $(that).parent().css("display", "none");
+              $(that).parent().remove();
+
+              if($("#uploaded_images").find(".edit_image_container").length <= 0){
+                $("#uploaded_images").css("display", "none");
+              }
+
               swal({
                 title: "Success",
                 text: resp.message,
@@ -179,15 +277,10 @@
                 type: "success",
                 showConfirmButton: false
               });
-              setTimeout(function(){ 
-                  location.reload();
-              }, 1000);
-              // $(this).parent().closest("div").fadeOut(200, function(){
-              //   $(this).parent().closest("div").remove();
-              // });
-              // $("#add_image_section").fadeIn(100, function(){
-              //   $("#add_image_section").css("display", "block");
-              // });
+
+              // setTimeout(function(){ 
+              //     location.reload();
+              // }, 1000);
             }
             else if(resp.status == 'danger'){
               swal("Error", resp.message, "warning");
