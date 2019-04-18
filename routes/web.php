@@ -22,6 +22,7 @@ Auth::routes(['verify' => true]);
 
 Route::get('/get-products/{id}', 'HomeController@getProducts');
 Route::get('/get-products/product-details/{id}', 'HomeController@getProductDetails');
+Route::get('/get-products/product-availability/{id}', 'HomeController@getProductAvailability');
 Route::post('/get-products/apply-filters', 'HomeController@applyFilters');
 Route::get('/cart', 'HomeController@viewCart');
 Route::get('/checkout', 'HomeController@checkoutPage')->middleware('auth');

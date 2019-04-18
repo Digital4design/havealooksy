@@ -12,6 +12,9 @@
         <!-- Bootstrap core CSS -->
         <link href="{{asset('public/looksyassets/css/bootstrap.min.css')}} " rel="stylesheet">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+        <!-- fullCalendar -->
+        <link rel="stylesheet" href="{{asset('public/adminPanelAssets')}}/bower_components/fullcalendar/dist/fullcalendar.min.css">
+        <link rel="stylesheet" href="{{asset('public/adminPanelAssets')}}/bower_components/fullcalendar/dist/fullcalendar.print.min.css" media="print">
         <!-- Custom styles for this template -->
         <link href="{{asset('public/looksyassets/css/owl.carousel.css')}}" rel="stylesheet">
         <link href="{{asset('public/looksyassets/css/owl.theme.default.min.css')}}"  rel="stylesheet">
@@ -83,7 +86,7 @@
                             <a class="page-scroll" href="#about">About</a>
                         </li>
                         <li>
-                            <a class="page-scroll" href="#services">Host</a>
+                            <a class="page-scroll" href="{{ url('/register') }}">Host</a>
                         </li>
                         <li>
                             <a class="page-scroll" href="#portfolio">Saved</a>
@@ -135,6 +138,9 @@
         <script src="{{ asset('public/looksyassets/js/theme-scripts.js') }}"></script>
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
         <script src="{{ asset('public/looksyassets/js/ie10-viewport-bug-workaround.js') }}"></script>
+        <!-- fullCalendar -->
+        <script src="{{asset('public/adminPanelAssets')}}/bower_components/moment/moment.js"></script>
+        <script src="{{asset('public/adminPanelAssets')}}/bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
         @yield('pageJs')
     </body>
 </html>

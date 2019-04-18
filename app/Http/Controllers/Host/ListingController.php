@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Host;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Yajra\Datatables\Datatables;
-use Illuminate\Support\Carbon;
 use App\Models\ListingImages;
 use App\Models\ListingGuests;
 use App\Models\ListingTimes;
 use App\Models\Categories;
 use App\Models\Listings;
 use Validator;
+use Carbon;
 use Auth;
 
 class ListingController extends Controller

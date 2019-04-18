@@ -8,6 +8,13 @@
 
 @extends($layout)
 
+@section('pageCss')
+<style type="text/css">
+	td.fc-past{background-color: #EEEEEE;}
+	td.fc-past:hover{cursor: not-allowed;}
+</style>
+@stop
+
 @section('content')
 <section class="product-detail">
 	<div class="container">
@@ -105,18 +112,24 @@
 	</div><!-- end container -->
 </section>
 <div class="modal fade" id="booking-calendar" style="display: none;">
-  <div class="modal-dialog">
+  <div class="modal-dialog calendar-dialog">
     <div class="modal-content">
       <form id="booking_options" method="POST">
         @csrf
+        <input type="hidden" name="listing_id" value="{{ $listing_data['id'] }}">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span></button>
           <h4 class="modal-title">Choose Booking Details</h4>
         </div>
-        <div class="modal-body">
-          <div class="form-group">
-            
+        <div class="modal-body calendar_body" style="padding:10px 20px;">
+          <div class="form-group calendar">
+            <div id="booking_calendar"></div>
+          </div>
+          <div class="form-group calendar_details">
+          	<h4 class="select_date_to_proceed"><b>Select a Date to Proceed.</b></h4>
+          	<div id="choose_details" style="display: none;">
+        	</div>
           </div>
         </div>
         <div class="modal-footer">
@@ -142,6 +155,45 @@
 				$("input[name=quantity]").val(quantity-1);
 			}
 		});
+		$(".guests_group .guest").on("click", function(){
+	        $(this).toggleClass("btn-danger");
+	    });
+	    $(".times_group .time").on("click", function(){
+	        $(".times_group .time").removeClass("btn-danger").addClass("btn-default");
+	        $(this).removeClass("btn-default").addClass("btn-danger");
+	    });
+        $('#booking_calendar').fullCalendar({
+          header : {left  : '', center: 'title', right : 'prev,next'},
+          // selectable: true,
+
+          dayClick: function (start, end, allDay, date, jsEvent, view) {
+          	if(!start.isBefore(moment())) {
+
+          		$(".fc-highlight").removeClass("fc-highlight");
+        		$(this).addClass("fc-highlight");
+
+        		var id = $("input[name=listing_id]").val();
+
+          		$.ajax({
+			        'url'        : '{{ url("get-products/product-availability") }}/'+id,
+			        'method'     : 'get',
+			        'dataType'   : 'json',
+			        success    : function(resp){
+			          
+			            if(resp.status == 'success'){
+			              	$("#choose_details").css("display", "block");
+							$("#choose_details").html(resp.listing_details);
+				          	$(".calendar_details").css("justify-content", "normal");
+				          	$(".select_date_to_proceed").css("display", "none");
+			            }
+			            else if(resp.status == 'danger'){
+			              swal("Error", resp.message, "warning");
+			            }
+			        } 
+			    });			
+			}
+          },
+        });
 	});
 </script>
 @stop

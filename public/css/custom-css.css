@@ -138,3 +138,72 @@ tr.shown td.details-control:before {
 .form_checkbox .checkbox-label{
 	margin-left:10px;
 }
+
+/* Change size of modal for booking calendar */
+@media (min-width: 768px){
+	.modal-dialog.calendar-dialog {
+		width: 1000px;
+	}
+}
+.calendar_body{
+	display: flex;
+}
+.calendar{
+	flex: 52%;
+}
+.calendar_details{
+	flex: 48%;
+	padding: 50px;
+	display:flex;
+	flex-direction:column;
+	justify-content:center;
+}
+.select_date_to_proceed{
+	align-self: center;
+	color:#444;
+	text-transform: uppercase;
+}
+#no_of_seats{
+	margin-bottom:20px;
+}
+.guests_group, .times_group{
+	display:flex;
+	justify-content: flex-start;
+	margin-bottom: 20px;
+	flex-wrap:wrap;
+}
+.guests_group .guest, .times_group .time{
+	position:relative;
+	padding:0;
+	width:150px;
+	margin: 0 10px 10px 0;
+    border-color: #ddd;
+}
+.guests_group .guest{
+	width:100px;
+}
+.guests_group .guest:hover, .times_group .time:hover{
+    background-color: #6e1cba;
+    border-color: #6e1cba;
+}
+.guests_group .guest input[type=checkbox], .times_group .time input[type=radio]{
+	opacity: 0;
+    height: 45px;
+    width: 100%;
+	margin:0;
+}
+.guests_group .guest input[type=checkbox]:hover, .times_group .time input[type=radio]:hover, .guests_group .guest label:hover, .times_group .time label:hover{
+	cursor:pointer;
+}
+.guests_group .guest label, .times_group .time label{
+	position:absolute;
+	margin:0px;
+	top:12px;
+	left:23px;
+}
+.times_group .time label{
+	left:40px;
+}
+.guests_group .guest:hover label, .times_group .time:hover label{
+	color: #fff;
+}

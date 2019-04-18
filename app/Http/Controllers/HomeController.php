@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\ListingGuests;
+use App\Models\ListingTimes;
 use App\Models\Categories;
 use App\Models\Listings;
 use Validator;
@@ -88,6 +90,17 @@ class HomeController extends Controller
                                             ->where('is_approved', '1')->get();
 
         return view('frontapp.product-details')->with(['listing_data' => $listing_data, 'all_listings' => $all_listings_of_category]);
+    }
+
+    /* Get Listing Availability Details */
+    public function getProductAvailability($id)
+    {
+        $guests = ListingGuests::where('listing_id', $id)->first();
+        $times = ListingTimes::where('listing_id', $id)->get();
+
+        $listing_details = view('frontapp.renders.listing_details_render')->with(['guests' => $guests, 'times' => $times])->render();
+
+        return response()->json(['status' => 'success', 'listing_details' => $listing_details]);
     }
 
     /* Apply Filters */

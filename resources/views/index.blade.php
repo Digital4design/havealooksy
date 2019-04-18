@@ -95,7 +95,6 @@
                 <div class="row">
                     @if(!$founder_picks->isEmpty())
                         @foreach($founder_picks as $val)
-                        <!-- team member item -->
                         <div class="col-md-3">
                             <a href="{{ url('get-products/product-details/'.$val['id']) }}" target="_blank">
                                 <div class="team-item">
@@ -110,7 +109,6 @@
                                 </div>
                             </a>
                         </div>
-                        <!-- end team member item -->
                         @endforeach
                     @else
                         <p class="text-center">No Founders Picks Available!</p>

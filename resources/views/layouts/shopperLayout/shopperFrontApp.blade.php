@@ -12,10 +12,14 @@
         <!-- Bootstrap core CSS -->
         <link href="{{asset('public/looksyassets/css/bootstrap.min.css')}} " rel="stylesheet">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+        <!-- fullCalendar -->
+        <link rel="stylesheet" href="{{asset('public/adminPanelAssets')}}/bower_components/fullcalendar/dist/fullcalendar.min.css">
+        <link rel="stylesheet" href="{{asset('public/adminPanelAssets')}}/bower_components/fullcalendar/dist/fullcalendar.print.min.css" media="print">
         <!-- Custom styles for this template -->
         <link href="{{asset('public/looksyassets/css/owl.carousel.css')}}" rel="stylesheet">
         <link href="{{asset('public/looksyassets/css/owl.theme.default.min.css')}}"  rel="stylesheet">
         <link href="{{asset('public/looksyassets/css/style.css')}} " rel="stylesheet">
+        <link href="{{asset('public/css/custom-css.css')}} " rel="stylesheet">
         
         <script src="{{asset('public/looksyassets/js/ie-emulation-modes-warning.js')}}"></script>
         <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
@@ -165,6 +169,9 @@
         <script src="{{ asset('public/looksyassets/js/theme-scripts.js') }}"></script>
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
         <script src="{{ asset('public/looksyassets/js/ie10-viewport-bug-workaround.js') }}"></script>
+        <!-- fullCalendar -->
+        <script src="{{asset('public/adminPanelAssets')}}/bower_components/moment/moment.js"></script>
+        <script src="{{asset('public/adminPanelAssets')}}/bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
         <script type="text/javascript">
             $("#hoverable").on("click", function(){
                 // $(".dropdown-items").toggleClass("show-hide", 2000);
