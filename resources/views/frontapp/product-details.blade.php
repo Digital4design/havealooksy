@@ -10,8 +10,10 @@
 
 @section('pageCss')
 <style type="text/css">
-	td.fc-past{background-color: #EEEEEE;}
-	td.fc-past:hover{cursor: not-allowed;}
+	td.fc-past{background-color: #eee;}
+	td.fc-day:hover{background-color: rgba(137,43,225,0.4); cursor: pointer;}
+	td.fc-day.fc-past:hover{background-color: #eee;cursor: not-allowed;}
+	.fc-hightlight{background-color: rgba(137,43,225,0.6);}
 </style>
 @stop
 
@@ -113,6 +115,9 @@
 </section>
 <div class="modal fade" id="booking-calendar" style="display: none;">
   <div class="modal-dialog calendar-dialog">
+  	<div id="loading" class="hide" style="position:absolute;top:45%;left:45%;z-index:1111;">
+	  <div class="loader"></div>
+	</div>
     <div class="modal-content">
       <form id="booking_options" method="POST">
         @csrf
@@ -173,7 +178,7 @@
         		$(this).addClass("fc-highlight");
 
         		var id = $("input[name=listing_id]").val();
-
+        		$("#loading").toggleClass("hide");
           		$.ajax({
 			        'url'        : '{{ url("get-products/product-availability") }}/'+id,
 			        'method'     : 'get',
@@ -181,6 +186,7 @@
 			        success    : function(resp){
 			          
 			            if(resp.status == 'success'){
+			            	$("#loading").toggleClass("hide");
 			              	$("#choose_details").css("display", "block");
 							$("#choose_details").html(resp.listing_details);
 				          	$(".calendar_details").css("justify-content", "normal");
