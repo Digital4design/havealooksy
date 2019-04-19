@@ -42,7 +42,7 @@
 						<a href="{{ url('get-products/product-details/'.$val['id']) }}" target="_blank">
 							<div class="team-item">
 								<div class="team-image" style="height:100%;">
-									<img src="{{ asset('public/images/listings/'.$val['image']) }}" class="img-responsive" alt="author">
+									<img src="{{ asset('public/images/listings/'.$val['getImages'][0]['name']) }}" class="img-responsive" alt="author">
 								</div>
 								<div class="team-text">
 								    <div class="team-name">RESTAURANT</div> 
