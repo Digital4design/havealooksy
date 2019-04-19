@@ -119,7 +119,7 @@
 	  <div class="loader"></div>
 	</div>
     <div class="modal-content">
-      <form id="booking_options" method="POST">
+      <form id="booking_options" method="POST" action="">
         @csrf
         <input type="hidden" name="listing_id" value="{{ $listing_data['id'] }}">
         <div class="modal-header">
@@ -160,13 +160,7 @@
 				$("input[name=quantity]").val(quantity-1);
 			}
 		});
-		$(".guests_group .guest").on("click", function(){
-	        $(this).toggleClass("btn-danger");
-	    });
-	    $(".times_group .time").on("click", function(){
-	        $(".times_group .time").removeClass("btn-danger").addClass("btn-default");
-	        $(this).removeClass("btn-default").addClass("btn-danger");
-	    });
+		
         $('#booking_calendar').fullCalendar({
           header : {left  : '', center: 'title', right : 'prev,next'},
           // selectable: true,
@@ -191,6 +185,14 @@
 							$("#choose_details").html(resp.listing_details);
 				          	$(".calendar_details").css("justify-content", "normal");
 				          	$(".select_date_to_proceed").css("display", "none");
+
+				          	$(".guests_group .guest").on("click", function(){
+						        $(this).toggleClass("btn-danger");
+						    });
+						    $(".times_group .time").on("click", function(){
+						        $(".times_group .time").removeClass("btn-danger").addClass("btn-default");
+						        $(this).removeClass("btn-default").addClass("btn-danger");
+						    });
 			            }
 			            else if(resp.status == 'danger'){
 			              swal("Error", resp.message, "warning");

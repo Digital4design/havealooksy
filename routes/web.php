@@ -24,7 +24,7 @@ Route::get('/get-products/{id}', 'HomeController@getProducts');
 Route::get('/get-products/product-details/{id}', 'HomeController@getProductDetails');
 Route::get('/get-products/product-availability/{id}', 'HomeController@getProductAvailability');
 Route::post('/get-products/apply-filters', 'HomeController@applyFilters');
-Route::get('/cart', 'HomeController@viewCart');
+Route::get('/cart', 'HomeController@viewCart')->middleware('auth');
 Route::get('/checkout', 'HomeController@checkoutPage')->middleware('auth');
 Route::get('/messages', 'HomeController@messagesView')->middleware('auth');
 Route::get('/messages/chat/{id}', 'HomeController@messagesChatView')->middleware('auth');
@@ -130,7 +130,7 @@ Route::group(['prefix' => 'shopper', 'middleware' => ['auth', 'shopper', 'verifi
         Route::get('/', 'Shopper\ChatController@getAllConversations');
         Route::get('/get-chat/{id}', 'Shopper\ChatController@getChat');
         Route::post('/send-message', 'Shopper\ChatController@sendMessage');
-    });    
+    });   
 });
 
 /*

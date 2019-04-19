@@ -7,6 +7,12 @@
 .wrap-login100-form-btn button:hover{
 	background-color:#4e1485;
 }
+.help-text{
+	color:#777;
+}
+.error{
+	color;red;
+}
 
 /* Loader */
 .loader {
@@ -153,7 +159,7 @@ tr.shown td.details-control:before {
 }
 .calendar_details{
 	flex: 48%;
-	padding: 50px;
+	padding: 30px 50px;
 	display:flex;
 	flex-direction:column;
 	justify-content:center;
