@@ -30,7 +30,7 @@
 	</div>
 	@endif
 </div>
-<small class="help-text text-center" style="display:block;margin-bottom:50px;">(Available Spots: {{ $guests['total_count'] }})</small>
+<small class="help-text text-center" style="display:block;margin-bottom:30px;">(Available Spots: {{ $guests['total_count'] }})</small>
 <p class="text-center" style="margin:10px;"><b>Choose Time Slot:</b></p>
 <div class="times_group">
 	@foreach($times as $val)

@@ -159,7 +159,7 @@ tr.shown td.details-control:before {
 }
 .calendar_details{
 	flex: 48%;
-	padding: 30px 50px;
+	padding: 10px 50px;
 	display:flex;
 	flex-direction:column;
 	justify-content:center;
@@ -183,7 +183,13 @@ tr.shown td.details-control:before {
 	align-items:center;
 	margin-bottom:10px;
 	width:100%;
-	justify-content:space-around;
+	justify-content:space-between;
+}
+.guests_group .guest label{
+	margin-left:30px;
+}
+.guests_group .guest .guestcount {
+    margin-right: 30px;
 }
 .guests_group .guest .btn-plus, .guests_group .guest .btn-minus{
 	background-color: rgba(137,43,225);
