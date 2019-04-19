@@ -174,34 +174,47 @@ tr.shown td.details-control:before {
 }
 .guests_group, .times_group{
 	display:flex;
-	justify-content: flex-start;
-	margin-bottom: 20px;
+	justify-content: center;
+	margin-bottom: 10px;
 	flex-wrap:wrap;
 }
-.guests_group .guest, .times_group .time{
+.guests_group .guest{
+	display:flex;
+	align-items:center;
+	margin-bottom:10px;
+	width:100%;
+	justify-content:space-around;
+}
+.guests_group .guest .btn-plus, .guests_group .guest .btn-minus{
+	background-color: rgba(137,43,225);
+	color: #fff;
+	border-radius:50%;
+}
+.guests_group .guest .btn-plus:hover, .guests_group .guest .btn-minus:hover{
+	background-color: #5b169c;
+	color: #fff;
+}
+.times_group .time{
 	position:relative;
 	padding:0;
 	width:150px;
 	margin: 0 10px 10px 0;
     border-color: #ddd;
 }
-.guests_group .guest{
-	width:100px;
-}
-.guests_group .guest:hover, .times_group .time:hover{
+.times_group .time:hover{
     background-color: #6e1cba;
     border-color: #6e1cba;
 }
-.guests_group .guest input[type=checkbox], .times_group .time input[type=radio]{
+.times_group .time input[type=radio]{
 	opacity: 0;
     height: 45px;
     width: 100%;
 	margin:0;
 }
-.guests_group .guest input[type=checkbox]:hover, .times_group .time input[type=radio]:hover, .guests_group .guest label:hover, .times_group .time label:hover{
+.times_group .time input[type=radio]:hover, .times_group .time label:hover{
 	cursor:pointer;
 }
-.guests_group .guest label, .times_group .time label{
+.times_group .time label{
 	position:absolute;
 	margin:0px;
 	top:12px;
@@ -210,6 +223,6 @@ tr.shown td.details-control:before {
 .times_group .time label{
 	left:40px;
 }
-.guests_group .guest:hover label, .times_group .time:hover label{
+.times_group .time:hover label{
 	color: #fff;
 }

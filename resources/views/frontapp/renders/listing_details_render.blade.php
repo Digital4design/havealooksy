@@ -1,32 +1,37 @@
-<label>Choose Guests:</label>
 <div class="guests_group">
 	@if($guests['adults'] == 1)
-	<div class="guest btn btn-default">
+	<div class="qty guest">
 		<label>Adults</label>
-		<input class="form-control" type="checkbox" name="guest[]" value="adults">
+		<div class="guestcount">
+			<div class="btn-minus"><span class="glyphicon glyphicon-minus"></span></div>
+			<input class="guest_input" name="guest['adults']" value="1">
+			<div class="btn-plus"><span class="glyphicon glyphicon-plus"></span></div>
+		</div>
 	</div>
 	@endif
 	@if($guests['children'] == 1)
-	<div class="guest btn btn-default">
+	<div class="qty guest">
 		<label>Children</label>
-		<input class="form-control" type="checkbox" name="guest[]" value="children">
+		<div class="guestcount">
+			<div class="btn-minus"><span class="glyphicon glyphicon-minus"></span></div>
+			<input class="guest_input" name="guest['children']" value="1">
+			<div class="btn-plus"><span class="glyphicon glyphicon-plus"></span></div>
+		</div>
 	</div>
 	@endif
 	@if($guests['infants'] == 1)
-	<div class="guest btn btn-default">
+	<div class="qty guest">
 		<label>Infants</label>
-		<input class="form-control" type="checkbox" name="guest[]" value="infants">
+		<div class="guestcount">
+			<div class="btn-minus"><span class="glyphicon glyphicon-minus"></span></div>
+			<input class="guest_input" name="guest['infants']" value="1">
+			<div class="btn-plus"><span class="glyphicon glyphicon-plus"></span></div>
+		</div>
 	</div>
 	@endif
-	<div class="error" id="error-guest"></div>
 </div>
-<div id="no_of_seats">
-	<label>Guests Count</label>
-	<input type="number" class="form-control" name="no_of_seats" min="1" placeholder="Guests Count">
-	<small class="help-text">Available Spots: {{ $guests['total_count'] }}</small>
-	<div class="error" id="error-no_of_seats"></div>
-</div>
-<label>Choose Time Slot:</label>
+<small class="help-text text-center" style="display:block;margin-bottom:50px;">(Available Spots: {{ $guests['total_count'] }})</small>
+<p class="text-center" style="margin:10px;"><b>Choose Time Slot:</b></p>
 <div class="times_group">
 	@foreach($times as $val)
 		<div class="time btn btn-default">
@@ -34,5 +39,4 @@
 			<input class="form-control" type="radio" name="time[]">
 		</div>        				
 	@endforeach
-	<div class="error" id="error-time"></div>
 </div>

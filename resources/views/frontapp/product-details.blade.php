@@ -138,8 +138,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Add To Cart</button>
+          <button type="button" class="btn btn-default pull-left" style="border-radius:0;border:1px solid #999;cursor:pointer;" data-dismiss="modal">Close</button>
+          <button type="submit" class="add-to-cart btn btn-default">Add To Cart</button>
         </div>
       </form>
     </div>
@@ -186,13 +186,21 @@
 				          	$(".calendar_details").css("justify-content", "normal");
 				          	$(".select_date_to_proceed").css("display", "none");
 
-				          	$(".guests_group .guest").on("click", function(){
-						        $(this).toggleClass("btn-danger");
-						    });
 						    $(".times_group .time").on("click", function(){
 						        $(".times_group .time").removeClass("btn-danger").addClass("btn-default");
 						        $(this).removeClass("btn-default").addClass("btn-danger");
 						    });
+
+						    $(".guests_group .guest .btn-plus").on("click", function(){
+								var quantity = parseInt($(this).parent(".guestcount").find(".guest_input").val());
+								$(this).parent(".guestcount").find(".guest_input").val(quantity+1);
+							});
+							$(".guests_group .guest .btn-minus").on("click", function(){
+								var quantity = parseInt($(this).parent(".guestcount").find(".guest_input").val());
+								if(quantity != 1){
+									$(this).parent(".guestcount").find(".guest_input").val(quantity-1)
+								}
+							});
 			            }
 			            else if(resp.status == 'danger'){
 			              swal("Error", resp.message, "warning");
