@@ -113,7 +113,7 @@
                 <div class="container">
                     <div class="intro-text">                        
                         <div class="intro-heading">LEARN FROM EXPERIENCE</div>
-                        <div class="intro-lead-in">Use looksy to book learning experiences with seasoned professionals</div>
+                        <div class="intro-lead-in">Book learning experiences with seasoned professionals</div>
                     </div>
                 </div>
             </div>
