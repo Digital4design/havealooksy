@@ -25,6 +25,8 @@ Route::get('/get-products/product-details/{id}', 'HomeController@getProductDetai
 Route::get('/get-products/product-availability/{id}', 'HomeController@getProductAvailability');
 Route::post('/get-products/apply-filters', 'HomeController@applyFilters');
 Route::get('/cart', 'HomeController@viewCart')->middleware('auth');
+Route::post('/add-to-cart', 'HomeController@addToCart');
+Route::post('/remove-from-cart', 'HomeController@removeFromCart')->middleware('auth');
 Route::get('/checkout', 'HomeController@checkoutPage')->middleware('auth');
 Route::get('/messages', 'HomeController@messagesView')->middleware('auth');
 Route::get('/messages/chat/{id}', 'HomeController@messagesChatView')->middleware('auth');
@@ -50,8 +52,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth', 'verified']
     Route::get('/get-unread-conversations', 'Admin\ChatController@getUnreadConversations');
 
     Route::group(['prefix' => 'users', 'middleware' => ['admin', 'auth']], function() {
-        Route::get('/', 'Admin\DashboardController@getUsersView');    
+        Route::get('/', 'Admin\DashboardController@getUsersView');      
         Route::get('/get-users', 'Admin\DashboardController@getUsers');
+        Route::get('/view/{id}', 'Admin\DashboardController@viewUser');  
         Route::get('/change-status/{id}/{status}', 'Admin\DashboardController@changeUserStatus');
     }); 
 
@@ -72,10 +75,16 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth', 'verified']
         Route::get('/get-images/{id}', 'Admin\ListingController@getListingImages');
         Route::get('/change-approval/{id}/{status}', 'Admin\ListingController@changeApprovalSetting');
         Route::get('/founder-pick/{id}/{status}', 'Admin\ListingController@changeFounderPickStatus');
+        Route::get('/view/{id}', 'Admin\ListingController@viewListing');
         Route::get('/edit-listing/{id}', ['as' => 'editListingAdmin', 'uses' => 'Admin\ListingController@editListingView']);
         Route::get('/remove-listing-image/{id}', 'Admin\ListingController@removeListingImage');
         Route::post('/update-listing', 'Admin\ListingController@updateListing');
         Route::get('/delete-listing/{id}', 'Admin\ListingController@deleteListing');
+    });
+
+    Route::group(['prefix' => 'bookings', 'middleware' => ['admin', 'auth']], function(){
+        Route::get('/', 'Admin\BookingController@getBookingsView');
+        Route::get('/get-bookings', 'Admin\BookingController@getAllBookings');
     });
 
     Route::group(['prefix' => 'chat', 'middleware' => ['admin', 'auth']], function(){
@@ -106,6 +115,10 @@ Route::group(['prefix' => 'host', 'middleware' => ['host', 'auth', 'verified']],
         Route::get('/remove-listing-image/{id}', 'Host\ListingController@removeListingImage');
         Route::post('/update-listing', 'Host\ListingController@updateListing'); 
         Route::get('/delete-listing/{id}', 'Host\ListingController@deleteListing'); 
+    });
+
+    Route::group(['prefix' => 'bookings', 'middleware' => ['host', 'auth']], function(){
+        Route::get('/', 'Host\BookingController@getBookings');
     });
 
     Route::group(['prefix' => 'chat', 'middleware' => ['host', 'auth']], function(){

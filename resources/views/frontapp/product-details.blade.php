@@ -13,7 +13,7 @@
 	td.fc-past{background-color: #eee;}
 	td.fc-day:hover{background-color: rgba(137,43,225,0.4); cursor: pointer;}
 	td.fc-day.fc-past:hover{background-color: #eee;cursor: not-allowed;}
-	.fc-hightlight{background-color: rgba(137,43,225,0.6);}
+	.fc-highlight{background-color: rgba(137,43,225,0.6);}
 </style>
 @stop
 
@@ -55,11 +55,11 @@
 						<h4 class="price"><span>${{ $listing_data['price'] }}</span></h4>
 						<p class="product-description">{{ $listing_data['description'] }}</p>           
                         <div class="qty-main">
-							<div class="qty">
+							<!-- <div class="qty">
 								<div class="btn-minus"><span class="glyphicon glyphicon-minus"></span></div>
 								<input name="quantity" value="1" />
 								<div class="btn-plus"><span class="glyphicon glyphicon-plus"></span></div>
-							</div>
+							</div> -->
 							<div class="action">
 								<a href="#" data-toggle="modal" data-target="#booking-calendar" class="add-to-cart btn btn-default">BUY THIS PRODUCT</a>							
 							</div>
@@ -119,9 +119,10 @@
 	  <div class="loader"></div>
 	</div>
     <div class="modal-content">
-      <form id="booking_options" method="POST" action="">
+      <form id="booking_options" method="POST">
         @csrf
         <input type="hidden" name="listing_id" value="{{ $listing_data['id'] }}">
+        <input type="hidden" name="date">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span></button>
@@ -133,13 +134,13 @@
           </div>
           <div class="form-group calendar_details">
           	<h4 class="select_date_to_proceed"><b>Select a Date to Proceed.</b></h4>
-          	<div id="choose_details" style="display: none;">
+          	<div id="choose_details" style="display: none;margin-top: 10px;">
         	</div>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default pull-left" style="border-radius:0;border:1px solid #999;cursor:pointer;" data-dismiss="modal">Close</button>
-          <button type="submit" class="add-to-cart btn btn-default">Add To Cart</button>
+          <input type="submit" class="add-to-cart btn btn-default" value="Add To Cart" disabled="true">
         </div>
       </form>
     </div>
@@ -150,16 +151,16 @@
 @section('pageJs')
 <script type="text/javascript">
 	$(document).ready(function(){
-		$(".btn-plus").on("click", function(){
-			var quantity = parseInt($("input[name=quantity]").val());
-			$("input[name=quantity]").val(quantity+1);
-		});
-		$(".btn-minus").on("click", function(){
-			var quantity = parseInt($("input[name=quantity]").val());
-			if(quantity != 1){
-				$("input[name=quantity]").val(quantity-1);
-			}
-		});
+		// $(".btn-plus").on("click", function(){
+		// 	var quantity = parseInt($("input[name=quantity]").val());
+		// 	$("input[name=quantity]").val(quantity+1);
+		// });
+		// $(".btn-minus").on("click", function(){
+		// 	var quantity = parseInt($("input[name=quantity]").val());
+		// 	if(quantity != 1){
+		// 		$("input[name=quantity]").val(quantity-1);
+		// 	}
+		// });
 		
         $('#booking_calendar').fullCalendar({
           header : {left  : '', center: 'title', right : 'prev,next'},
@@ -170,6 +171,7 @@
 
           		$(".fc-highlight").removeClass("fc-highlight");
         		$(this).addClass("fc-highlight");
+        		$("input[name=date]").val($(this).attr('data-date'));
 
         		var id = $("input[name=listing_id]").val();
         		$("#loading").toggleClass("hide");
@@ -185,6 +187,7 @@
 							$("#choose_details").html(resp.listing_details);
 				          	$(".calendar_details").css("justify-content", "normal");
 				          	$(".select_date_to_proceed").css("display", "none");
+				          	$(".add-to-cart").prop("disabled", false);
 
 						    $(".times_group .time").on("click", function(){
 						        $(".times_group .time").removeClass("btn-danger").addClass("btn-default");
@@ -195,9 +198,15 @@
 								var quantity = parseInt($(this).parent(".guestcount").find(".guest_input").val());
 								$(this).parent(".guestcount").find(".guest_input").val(quantity+1);
 							});
-							$(".guests_group .guest .btn-minus").on("click", function(){
+							$(".guests_group .guest.adult .btn-minus").on("click", function(){
 								var quantity = parseInt($(this).parent(".guestcount").find(".guest_input").val());
 								if(quantity != 1){
+									$(this).parent(".guestcount").find(".guest_input").val(quantity-1)
+								}
+							});
+							$(".guests_group .guest.not-adult .btn-minus").on("click", function(){
+								var quantity = parseInt($(this).parent(".guestcount").find(".guest_input").val());
+								if(quantity != 0){
 									$(this).parent(".guestcount").find(".guest_input").val(quantity-1)
 								}
 							});
@@ -209,6 +218,49 @@
 			    });			
 			}
           },
+        });
+
+        $("#booking_options").submit(function(){
+        	$.ajax({
+		        'url'        : '{{ url("/add-to-cart") }}',
+		        'method'     : 'post',
+		        'data'       : $(this).serialize(),
+		        'dataType'   : 'json',
+		        success    : function(data){
+		          
+		            if(data.status == 'success'){
+		              swal({
+		                title: "Success",
+		                text: data.message,
+		                timer: 3000,
+		                type: "success",
+		                showConfirmButton: false
+		              });
+		              setTimeout(function(){ 
+		                  window.location.href = "{{ url('/cart') }}";
+		              }, 3000);
+		            }
+		            else if(data.status == 'danger'){
+		              swal("Error", data.message, "warning");
+		            }
+		            else if(data.status == 'login'){
+		              window.location.href = "{{ url('/login') }}";
+		            }
+		            else{
+		              console.log(data);
+		    
+		              $('.error').html('');
+		              $('.error').parent().removeClass('has-error');
+		                   $.each(data,function(key,value){
+		                       if(value != ""){
+		                          $("#error-"+key).text(value);
+		                           $("#error-"+key).parent().addClass('has-error');
+		                       }
+		                   });
+		            }
+		        } 
+		    });
+		    return false;
         });
 	});
 </script>

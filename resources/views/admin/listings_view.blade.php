@@ -5,7 +5,7 @@
   .box{border:none;}
   .toolbar{float:left;height:35px;margin-top:5px;}
   .filters{margin-bottom:20px;}
-  .btn.button_delete, .btn-info{display:inline;}
+  .btn.button_delete, .btn-info, .btn.bg-teal{display:inline;}
   .approve-unapprove{vertical-align:-webkit-baseline-middle;}
 </style>
 @stop

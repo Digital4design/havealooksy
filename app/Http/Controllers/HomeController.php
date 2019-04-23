@@ -7,8 +7,10 @@ use App\Models\ListingGuests;
 use App\Models\ListingTimes;
 use App\Models\Categories;
 use App\Models\Listings;
+use App\Models\Bookings;
 use Validator;
 use Auth;
+use Cart;
 
 class HomeController extends Controller
 {
@@ -17,10 +19,10 @@ class HomeController extends Controller
      *
      * @return void
      */
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
+    /*public function __construct()
+    {
+        $this->middleware('auth');
+    }*/
 
     /**
      * Show the application dashboard.
@@ -148,7 +150,108 @@ class HomeController extends Controller
 
     public function viewCart()
     {
-        return view('frontapp.cart');
+        if(Cart::session(Auth::user()->id)->isEmpty())
+        {
+            $data = 'No items added to cart.';
+            $status = 'empty';
+        }
+        else
+        {
+            $data = Cart::session(Auth::user()->id)->getContent();
+
+            foreach ($data as $d)
+            {
+                $bkng = Bookings::with(['getBookingStatus'])->where('id', $d['attributes']['booking_id'])->first();
+                $d['status'] = $bkng['getBookingStatus']['name'];
+            }
+
+            $status = 'not-empty';
+        }
+        return view('frontapp.cart')->with(['status' => $status, 'data' => $data]);
+    }
+
+    public function addToCart(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'time' => ['required'],   
+        ], ['time.required' => 'You must choose a time slot.']);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+
+        try
+        {
+            if(Auth::guest())
+            {
+                return response()->json(['status' => 'login']);
+            }
+
+            
+            $listing = Listings::with(['getGuests', 'getTimes', 'getImages'])->where('id', $request->listing_id)->first();
+
+            $total_guests = $adults = $children = $infants = 0;
+            if(isset($request->guest['adults'])){
+                $total_guests += $request->guest['adults'];
+                $adults = $request->guest['adults'];
+            }
+            if(isset($request->guest['children'])){
+                $total_guests += $request->guest['children'];
+                $adults = $request->guest['children'];
+            }
+            if(isset($request->guest['infants'])){
+                $total_guests += $request->guest['infants'];
+                $adults = $request->guest['infants'];
+            }
+
+            if($total_guests > $listing['getGuests']['total_count'])
+            {
+                return response()->json(['status' => 'danger', 'message' => 'Guest count must not exceed Maximum allowed guests']);
+            }
+
+            if(Cart::session(Auth::user()->id)->get($listing['id']))
+            {
+                return response()->json(['status' => 'danger', 'message' => 'This experience has been already added to cart.']);
+            }
+
+            $start_time = substr($request->time, 0, 5);
+            $end_time = substr($request->time, 6);
+            $get_time_slot = ListingTimes::where('listing_id', $listing['id'])
+                                        ->where('start_time', $start_time)
+                                        ->where('end_time', $end_time)
+                                        ->first();
+
+            /* Create booking entry */
+            $booking = Bookings::create([
+                'date' => $request->date,
+                'no_of_seats' => $total_guests,
+                'time_slot' => $get_time_slot['id'],
+                'status_id' => 3, /* Waiting for Host confirmation */
+                'listing_id' => $listing['id'],
+                'user_id' => Auth::user()->id,
+            ]);
+
+            Cart::session(Auth::user()->id)
+                ->add($listing['id'], $listing['title'], $listing['price'], 1, array('description' => $listing['description'], 'image' => $listing['getImages'][0]['name'], 'adults' => $adults, 'children' => $children, 'infants' => $infants, 'time_slot' => $request->time, 'booking_id' => $booking['id']));
+
+            return response()->json(['status' => 'success', 'message' => 'Your request for the experience has been submitted for confirmation.']);
+        }
+        catch(\Exception $e)
+        {
+            // return response()->json(['status' => 'danger','message' => 'Something went wrong! Please try again later.']);
+            return response()->json(['status' => 'danger','message' => $e->getMessage()]);
+        }
+    }
+
+    public function removeFromCart(Request $request)
+    {
+        $cart_item = Cart::session(Auth::user()->id)->get($request->cart_item_id);
+
+        $remove_booking = Bookings::find($cart_item['attributes']['booking_id']);
+        $remove_booking->delete();
+
+        Cart::session(Auth::user()->id)->remove($request->cart_item_id);
+        return redirect()->back();
     }
 
     public function searchWebsite(Request $request)

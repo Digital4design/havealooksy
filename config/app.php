@@ -178,6 +178,7 @@ return [
         Zizaco\Entrust\EntrustServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
         Musonza\Chat\ChatServiceProvider::class,
+        Darryldecode\Cart\CartServiceProvider::class,
 
     ],
 
@@ -235,6 +236,7 @@ return [
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Chat' => Musonza\Chat\Facades\ChatFacade::class,
+        'Cart' => Darryldecode\Cart\Facades\CartFacade::class,
 
     ],
 

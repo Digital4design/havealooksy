@@ -14,5 +14,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UserTableSeeder::class);
 		$this->call(Role::class);
 		$this->call(roleUser::class);
+		$this->call(BookingStatus::class);
     }
 }

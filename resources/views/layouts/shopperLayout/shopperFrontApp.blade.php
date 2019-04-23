@@ -20,6 +20,7 @@
         <link href="{{asset('public/looksyassets/css/owl.theme.default.min.css')}}"  rel="stylesheet">
         <link href="{{asset('public/looksyassets/css/style.css')}} " rel="stylesheet">
         <link href="{{asset('public/css/custom-css.css')}} " rel="stylesheet">
+        <link rel="stylesheet" href="{{asset('public/css/sweetalert/sweetalert.min.css')}}">
         
         <script src="{{asset('public/looksyassets/js/ie-emulation-modes-warning.js')}}"></script>
         <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
@@ -87,7 +88,7 @@
                             </li>
                         </ul>
                       </li> -->
-                      <li class="cart"><a href="{{ url('/cart') }}"><span class="glyphicon glyphicon-shopping-cart"><span class="label" style="position:absolute;background-color:rgba(137,43,225,0.6);border-radius:50%;font-weight:normal;top:-10px;left:16px;">0</span></span></a></li> 
+                      <li class="cart"><a href="{{ url('/cart') }}"><span class="glyphicon glyphicon-shopping-cart"><span class="label" style="position:absolute;background-color:rgba(137,43,225,0.6);border-radius:50%;font-weight:normal;top:-10px;left:16px;">{{ Cart::session(Auth::user()->id)->getContent()->count() }}</span></span></a></li> 
                       <li id="hoverable"><a class="user_name">{{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}</a></li>
                       <ul class="dropdown-items">
                           <li class="dropdown-item"><a href="{{ url('shopper/dashboard') }}">Dashboard</a></li>
@@ -172,6 +173,7 @@
         <!-- fullCalendar -->
         <script src="{{asset('public/adminPanelAssets')}}/bower_components/moment/moment.js"></script>
         <script src="{{asset('public/adminPanelAssets')}}/bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
+        <script src="{{asset('public/js/sweetalert/sweetalert.min.js')}}"></script>
         <script type="text/javascript">
             $("#hoverable").on("click", function(){
                 // $(".dropdown-items").toggleClass("show-hide", 2000);

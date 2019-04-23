@@ -20,6 +20,7 @@
         <link href="{{asset('public/looksyassets/css/owl.theme.default.min.css')}}"  rel="stylesheet">
         <link href="{{asset('public/looksyassets/css/style.css')}} " rel="stylesheet">
         <link href="{{asset('public/css/custom-css.css')}} " rel="stylesheet">
+        <link rel="stylesheet" href="{{asset('public/css/sweetalert/sweetalert.min.css')}}">
         
         <script src="{{asset('public/looksyassets/js/ie-emulation-modes-warning.js')}}"></script>
         <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
@@ -66,7 +67,7 @@
                     <span class="icon-bar"></span>
                     </button>
                     <ul class="nav navbar-right"> 
-                      <li class="cart"><a href="{{ url('/cart') }}"><span class="glyphicon glyphicon-shopping-cart"><span class="label" style="position:absolute;background-color:rgba(137,43,225,0.6);border-radius:50%;font-weight:normal;top:-10px;left:16px;">0</span></span></a></li>
+                      <!-- <li class="cart"><a href="{{ url('/cart') }}"><span class="glyphicon glyphicon-shopping-cart"><span class="label" style="position:absolute;background-color:rgba(137,43,225,0.6);border-radius:50%;font-weight:normal;top:-10px;left:16px;">0</span></span></a></li> -->
                       <li class="login"><a href="{{ url('/login') }}"> Login</a></li>
                       <li class="signup"><a href="{{ url('/register') }}"> Signup</a></li>           
                     </ul>               
@@ -141,6 +142,7 @@
         <!-- fullCalendar -->
         <script src="{{asset('public/adminPanelAssets')}}/bower_components/moment/moment.js"></script>
         <script src="{{asset('public/adminPanelAssets')}}/bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
+        <script src="{{asset('public/js/sweetalert/sweetalert.min.js')}}"></script>
         @yield('pageJs')
     </body>
 </html>

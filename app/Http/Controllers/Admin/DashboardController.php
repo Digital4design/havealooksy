@@ -161,7 +161,7 @@ class DashboardController extends Controller
                             if($all_users['status'] == 0){
                                 return 'Blocked';
                             }
-                        })->addColumn('block_unblock', function ($all_users){
+                        })->addColumn('action', function ($all_users){
                             if($all_users['status'] == 1){
                                 $status = 'Block';
                                 $btn_color = 'danger';
@@ -170,8 +170,17 @@ class DashboardController extends Controller
                                 $status = 'Unblock';
                                 $btn_color = 'info';
                             }
-                            return "<button type='button' data-id='".$all_users['id']."' class='btn btn-".$btn_color." block-unblock'>".$status."</button>";
-                        })->rawColumns(['block_unblock' => 'block_unblock'])->make(true);
+                            return "<a href='".url('admin/users/view/'.$all_users['id'])."' class='btn btn-info' style='margin-right:5px;display:inline;'><i class='fa fa-eye'></i></a><button type='button' data-id='".$all_users['id']."' class='btn btn-".$btn_color." block-unblock' style='display:inline;'>".$status."</button>";
+                        })->rawColumns(['action' => 'action'])->make(true);
+    }
+
+    public function viewUser($id)
+    {
+        $user = User::with(['getRole'])
+                        ->whereHas('roles', function($q){
+                            $q->where('name', 'shopper')->orWhere('name', 'host');
+                        })->where('id', $id)->first();
+        return view('admin.view_user')->with('user', $user);
     }
 
     public function changeUserStatus($id, $status)

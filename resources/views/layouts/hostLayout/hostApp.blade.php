@@ -17,6 +17,9 @@
   <!-- DataTables -->
   <link rel="stylesheet" href="{{asset('public/adminPanelAssets')}}/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
   <link rel="stylesheet" href="{{asset('public/css/datatables')}}/buttons.dataTables.min.css">
+  <!-- fullCalendar -->
+  <link rel="stylesheet" href="{{asset('public/adminPanelAssets')}}/bower_components/fullcalendar/dist/fullcalendar.min.css">
+  <link rel="stylesheet" href="{{asset('public/adminPanelAssets')}}/bower_components/fullcalendar/dist/fullcalendar.print.min.css" media="print">
   <!-- LightBox -->
   <link rel="stylesheet" href="{{asset('public/css/lightbox')}}/lightbox.min.css">
   <!-- Theme style -->
@@ -185,6 +188,11 @@
             <i class="fa fa-list-alt"></i> <span>Listings</span>
           </a>
         </li>
+        <li class="{{ Request::is('host/bookings') ? 'active' : '' }}">
+          <a href="{{ url('host/bookings') }}">
+            <i class="fa fa-shopping-cart"></i> <span>Bookings</span>
+          </a>
+        </li>
 		    <li class="{{ Request::is('host/chat') ? 'active' : '' }}">
           <a href="{{ url('host/chat') }}">
             <i class="fa fa-commenting"></i> <span>Messages</span><span class="pull-right" style="margin-right:5px;">{{ ($unreadCount != 0) ? $unreadCount : '' }}</span>
@@ -270,6 +278,9 @@
 <script src="{{asset('public/adminPanelAssets')}}/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <script src="{{asset('public/js/datatables')}}/dataTables.buttons.min.js"></script>
 <script src="{{asset('public/js/datatables')}}/buttons.colVis.min.js"></script>
+<!-- fullCalendar -->
+<script src="{{asset('public/adminPanelAssets')}}/bower_components/moment/moment.js"></script>
+<script src="{{asset('public/adminPanelAssets')}}/bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
 <!-- LightBox -->
 <script src="{{asset('public/js/lightbox')}}/lightbox.min.js"></script>
 <!-- AdminLTE App -->
@@ -284,7 +295,7 @@
       $(".change-pic").css("display", "none");
     });
     $('.timepicker').timepicker({
-      showInputs: false, showMeridian:false, defaultTime: ''
+      showInputs: false, /*showMeridian:false,*/ defaultTime: ''
     });
     $("a.sidebar-toggle").on("click", function(){
       // $(".user-panel img").toggleClass("fix-height");

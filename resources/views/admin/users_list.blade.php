@@ -33,7 +33,7 @@
                           <th>Postal Code</th>
                           <th>User Type</th>
                           <th>Status</th>
-                          <th>Block/Unblock</th>
+                          <th>Action</th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -45,7 +45,7 @@
                           <th>Postal Code</th>
                           <th>User Type</th>
                           <th>Status</th>
-                          <th>Block/Unblock</th>
+                          <th>Action</th>
                         </tr>
                     </tfoot>
                   </table>
@@ -89,7 +89,7 @@ $(function() {
             { data: 'postal_code', name: 'postal_code' },
             { data: 'user_type', name: 'user_type' },
             { data: 'status', name: 'status', orderable: false, visible: false },
-            { data: 'block_unblock', name: 'block_unblock', orderable: false },
+            { data: 'action', name: 'action', orderable: false },
         ],
         oLanguage: {
           "sInfoEmpty" : "Showing 0 to 0 of 0 entries",

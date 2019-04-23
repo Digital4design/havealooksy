@@ -55,10 +55,10 @@ class ListingController extends Controller
                                     $names .= ', Infants';
                                 return $names;
                         })->addColumn('time_slots', function($all_listings){
-                                $time_slots = Carbon::createFromFormat('H:i:s', $all_listings['getTimes'][0]['start_time'])->format('H:i')."-".Carbon::createFromFormat('H:i:s', $all_listings['getTimes'][0]['end_time'])->format('H:i');
+                                $time_slots = Carbon::createFromFormat('H:i:s', $all_listings['getTimes'][0]['start_time'])->format('g:i a')."-".Carbon::createFromFormat('H:i:s', $all_listings['getTimes'][0]['end_time'])->format('g:i a');
                                 foreach ($all_listings['getTimes'] as $key => $value) {
-                                    $start_time = Carbon::createFromFormat('H:i:s', $value['start_time'])->format('H:i');
-                                    $end_time = Carbon::createFromFormat('H:i:s', $value['end_time'])->format('H:i');
+                                    $start_time = Carbon::createFromFormat('H:i:s', $value['start_time'])->format('g:i a');
+                                    $end_time = Carbon::createFromFormat('H:i:s', $value['end_time'])->format('g:i a');
                                     if($key != 0)
                                         $time_slots .= ", ".$start_time."-".$end_time;
                                 }
@@ -82,7 +82,7 @@ class ListingController extends Controller
                             }
                             return "<a href='#' data-id='".$all_listings['id']."' class='founder_pick_btn btn btn-sm ".$fndr_class."' style='margin-left:15px;'>".$fndr_label."</a>";
                         })->addColumn('action', function ($all_listings){
-                            return "<a href='".route('editListingAdmin', $all_listings['id'])."' class='btn btn-info' style='margin-right:5px;'><i class='fa fa-edit'></i></a><button type='button' data-id='".$all_listings['id']."' class='btn btn-warning button_delete'><i class='fa fa-trash-o'></i></button>";
+                            return "<a href='".url('admin/listings/view/'.$all_listings['id'])."' class='btn bg-teal' style='margin-right:5px;'><i class='fa fa-eye'></i></a><a href='".route('editListingAdmin', $all_listings['id'])."' class='btn btn-info' style='margin-right:5px;'><i class='fa fa-edit'></i></a><button type='button' data-id='".$all_listings['id']."' class='btn btn-warning button_delete'><i class='fa fa-trash-o'></i></button>";
                         })->addColumn('images', function ($all_listings){
                             return "<a href='#' data-toggle='modal' data-target='#image-modal' class='listing_images' data-id='".$all_listings['id']."' style='font-size:1em;padding:10px;'><i class='glyphicon glyphicon-picture'></i></a>";
                         })->rawColumns(['approved_unapproved' => 'approved_unapproved', 'action' => 'action', 'images' => 'images', 'founder_pick_button' => 'founder_pick_button'])->make(true);
@@ -112,6 +112,12 @@ class ListingController extends Controller
         $founder_pick_status->save();
 
         return response()->json(['status' => 'success']);
+    }
+
+    public function viewListing($id)
+    {
+        $listing = Listings::with(['getGuests', 'getTimes', 'getImages', 'getCategory'])->where('id', $id)->first();
+        return view("admin.view_listing")->with('listing', $listing);
     }
 
     public function editListingView($id)
@@ -233,6 +239,9 @@ class ListingController extends Controller
 
     public function addTimeSlot($start, $end, $id)
     {
+        $start = date("H:i", strtotime($start));
+        $end = date("H:i", strtotime($end));
+        
         ListingTimes::create([
             'start_time' => $start,
             'end_time' => $end,

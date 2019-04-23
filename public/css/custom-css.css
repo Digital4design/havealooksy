@@ -11,11 +11,30 @@
 	color:#777;
 }
 .error{
-	color;red;
+	color:red;
 }
 header .intro-text .intro-lead-in{
 	font-size:35px;
 	margin-top:20px;
+}
+.box .box-row{
+	display:flex;
+	padding:5px 50px;
+}
+.box .box-row label{
+	flex: 20%;
+}
+.box .box-row .box-row-content{
+	flex: 80%;
+}
+.view_eye{
+	text-decoration:none;
+	color:#666;
+	font-size:16px;
+	padding: 0px 12px;
+}
+.view_eye:hover{
+	color:#333;
 }
 
 /* Loader */
@@ -231,7 +250,7 @@ tr.shown td.details-control:before {
 	left:23px;
 }
 .times_group .time label{
-	left:40px;
+	left:13px;
 }
 .times_group .time:hover label{
 	color: #fff;

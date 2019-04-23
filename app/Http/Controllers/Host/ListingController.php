@@ -39,10 +39,10 @@ class ListingController extends Controller
                                     $names .= ', Infants';
                                 return $names;
                         })->addColumn('time_slots', function($all_listings){
-                                $time_slots = Carbon::createFromFormat('H:i:s', $all_listings['getTimes'][0]['start_time'])->format('H:i')."-".Carbon::createFromFormat('H:i:s', $all_listings['getTimes'][0]['end_time'])->format('H:i');
+                                $time_slots = Carbon::createFromFormat('H:i:s', $all_listings['getTimes'][0]['start_time'])->format('g:i a')."-".Carbon::createFromFormat('H:i:s', $all_listings['getTimes'][0]['end_time'])->format('g:i a');
                                 foreach ($all_listings['getTimes'] as $key => $value) {
-                                    $start_time = Carbon::createFromFormat('H:i:s', $value['start_time'])->format('H:i');
-                                    $end_time = Carbon::createFromFormat('H:i:s', $value['end_time'])->format('H:i');
+                                    $start_time = Carbon::createFromFormat('H:i:s', $value['start_time'])->format('g:i a');
+                                    $end_time = Carbon::createFromFormat('H:i:s', $value['end_time'])->format('g:i a');
                                     if($key != 0)
                                         $time_slots .= ", ".$start_time."-".$end_time;
                                 }
@@ -98,12 +98,6 @@ class ListingController extends Controller
         }
         try
         {
-
-            /* Check if start time or end time is equal to 0:00 */
-            if($request->start_time1 == '0:00' || $request->end_time1 == '0:00' || $request->start_time2 == '0:00' || $request->end_time2 == '0:00' || $request->start_time3 == '0:00' || $request->end_time3 == '0:00' || $request->start_time4 == '0:00' || $request->end_time4 == '0:00')
-            {
-                return back()->with(['status' => 'danger', 'message' => 'Time must be greater than 0:00.']);
-            }
 
         	$listing = Listings::create([
                 'title' => $request->title,
@@ -168,6 +162,9 @@ class ListingController extends Controller
 
     public function addTimeSlot($start, $end, $id)
     {
+        $start = date("H:i", strtotime($start));
+        $end = date("H:i", strtotime($end));
+
         ListingTimes::create([
             'start_time' => $start,
             'end_time' => $end,

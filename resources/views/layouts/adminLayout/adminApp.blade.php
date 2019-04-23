@@ -195,6 +195,11 @@
             <i class="fa fa-list-alt"></i> <span>Listings</span>
           </a>
         </li>
+        <li class="{{ Request::is('admin/bookings') ? 'active' : '' }}">
+          <a href="{{ url('admin/bookings') }}">
+            <i class="fa fa-shopping-cart"></i> <span>Bookings</span>
+          </a>
+        </li>
         <li class="{{ Request::is('admin/chat') ? 'active' : '' }}">
           <a href="{{ url('admin/chat') }}">
             <i class="fa fa-commenting"></i> <span>Messages</span><span class="pull-right" style="margin-right:5px;">{{ ($unreadCount != 0) ? $unreadCount : '' }}</span>
@@ -294,7 +299,7 @@ $(document).ready(function(){
     $(".change-pic").css("display", "none");
   });
   $('.timepicker').timepicker({
-      showInputs: false, showMeridian:false, defaultTime: ''
+      showInputs: false, /*showMeridian:false,*/ defaultTime: ''
     });
   $("a.sidebar-toggle").on("click", function(){
       // $(".user-panel img").toggleClass("fix-height");
