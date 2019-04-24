@@ -14,6 +14,9 @@
   <link rel="stylesheet" href="{{asset('public/adminPanelAssets')}}/bower_components/Ionicons/css/ionicons.min.css">
   <!-- DataTables -->
   <link rel="stylesheet" href="{{asset('public/adminPanelAssets')}}/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+  <!-- fullCalendar -->
+  <link rel="stylesheet" href="{{asset('public/adminPanelAssets')}}/bower_components/fullcalendar/dist/fullcalendar.min.css">
+  <link rel="stylesheet" href="{{asset('public/adminPanelAssets')}}/bower_components/fullcalendar/dist/fullcalendar.print.min.css" media="print">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('public/adminPanelAssets')}}/dist/css/AdminLTE.min.css">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -175,6 +178,11 @@
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
           </a>
         </li>
+        <li class="{{ Request::is('shopper/bookings') ? 'active' : '' }}">
+          <a href="{{ url('shopper/bookings') }}">
+            <i class="fa fa-shopping-cart"></i> <span>Bookings</span>
+          </a>
+        </li>
 		    <li class="{{ Request::is('shopper/chat') ? 'active' : '' }}">
           <a href="{{ url('shopper/chat') }}">
             <i class="fa fa-commenting"></i> <span>Messages</span><span class="pull-right" style="margin-right:5px;">{{ ($unreadCount != 0) ? $unreadCount : '' }}</span>
@@ -253,6 +261,9 @@
 <!-- DataTables -->
 <script src="{{asset('public/adminPanelAssets')}}/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="{{asset('public/adminPanelAssets')}}/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<!-- fullCalendar -->
+<script src="{{asset('public/adminPanelAssets')}}/bower_components/moment/moment.js"></script>
+<script src="{{asset('public/adminPanelAssets')}}/bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
 <!-- AdminLTE App -->
 <script src="{{asset('public/adminPanelAssets')}}/dist/js/adminlte.min.js"></script>
 <script src="{{asset('public/js/sweetalert/sweetalert.min.js')}}"></script>

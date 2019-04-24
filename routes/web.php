@@ -118,7 +118,9 @@ Route::group(['prefix' => 'host', 'middleware' => ['host', 'auth', 'verified']],
     });
 
     Route::group(['prefix' => 'bookings', 'middleware' => ['host', 'auth']], function(){
-        Route::get('/', 'Host\BookingController@getBookings');
+        Route::get('/', 'Host\BookingController@getBookingsView');
+        Route::get('/get-bookings', 'Host\BookingController@getAllBookings');
+        Route::get('/get-booking-data/{id}', 'Host\BookingController@getBookingData');
     });
 
     Route::group(['prefix' => 'chat', 'middleware' => ['host', 'auth']], function(){
@@ -138,6 +140,12 @@ Route::group(['prefix' => 'shopper', 'middleware' => ['auth', 'shopper', 'verifi
     Route::post('/change-profile-picture', 'Shopper\DashboardController@changeProfilePicture');
     Route::get('/remove-profile-picture', 'Shopper\DashboardController@removeProfilePicture');
     Route::get('/get-unread-conversations', 'Shopper\ChatController@getUnreadConversations');
+
+    Route::group(['prefix' => 'bookings', 'middleware' => ['shopper', 'auth']], function(){
+        Route::get('/', 'Shopper\BookingController@getBookingsView');
+        Route::get('/get-bookings', 'Shopper\BookingController@getAllBookings');
+        Route::get('/get-booking-data/{id}', 'Shopper\BookingController@getBookingData');
+    });
 
     Route::group(['prefix' => 'chat', 'middleware' => ['shopper', 'auth']], function(){
         Route::get('/', 'Shopper\ChatController@getAllConversations');

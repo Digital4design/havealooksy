@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Categories;
 use App\Models\Listings;
+use App\Models\Bookings;
 use Validator;
 use App\User;
 use Redirect;
@@ -36,7 +37,8 @@ class DashboardController extends Controller
 
     public function dashboardView()
     {
-    	return view('shopper.dashboard');
+        $bookings = Bookings::where('user_id', Auth::user()->id)->get()->count();
+    	return view('shopper.dashboard')->with('bookings', $bookings);
     }
 
     public function profile()

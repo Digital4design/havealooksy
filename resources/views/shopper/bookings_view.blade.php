@@ -1,4 +1,4 @@
-@extends('layouts.hostLayout.hostApp')
+@extends('layouts.shopperLayout.shopperApp')
 
 @section('pageCss')
 <style type="text/css">
@@ -40,6 +40,7 @@
                           <p>{{ $b['getBookedListingUser']['title'] }}</p>
                           <p style="margin-left:auto;">{{ Carbon::create($b['getBookedListingTime']['start_time'])->format('g:i a') }}-{{ Carbon::create($b['getBookedListingTime']['end_time'])->format('g:i a') }}</p>
                         </div>
+                        <p style="color:red;">{{ $b['getBookingStatus']['display_name'] }}</p>
                       </a>
                     </div>
                   @endforeach
@@ -79,7 +80,7 @@
         selectable: true,
         events: function(start, end, timezone, callback) {
           $.ajax({
-              url: "{{ url('host/bookings/get-bookings') }}",
+              url: "{{ url('shopper/bookings/get-bookings') }}",
               type: 'get',
               dataType: 'json',
               data: {
@@ -93,7 +94,7 @@
                         events.push({
                             id: r.id,
                             title: r.get_booked_listing_user.title,
-                            description: "Time: "+r.time,
+                            description: "Status: "+r.get_booking_status.display_name,
                             start: r.date,
                             end: r.date, 
                         });
@@ -114,10 +115,16 @@
         },
     });
 
+    function newLine(display_txt)
+    {
+      display_txt = display_txt.replace(/\n/g, "<br />");
+      return display_txt;
+    }
+
     $("#get-booking-data").on("click", function(){
       var id = $(this).attr("data-id")
       $.ajax({
-          url: "{{ url('host/bookings/get-booking-data') }}/"+id,
+          url: "{{ url('shopper/bookings/get-booking-data') }}/"+id,
           type: 'get',
           dataType: 'json',
           success: function(data) {

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Listings;
+use App\Models\Bookings;
 use Validator;
 use App\User;
 use Auth;
@@ -15,7 +16,10 @@ class DashboardController extends Controller
     public function index()
     {
         $listings = Listings::where('user_id', Auth::user()->id)->get()->count();
-    	return view('host.dashboard')->with('listings', $listings);
+        $bookings = Bookings::whereHas('getBookedListingUser', function($q){
+                        $q->where('user_id', Auth::user()->id);
+                    })->get()->count();
+    	return view('host.dashboard')->with(['listings' => $listings, 'bookings' => $bookings]);
     }
 
     public function profile()

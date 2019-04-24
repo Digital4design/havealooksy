@@ -18,4 +18,9 @@ class Bookings extends Model
     {
     	return $this->belongsTo("App\Models\Listings", 'listing_id');
     }
+
+    public function getBookedListingTime()
+    {
+        return $this->belongsTo("App\Models\ListingTimes", 'time_slot');
+    }
 }

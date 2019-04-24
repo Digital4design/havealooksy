@@ -52,13 +52,13 @@
             <div class="col-lg-3 col-xs-6">
                 <div class="small-box bg-green">
                     <div class="inner">
-                        <h3>5</h3>
+                        <h3>{{ $bookings }}</h3>
                         <p>Booking Calendar</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-calendar"></i>
                     </div>
-                    <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                    <a href="{{ url('host/bookings') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
             </div>
         </div>

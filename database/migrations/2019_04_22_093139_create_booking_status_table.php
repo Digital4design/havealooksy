@@ -16,6 +16,7 @@ class CreateBookingStatusTable extends Migration
         Schema::create('booking_status', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('display_name');
             $table->string('description');
             $table->timestamps();
         });
