@@ -71,6 +71,7 @@
         serverSide: true,
         lengthMenu: [10,25,50,100],
         responsive: true,
+        order: [ 1, "asc" ],
         ajax: {
           "url": '{!! url("admin/bookings/get-bookings") !!}',
           "type": 'GET',

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Yajra\Datatables\Datatables;
 use App\Models\Categories;
 use App\Models\Listings;
+use App\Models\Bookings;
 use Validator;
 use App\User;
 use Auth;
@@ -22,7 +23,8 @@ class DashboardController extends Controller
                         })->get()->count();
         $categories = Categories::get()->count();
         $listings = Listings::get()->count();
-    	return view('admin.dashboard')->with(['users' => $users, 'categories' => $categories, 'listings' => $listings]);
+        $bookings = Bookings::get()->count();
+    	return view('admin.dashboard')->with(['users' => $users, 'categories' => $categories, 'listings' => $listings, 'bookings' => $bookings]);
     }
 
     public function profile()

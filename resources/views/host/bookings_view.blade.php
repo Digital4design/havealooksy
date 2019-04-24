@@ -24,28 +24,58 @@
       @endif
       <div class="row">
         <div class="col-xs-12">
-          <div class="box box-info">
-            <div class="box-header with-border">
-              <h3 class="box-title">Booking Calendar</h3>
-            </div>
-            <div class="box-body">
-              <div class="col-xs-12 col-lg-6" id="booking_calendar"></div>
-              <div class="col-xs-12 col-lg-6">
-                @if(!$bookings->isEmpty())
-                  @foreach($bookings as $b)
-                    <div class="small-box">
-                      <a href="#" id="get-booking-data" data-id="{{ $b['id'] }}" data-toggle="modal" data-target="#booking-data">
-                        <h5>{{ Carbon::create($b['date'])->format('d/m/Y') }}</h5>
-                        <div class="booking-box">
-                          <p>{{ $b['getBookedListingUser']['title'] }}</p>
-                          <p style="margin-left:auto;">{{ Carbon::create($b['getBookedListingTime']['start_time'])->format('g:i a') }}-{{ Carbon::create($b['getBookedListingTime']['end_time'])->format('g:i a') }}</p>
-                        </div>
-                      </a>
-                    </div>
-                  @endforeach
-                @else
-                  <p>No Bookings.</p>
-                @endif
+          <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+              <li class="active"><a href="#booking_calendar_box" data-toggle="tab">Booking Calendar</a></li>
+              <li><a href="#booking_table_box" data-toggle="tab">Booking Table</a></li>
+            </ul>
+            <div class="tab-content">
+              <div id="booking_calendar_box" class="active tab-pane box-body">
+                <div class="col-xs-12 col-lg-6" id="booking_calendar"></div>
+                <div class="col-xs-12 col-lg-6">
+                  @if(!$bookings->isEmpty())
+                    @foreach($bookings as $b)
+                      <div class="small-box">
+                        <a href="#" id="get-booking-data" data-id="{{ $b['id'] }}" data-toggle="modal" data-target="#booking-data">
+                          <h5>{{ Carbon::create($b['date'])->format('d/m/Y') }}</h5>
+                          <div class="booking-box">
+                            <p>{{ $b['getBookedListingUser']['title'] }}</p>
+                            <p style="margin-left:auto;">{{ Carbon::create($b['getBookedListingTime']['start_time'])->format('g:i a') }}-{{ Carbon::create($b['getBookedListingTime']['end_time'])->format('g:i a') }}</p>
+                          </div>
+                          <p style="color:red;">{{ $b['getbookingStatus']['display_name'] }}</p>
+                        </a>
+                      </div>
+                    @endforeach
+                  @else
+                    <p>No Bookings.</p>
+                  @endif
+                </div>
+              </div>
+              <div id="booking_table_box"  class="tab-pane box-body">
+                <table id="bookings_list" class="table table-bordered table-striped">
+                  <thead>
+                      <tr>
+                        <th>Booking ID</th>
+                        <th>Date of Booking</th>
+                        <th>No of Seats</th>
+                        <th>Time Slot</th>
+                        <th>Status</th>
+                        <th>Listing</th>
+                        <th>Action</th>
+                      </tr>
+                  </thead>
+                  <tfoot>
+                      <tr>
+                        <th>Booking ID</th>
+                        <th>Date of Booking</th>
+                        <th>No of Seats</th>
+                        <th>Time Slot</th>
+                        <th>Status</th>
+                        <th>Listing</th>
+                        <th>Action</th>
+                      </tr>
+                  </tfoot>
+                </table>
               </div>
             </div>
           </div>
@@ -127,6 +157,75 @@
             }
           } 
       });
+    });
+
+    var table = $('#bookings_list').DataTable({
+        processing: true,
+        serverSide: true,
+        lengthMenu: [10,25,50,100],
+        responsive: true,
+        order: [ 1, "asc" ],
+        ajax: {
+          "url": '{!! url("host/bookings/get-bookings-table") !!}',
+          "type": 'GET',
+        },
+        columns: [
+            { data: 'id', name: 'id' },
+            { data: 'date', name: 'date' },
+            { data: 'no_of_seats', name: 'no_of_seats' },
+            { data: 'time_slot', name: 'time_slot' },
+            { data: 'status_id', name: 'status_id' },
+            { data: 'listing_id', name: 'listing_id', orderable: false },
+            { data: 'action', name: 'action', orderable: false },
+        ],
+        oLanguage: {
+          "sInfoEmpty" : "Showing 0 to 0 of 0 entries",
+          "sZeroRecords": "No matching records found",
+          "sEmptyTable": "No data available in table",
+        },
+    });
+
+    $(document).on("click", "a.confirmation", function(){
+      var id = $(this).attr("data-id")
+      
+      if($(this).hasClass("btn-info")){
+        data = 1;
+        message = "Booking has been confirmed.";
+        $(this).text("Revoke Confirmation");
+        $(this).removeClass("btn-info").addClass("btn-default");
+      }
+      else if($(this).hasClass("btn-default")){
+        data = 3;
+        message = "Booking Confirmation has been revoked.";
+        $(this).text("Confirm Booking");
+        $(this).removeClass("btn-default").addClass("btn-info");
+      }
+
+      $.ajax({
+          url: "{{ url('host/bookings/change-confirmation') }}/"+id+"/"+data,
+          type: 'get',
+          dataType: 'json',
+          success: function(data) {
+            if(data.status =='success')
+            {
+              swal({
+                title: "Success",
+                text: message,
+                timer: 2000,
+                type: "success",
+                showConfirmButton: false
+              });
+
+              // setTimeout(function(){ 
+              //     location.reload();
+              // }, 2000);
+            }
+            else if(data.status == 'danger'){
+              swal("Error", data.message, "warning");
+            }
+          } 
+      });
+      return false;
     });
   });
 </script>

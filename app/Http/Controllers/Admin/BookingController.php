@@ -22,7 +22,7 @@ class BookingController extends Controller
     	$bookings = Bookings::with(['getBookingStatus'])->get();
     	return Datatables::of($bookings)
     					->editColumn('status_id', function ($bookings){
-                            return $bookings['getBookingStatus']['name'];
+                            return $bookings['getBookingStatus']['display_name'];
     					})->editColumn('time_slot', function ($bookings){
     						$time_slot = ListingTimes::where('id', $bookings['time_slot'])
     									->first();

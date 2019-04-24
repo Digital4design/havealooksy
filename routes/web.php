@@ -121,6 +121,8 @@ Route::group(['prefix' => 'host', 'middleware' => ['host', 'auth', 'verified']],
         Route::get('/', 'Host\BookingController@getBookingsView');
         Route::get('/get-bookings', 'Host\BookingController@getAllBookings');
         Route::get('/get-booking-data/{id}', 'Host\BookingController@getBookingData');
+        Route::get('/get-bookings-table', 'Host\BookingController@getBookingsTable');
+        Route::get('/change-confirmation/{id}/{data}', 'Host\BookingController@changeBookingConfirmation');
     });
 
     Route::group(['prefix' => 'chat', 'middleware' => ['host', 'auth']], function(){

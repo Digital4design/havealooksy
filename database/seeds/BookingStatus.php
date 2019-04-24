@@ -16,7 +16,7 @@ class BookingStatus extends Seeder
         		array(
         			'id' => 1,
         			'name' => 'pending',
-                    'display_name' => 'Pending',
+                    'display_name' => 'Pending Payment',
         			'description' =>  'When the booking is confirmed by Host but payment is pending.',
         			'created_at' =>  date("Y-m-d H:i:s"),
         			'updated_at' =>  date("Y-m-d H:i:s"),

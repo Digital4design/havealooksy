@@ -61,6 +61,18 @@
                 </div>
             </div>
             <div class="col-lg-3 col-xs-6">
+                <div class="small-box bg-teal">
+                    <div class="inner">
+                        <h3>{{ $bookings }}</h3>
+                        <p>Bookings</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-shopping-cart"></i>
+                    </div>
+                    <a href="{{ url('admin/bookings') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-xs-6">
                 <div class="small-box bg-red">
                     <div class="inner">
                         @php $unreadCount = Chat::messages()->for(Auth::user())->unreadCount(); @endphp

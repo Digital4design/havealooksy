@@ -18,3 +18,7 @@
 	<label>Time Slot</label>
 	<p>{{ Carbon::create($booking['getBookedListingTime']['start_time'])->format('g:i a') }}-{{ Carbon::create($booking['getBookedListingTime']['end_time'])->format('g:i a') }}</p>
 </div>
+<div class="modal-row">
+	<label>Status</label>
+	<p>{{ $booking['getBookingStatus']['display_name'] }}</p>
+</div>
