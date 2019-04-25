@@ -55,6 +55,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth', 'verified']
     Route::get('/remove-profile-picture', 'Admin\DashboardController@removeProfilePicture');
     Route::get('/get-unread-conversations', 'Admin\ChatController@getUnreadConversations');
 
+    /* Users */
     Route::group(['prefix' => 'users', 'middleware' => ['admin', 'auth']], function() {
         Route::get('/', 'Admin\DashboardController@getUsersView');      
         Route::get('/get-users', 'Admin\DashboardController@getUsers');
@@ -62,6 +63,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth', 'verified']
         Route::get('/change-status/{id}/{status}', 'Admin\DashboardController@changeUserStatus');
     }); 
 
+    /* Categories */
     Route::group(['prefix' => 'categories', 'middleware' => ['admin', 'auth']], function() {
         Route::get('/', 'Admin\DashboardController@getCategoriesView');
         Route::get('/get-categories', 'Admin\DashboardController@getCategories');  
@@ -73,6 +75,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth', 'verified']
         Route::get('/remove-image/{id}', 'Admin\DashboardController@removeCategoryImage');
     });
 
+    /* Listings */
     Route::group(['prefix' => 'listings', 'middleware' => ['admin', 'auth']], function() {
         Route::get('/', ['as' => 'listingsAdmin', 'uses' => 'Admin\ListingController@getListingsView']);
         Route::get('/get-listings', 'Admin\ListingController@getAllListings');
@@ -86,16 +89,24 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth', 'verified']
         Route::get('/delete-listing/{id}', 'Admin\ListingController@deleteListing');
     });
 
+    /* Bookings */
     Route::group(['prefix' => 'bookings', 'middleware' => ['admin', 'auth']], function(){
         Route::get('/', 'Admin\BookingController@getBookingsView');
         Route::get('/get-bookings', 'Admin\BookingController@getAllBookings');
     });
 
+    /* Chat */
     Route::group(['prefix' => 'chat', 'middleware' => ['admin', 'auth']], function(){
         Route::get('/', 'Admin\ChatController@getAllConversations');
         Route::get('/get-chat/{id}', 'Admin\ChatController@getChat');
         Route::post('/send-message', 'Admin\ChatController@sendMessage');
-    }); 
+    });
+
+    /* Notifications */
+    Route::get('/markAsRead', function(){
+        Auth::user()->unreadNotifications->markAsRead();
+    });
+    Route::get('/all-notifications', 'Admin\DashboardController@allNotifications'); 
 });
 
 Route::group(['prefix' => 'host', 'middleware' => ['host', 'auth', 'verified']], function() {
@@ -108,12 +119,14 @@ Route::group(['prefix' => 'host', 'middleware' => ['host', 'auth', 'verified']],
     Route::get('/remove-profile-picture', 'Host\DashboardController@removeProfilePicture');
     Route::get('/get-unread-conversations', 'Host\ChatController@getUnreadConversations');
 
+    /* Listings */
     Route::group(['prefix' => 'listings', 'middleware' => ['host', 'auth']], function() {
         Route::get('/', ['as' => 'listings', 'uses' => 'Host\DashboardController@getListingsView']);
         Route::get('/get-listings', 'Host\ListingController@getListings');
         Route::get('/get-images/{id}', 'Host\ListingController@getListingImages');
         Route::get('/add-listing', 'Host\ListingController@addListing');
         Route::post('/save-listing', 'Host\ListingController@saveListing');
+        Route::get('/view/{id}', 'Host\ListingController@viewListing');
         Route::get('/change-status/{id}/{status}', 'Host\ListingController@changeStatus'); 
         Route::get('/edit-listing/{id}', ['as' => 'editListing', 'uses' => 'Host\ListingController@editListingView']);
         Route::get('/remove-listing-image/{id}', 'Host\ListingController@removeListingImage');
@@ -121,6 +134,7 @@ Route::group(['prefix' => 'host', 'middleware' => ['host', 'auth', 'verified']],
         Route::get('/delete-listing/{id}', 'Host\ListingController@deleteListing'); 
     });
 
+    /* Bookings */
     Route::group(['prefix' => 'bookings', 'middleware' => ['host', 'auth']], function(){
         Route::get('/', 'Host\BookingController@getBookingsView');
         Route::get('/get-bookings', 'Host\BookingController@getAllBookings');
@@ -129,11 +143,18 @@ Route::group(['prefix' => 'host', 'middleware' => ['host', 'auth', 'verified']],
         Route::get('/change-confirmation/{id}/{data}', 'Host\BookingController@changeBookingConfirmation');
     });
 
+    /* Chat */
     Route::group(['prefix' => 'chat', 'middleware' => ['host', 'auth']], function(){
         Route::get('/', 'Host\ChatController@getAllConversations');
         Route::get('/get-chat/{id}', 'Host\ChatController@getChat');
         Route::post('/send-message', 'Host\ChatController@sendMessage');
-    });    
+    });
+
+    /* Notifications */
+    Route::get('/markAsRead', function(){
+        Auth::user()->unreadNotifications->markAsRead();
+    });
+    Route::get('/all-notifications', 'Host\DashboardController@allNotifications');    
 });
 
 Route::group(['prefix' => 'shopper', 'middleware' => ['auth', 'shopper', 'verified']], function() {
@@ -147,17 +168,25 @@ Route::group(['prefix' => 'shopper', 'middleware' => ['auth', 'shopper', 'verifi
     Route::get('/remove-profile-picture', 'Shopper\DashboardController@removeProfilePicture');
     Route::get('/get-unread-conversations', 'Shopper\ChatController@getUnreadConversations');
 
+    /* Bookings */
     Route::group(['prefix' => 'bookings', 'middleware' => ['shopper', 'auth']], function(){
         Route::get('/', 'Shopper\BookingController@getBookingsView');
         Route::get('/get-bookings', 'Shopper\BookingController@getAllBookings');
         Route::get('/get-booking-data/{id}', 'Shopper\BookingController@getBookingData');
     });
 
+    /* Chat */
     Route::group(['prefix' => 'chat', 'middleware' => ['shopper', 'auth']], function(){
         Route::get('/', 'Shopper\ChatController@getAllConversations');
         Route::get('/get-chat/{id}', 'Shopper\ChatController@getChat');
         Route::post('/send-message', 'Shopper\ChatController@sendMessage');
-    });   
+    });
+
+    /* Notifications */
+    Route::get('/markAsRead', function(){
+        Auth::user()->unreadNotifications->markAsRead();
+    });
+    Route::get('/all-notifications', 'Shopper\DashboardController@allNotifications');   
 });
 
 /*

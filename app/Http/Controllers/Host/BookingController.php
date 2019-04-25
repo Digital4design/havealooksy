@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Host;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Notifications\Shopper\NotifyShopper;
 use Yajra\Datatables\Datatables;
 use App\Models\ListingTimes;
 use App\Models\Bookings;
+use App\Models\Listings;
+use App\User;
 use Carbon;
 use Auth;
 
@@ -85,6 +88,18 @@ class BookingController extends Controller
             $booking = Bookings::find($id);
             $booking->status_id = $data;
             $booking->save();
+
+            $listing = Listings::where('id', $booking['listing_id'])->first();
+            $time_slot = ListingTimes::where('id', $booking['time_slot'])->first();
+            $date = Carbon::create($booking['date'])->format("d/m/Y");
+
+            $time = Carbon::create($time_slot['start_time'])->format("g:i a")."-".Carbon::create($time_slot['end_time'])->format("g:i a");
+
+            $notification_data = ["user" => '', "message" => "Your booking for ".$listing->title." on ".$date." at ".$time." has been confirmed. Click here to make payment.", "action" => url('/cart')];
+
+            $user = User::find($booking['user_id']);
+
+            $user->notify(new NotifyShopper($notification_data));
 
             return response()->json(['status' => 'success']);
         }

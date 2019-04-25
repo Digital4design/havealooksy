@@ -154,4 +154,9 @@ class DashboardController extends Controller
         }
         return response()->json(['status' => 'danger','message' => 'Something went wrong. Please try again later.']);
     }
+
+    public function allNotifications()
+    {
+        return view('shopper.all_notifications_view');
+    }
 }

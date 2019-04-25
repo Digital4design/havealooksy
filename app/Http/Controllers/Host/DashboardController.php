@@ -140,4 +140,9 @@ class DashboardController extends Controller
     {
     	return view('host.listings');
     }
+
+    public function allNotifications()
+    {
+        return view('host.all_notifications_view');
+    }
 }

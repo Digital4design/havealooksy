@@ -215,10 +215,6 @@
                 type: "success",
                 showConfirmButton: false
               });
-
-              // setTimeout(function(){ 
-              //     location.reload();
-              // }, 2000);
             }
             else if(data.status == 'danger'){
               swal("Error", data.message, "warning");

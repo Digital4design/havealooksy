@@ -6,8 +6,8 @@
   .filters{display:flex;justify-content:center;align-items:center;padding-bottom:20px;}
   .filters label{margin-right:30px;}
   .toolbar{float:left;height:35px;margin-top:5px;}
-  .btn.button_delete, .btn-info, .btn.active-deactive, .is-favorite{padding:6px 10px;}
-  .btn.button_delete, .btn-info{display:inline;}
+  .btn.button_delete, .btn-info, .btn.active-deactive, .is-favorite, .btn.bg-teal{padding:6px 10px;}
+  .btn.button_delete, .btn-info, .btn.bg-teal{display:inline;}
 </style>
 @stop
 
@@ -44,6 +44,8 @@
                     <div style="margin-right:50px;">
                       <button id="active" class="btn btn-primary">ACTIVE</button>
                       <button id="inactive" class="btn btn-primary">INACTIVE</button>
+                      <button id="approved" class="btn btn-danger">APPROVED</button>
+                      <button id="unapproved" class="btn btn-danger">UNAPPROVED</button>
                     </div>
                   </div>
                   <table id="listings_list" class="table table-bordered table-striped">
@@ -55,6 +57,7 @@
                           <th>Price</th>
                           <th>Category</th>
                           <th>Status</th>
+                          <th>Approval Status</th>
                           <th>Images</th>
                           <th>Activate/Deactivate</th>
                           <th>Action</th>
@@ -68,6 +71,7 @@
                           <th>Price</th>
                           <th>Category</th>
                           <th>Status</th>
+                          <th>Approval Status</th>
                           <th>Images</th>
                           <th>Activate/Deactivate</th>
                           <th>Action</th>
@@ -135,7 +139,8 @@ $(function() {
             { data: 'location', name: 'location' },
             { data: 'price', name: 'price' },
             { data: 'category', name: 'category' },
-            { data: 'status', name: 'status', orderable: false},
+            { data: 'status', name: 'status', orderable: false, visible: false },
+            { data: 'is_approved', name: 'is_approved', orderable: false },
             { data: 'images', name: 'images', orderable: false },
             { data: 'activate_deactivate', name: 'activate_deactivate', orderable: false },
             { data: 'action', name: 'action', orderable: false },
@@ -222,16 +227,25 @@ $(function() {
     });
 
     $('#all').on('click', function () {
-        table.columns(5).search("").draw();
+        table.columns().search("").draw();
     });
 
     $('#active').on('click', function () {
         regExSearch = "^" + "Active" +"$";
-        table.columns(5).search(regExSearch, true, false, false).draw();
+        table.columns(5).search(regExSearch, true, false, false).columns(6).search("").draw();
     });
 
     $('#inactive').on('click', function () {
-        table.columns(5).search("Deactive").draw();
+        table.columns(5).search("Deactive").columns(6).search("").draw();
+    });
+
+    $('#approved').on('click', function () {
+        regExSearch = "^" + "Approved" +"$";
+        table.columns(6).search(regExSearch, true, false, false).columns(5).search("").draw();
+    });
+
+    $('#unapproved').on('click', function () {
+        table.columns(6).search("Unapproved").columns(5).search("").draw();
     });
 
     $(document).on("click", "button.active-deactive", function(){

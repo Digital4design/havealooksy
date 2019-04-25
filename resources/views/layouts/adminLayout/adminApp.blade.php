@@ -77,44 +77,33 @@
           </li>
           <!-- Notifications: style can be found in dropdown.less -->
           <li class="dropdown notifications-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="markNotificationsAsRead()">
               <i class="fa fa-bell-o"></i>
-              <span class="label label-warning">10</span>
+              @if(count(Auth::user()->unreadNotifications))
+                <span class="label label-warning nav-unread">{{count(Auth::user()->unreadNotifications)}}</span>
+              @endif
             </a>
             <ul class="dropdown-menu">
-              <li class="header">You have 10 notifications</li>
+              <li class="header">You have {{ (count(Auth::user()->unreadNotifications)) ? count(Auth::user()->unreadNotifications) : 0 }} notifications</li>
               <li>
                 <!-- inner menu: contains the actual data -->
                 <ul class="menu">
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the
-                      page and may cause design problems
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-users text-red"></i> 5 new members joined
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-shopping-cart text-green"></i> 25 sales made
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-user text-red"></i> You changed your username
-                    </a>
-                  </li>
+                  @if(!Auth::user()->unreadNotifications->isEmpty())
+                    @foreach(Auth::user()->unreadNotifications as $notification)
+                      <li>
+                        <a class="notification_link" href="{{ $notification->data['action'] }}">
+                          <div>
+                            <p>{{ $notification->data['user'] }}{{ $notification->data['message'] }}</p>
+                          </div>
+                        </a>
+                      </li>
+                    @endforeach
+                  @else
+                    <p class="text-center">No new notification.</p>
+                  @endif
                 </ul>
               </li>
-              <li class="footer"><a href="#">View all</a></li>
+              <li class="footer"><a id="view_all_notifications" href="{{ url('admin/all-notifications') }}">View all</a></li>
             </ul>
           </li>
           <!-- User Account: style can be found in dropdown.less -->
@@ -404,7 +393,14 @@ $(document).ready(function(){
     });
     return false;
   });
-}); 
+});
+
+function markNotificationsAsRead()
+{
+  $("span.nav-unread").remove();
+  $.get('{{ url("admin/markAsRead") }}');
+}
+
 </script>
 @yield('pageJs')
 </body>

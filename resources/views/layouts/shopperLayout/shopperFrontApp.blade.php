@@ -29,12 +29,23 @@
             #hoverable a{border-radius:5px;}
             #hoverable a:hover{background:none;border-radius:0px;}
             #hoverable a.user_name:hover{background:none;border-bottom:2px solid #761dc9;border-radius:0px;}
-            .dropdown-items{position:absolute;list-style:none;background-color:rgba(0,0,0,0.6);right:0px;z-index:1;color:#fff;border-radius:5px;margin-top:3px;padding:0px;display:none;}
+            .dropdown-items{position:absolute;list-style:none;background-color:rgba(0,0,0,0.6);right:0px;z-index:1;color:#fff;border-radius:5px;margin-top:3px;padding:0px;display:none;top:40px;}
+            .dropdown-menu{background-color:rgba(0,0,0,0.6)}
             li.dropdown-item{padding:15px 7px;}
             li.dropdown-item:hover{background-color:rgb(118,29,201);width:100%;}
             li.dropdown-item a{text-decoration:none;}
             li.dropdown-item a:hover{background-color:transparent;}
             .show-hide{display:block;}
+            .dropdown.notifications-menu a:hover, .dropdown.notifications-menu a:focus{background:transparent;color:#fff !important;}
+            #view_all_notifications{font-size:12px;color:#fff;}
+            a#view_all_notifications:hover{background-color:transparent;color:rgba(137,43,225,1) !important;}
+            .navbar-default .nav li a.notification_link_front {
+                text-transform: unset;
+                font-weight: normal;
+                letter-spacing: 0px;
+                text-decoration:none;
+            }
+            .navbar-default .nav li a.notification_link_front p{color:#fff;font-size:12px;}
         </style>
         @yield('pageCss')
     </head>
@@ -79,17 +90,39 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     </button>   
-                    <ul class="nav navbar-right"> 
-                      <!-- <li style="position:relative;"><a href="">{{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}</a>
-                        <ul style="position:absolute;top:50px;left:-15px;">
-                            <li class="dropdown-item"><a href="{{ url('shopper/dashboard') }}">Dashboard</a></li>
-                            <li>
-                                <a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a>
-                            </li>
+                    <ul class="nav" style="display:flex;"> 
+                      <li class="dropdown notifications-menu" style="margin-left:0px;flex:20%;">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="markNotificationsAsRead()" style="padding:10px;">
+                          <i class="fa fa-bell-o"></i>
+                          @if(count(Auth::user()->unreadNotifications))
+                            <span class="label nav-unread" style="position:absolute;background-color:rgba(137,43,225,0.6);border-radius:50%;font-weight:normal;top:1px;left:22px;font-family:'Glyphicons Halflings'">{{count(Auth::user()->unreadNotifications)}}</span>
+                          @endif
+                        </a>
+                        <ul class="dropdown-menu" style="padding:5px;padding-bottom:0px;color:#fff;width:200px;font-size:12px;">
+                          <li class="header">You have {{ (count(Auth::user()->unreadNotifications)) ? count(Auth::user()->unreadNotifications) : 0 }} notifications</li>
+                          <li>
+                            <!-- inner menu: contains the actual data -->
+                            <ul class="menu" style="padding-inline-start:0px;">
+                              @if(!Auth::user()->unreadNotifications->isEmpty())
+                                @foreach(Auth::user()->unreadNotifications as $notification)
+                                  <li>
+                                    <a class="notification_link_front" href="{{ $notification->data['action'] }}">
+                                      <div>
+                                        <p>{{ $notification->data['user'] }}{{ $notification->data['message'] }}</p>
+                                      </div>
+                                    </a>
+                                  </li>
+                                @endforeach
+                              @else
+                                <p class="text-center" style="font-size:12px;color:#fff;">No new notification.</p>
+                              @endif
+                            </ul>
+                          </li>
+                          <li class="footer"><a class="text-center" id="view_all_notifications" href="{{ url('shopper/all-notifications') }}">View all</a></li>
                         </ul>
-                      </li> -->
-                      <li class="cart"><a href="{{ url('/cart') }}"><span class="glyphicon glyphicon-shopping-cart"><span class="label" style="position:absolute;background-color:rgba(137,43,225,0.6);border-radius:50%;font-weight:normal;top:-10px;left:16px;">{{ Cart::session(Auth::user()->id)->getContent()->count() }}</span></span></a></li> 
-                      <li id="hoverable"><a class="user_name">{{ Auth::user()->first_name }}&nbsp;{{ Auth::user()->last_name }}</a></li>
+                      </li>
+                      <li class="cart" style="margin-left:0px;flex:20%;"><a href="{{ url('/cart') }}" style="padding:10px;"><span class="glyphicon glyphicon-shopping-cart"><span class="label" style="position:absolute;background-color:rgba(137,43,225,0.6);border-radius:50%;font-weight:normal;top:-10px;left:16px;">{{ Cart::session(Auth::user()->id)->getContent()->count() }}</span></span></a></li> 
+                      <li id="hoverable" style="flex:60%;"><a class="user_name text-center">{{ Auth::user()->first_name }}</a></li>
                       <ul class="dropdown-items">
                           <li class="dropdown-item"><a href="{{ url('shopper/dashboard') }}">Dashboard</a></li>
                           <li class="dropdown-item"><a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a></li>
@@ -180,6 +213,11 @@
                 $("#hoverable a").toggleClass("user_name"); 
                 $(".dropdown-items").slideToggle();
             });
+            function markNotificationsAsRead()
+            {
+                $("span.nav-unread").remove();
+                $.get('{{ url("shopper/markAsRead") }}');
+            }
         </script>
         @yield('pageJs')
     </body>

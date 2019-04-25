@@ -285,12 +285,21 @@ class HomeController extends Controller
             $stripe = Stripe::make(env('STRIPE_SECRET_KEY'));
 
             try {
-                $token = $stripe->tokens()->create([
+                /*$token = $stripe->tokens()->create([
                         'card' => [
                             'number' => $request->get('card_no'),
                             'exp_month' => $request->get('ccExpiryMonth'),
                             'exp_year' => $request->get('ccExpiryYear'),
                             'cvc' => $request->get('cvvNumber'),
+                        ],
+                    ]);*/
+
+                $token = $stripe->tokens()->create([
+                        'card' => [
+                            'number' => '4242424242424242',
+                            'exp_month' => '12',
+                            'exp_year' => '2020',
+                            'cvc' => '123',
                         ],
                     ]);
 

@@ -36,7 +36,8 @@
                     <button id="all" class="btn btn-primary">ALL</button>
                     <button id="approved" class="btn btn-primary">APPROVED</button>
                     <button id="unapproved" class="btn btn-primary">UNAPPROVED</button>
-                    <button id="founders_pick" class="btn btn-danger">FOUNDER PICKS</button>
+                    <button id="founders_pick" class="btn btn-warning">FOUNDER PICKS</button>
+                    <button id="deleted" class="btn btn-danger">DELETED LISTINGS</button>
                   </div>
                   <table id="listings_list" class="table table-bordered table-striped">
                     <thead>
@@ -51,9 +52,12 @@
                           <th>Images</th>
                           <th>Founder's Pick</th>
                           <th>Action</th>
-                          <th></th>
+                          <th>Approval</th>
                           <th>Approval Status</th>
                           <th></th>
+                          <th>Created At</th>
+                          <th>Deleted By</th>
+                          <th>Deleted At</th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -68,9 +72,12 @@
                           <th>Images</th>
                           <th>Founder's Pick</th>
                           <th>Action</th>
-                          <th></th>
+                          <th>Approval</th>
                           <th>Approval Status</th>
                           <th></th>
+                          <th>Created At</th>
+                          <th>Deleted By</th>
+                          <th>Deleted At</th>
                         </tr>
                     </tfoot>
                   </table>
@@ -107,13 +114,14 @@
         serverSide: true,
         lengthMenu: [10,25,50,100],
         responsive: true,
+        scrollX: true,
         order: [ 1, "asc" ],
         dom: "<'row'<'col-md-2'l><'col-md-2'B><'col-md-8'f>>" + "<'row'<'col-md-4'><'col-md-4'>>" + "<'row'<'col-md-12't>><'row'<'col-md-12'ip>>",
         buttons: [
           {
             extend: 'colvis',
             collectionLayout: 'fixed two-column',
-            columns: [1, 2, 3, 4, 5]
+            columns: [1, 2, 3, 4, 5, 13, 14]
           }
         ],
         ajax: {
@@ -134,13 +142,16 @@
             { data: 'location', name: 'location' },
             { data: 'price', name: 'price' },
             { data: 'category', name: 'category' },
-            { data: 'status', name: 'status', orderable: false, visible: false },
+            { data: 'status', name: 'status', orderable: false },
             { data: 'images', name: 'images', orderable: false },
             { data: 'founder_pick_button', name: 'founder_pick_button', orderable: false },
             { data: 'action', name: 'action', orderable: false },
             { data: 'approved_unapproved', name: 'approved_unapproved', orderable: false },
             { data: 'is_approved', name: 'is_approved', orderable: false, visible: false },
             { data: 'founder_pick', name: 'founder_pick', orderable: false, visible: false },
+            { data: 'created_at', name: 'created_at' },
+            { data: 'deleted_by', name: 'deleted_by', orderable: false, visible: false },
+            { data: 'deleted_at', name: 'deleted_at', orderable: false, visible: false },
         ],
         oLanguage: {
           "sInfoEmpty" : "Showing 0 to 0 of 0 entries",
@@ -225,20 +236,24 @@
     });
 
     $('#all').on('click', function () {
-        table.columns(10).search("").columns(11).search("").draw();
+        table.columns().search("").draw();
     });
 
     $('#approved').on('click', function () {
         regExSearch = "^" + "Approved" +"$";
-        table.columns(10).search(regExSearch, true, false, false).columns(11).search("").draw();
+        table.columns(10).search(regExSearch, true, false, false).columns(11).search("").columns(13).search("").draw();
     });
 
     $('#unapproved').on('click', function () {
-        table.columns(10).search("Unapproved").columns(11).search("").draw();
+        table.columns(10).search("Unapproved").columns(11).search("").columns(13).search("").draw();
     });
 
     $('#founders_pick').on('click', function () {
-        table.columns(11).search("Yes").columns(10).search("").draw();
+        table.columns(11).search("Yes").columns(10).search("").columns(13).search("").draw();
+    });
+
+    $('#deleted').on('click', function () {
+        table.columns(13).search("You").columns(13).search("Host").columns(10).search("").columns(11).search("").draw();
     });
 
     $(document).on("click", "a.founder_pick_btn", function(){

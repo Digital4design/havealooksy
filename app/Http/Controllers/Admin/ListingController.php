@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Notifications\Host\NotifyHost;
 use Yajra\Datatables\Datatables;
 use App\Models\ListingImages;
 use App\Models\ListingGuests;
@@ -24,7 +25,7 @@ class ListingController extends Controller
 
     public function getAllListings()
     {
-    	$all_listings = Listings::with(['getGuests', 'getTimes'])->select("*")->get();
+    	$all_listings = Listings::with(['getGuests', 'getTimes'])->select("*")->withTrashed()->get();
 
     	return Datatables::of($all_listings)
     					->editColumn('status', function ($all_listings){
@@ -70,7 +71,7 @@ class ListingController extends Controller
                             if($all_listings['is_approved'] == 0){
                                 $approval_class = "text-red fa-square-o";
                             }
-                            return "<a href='#' data-id='".$all_listings['id']."' class='approve-unapprove'><i class='fa ".$approval_class."'</i></a>";
+                            return "<a href='#' data-id='".$all_listings['id']."' class='approve-unapprove' style='padding-left:25px;'><i class='fa ".$approval_class."'</i></a>";
                         })->addColumn('founder_pick_button', function ($all_listings){
                             if($all_listings['founder_pick'] == 1){
                                 $fndr_class = 'btn-default';
@@ -85,7 +86,31 @@ class ListingController extends Controller
                             return "<a href='".url('admin/listings/view/'.$all_listings['id'])."' class='btn bg-teal' style='margin-right:5px;'><i class='fa fa-eye'></i></a><a href='".route('editListingAdmin', $all_listings['id'])."' class='btn btn-info' style='margin-right:5px;'><i class='fa fa-edit'></i></a><button type='button' data-id='".$all_listings['id']."' class='btn btn-warning button_delete'><i class='fa fa-trash-o'></i></button>";
                         })->addColumn('images', function ($all_listings){
                             return "<a href='#' data-toggle='modal' data-target='#image-modal' class='listing_images' data-id='".$all_listings['id']."' style='font-size:1em;padding:10px;'><i class='glyphicon glyphicon-picture'></i></a>";
-                        })->rawColumns(['approved_unapproved' => 'approved_unapproved', 'action' => 'action', 'images' => 'images', 'founder_pick_button' => 'founder_pick_button'])->make(true);
+                        })->editColumn('created_at', function ($all_listings){
+                            $created_at = Carbon::create($all_listings['created_at']->toDateTimeString())->format("d/m/Y g:i a");                        
+                            return $created_at;
+                        })->editColumn('deleted_by', function ($all_listings){
+                            if($all_listings['deleted_by']){
+                                $user = User::where('id', $all_listings['deleted_by'])->first();
+                                if(!strcmp($user['first_name'], Auth::user()->first_name)){
+                                    $deleting_user = "<p class='text-center' style='color:red;'>You</p>";
+                                }
+                                else{
+                                    $deleting_user = "<a href='".url('admin/users/view/'.$user['id'])."' style='padding-left:20px;'>Host</a>";
+                                }
+                            }
+                            else{
+                                $deleting_user = "<p class='text-center'>-</p>";
+                            }                            
+                            return $deleting_user;
+                        })->editColumn('deleted_at', function ($all_listings){
+                            if($all_listings['deleted_at']){
+                                $deleted_at = Carbon::create($all_listings['deleted_at']->toDateTimeString())->format("d/m/Y g:i a");
+                            }else{
+                                $deleted_at = "<p class='text-center'>-</p>";
+                            }                         
+                            return $deleted_at;
+                        })->rawColumns(['approved_unapproved' => 'approved_unapproved', 'action' => 'action', 'images' => 'images', 'founder_pick_button' => 'founder_pick_button', 'deleted_by' => 'deleted_by', 'deleted_at' => 'deleted_at'])->make(true);
     }
 
     public function getListingImages($id)
@@ -101,6 +126,19 @@ class ListingController extends Controller
         $change_approval->is_approved = $status;
         $change_approval->save();
 
+        if($status == 1){
+            $approval_status = "Approved";
+        }
+        if($status == 0){
+            $approval_status = "Rejected";
+        }
+
+        $notification_data = ["user" => '', "message" => "Your listing titled '".$change_approval->title."' has been ".$approval_status.".", "action" => url('host/listings/view/'.$change_approval['id'])];
+
+        $user = User::find($change_approval['user_id']);
+
+        $user->notify(new NotifyHost($notification_data));
+
         return response()->json(['status' => 'success', 'listing_approval_status' => $status]);
     }
 
@@ -111,19 +149,39 @@ class ListingController extends Controller
         $founder_pick_status->founder_pick = $status;
         $founder_pick_status->save();
 
+        $notification_data = ["user" => '', "message" => "Your listing titled '".$founder_pick_status->title."' has been added to Founder's Picks.", "action" => url('host/listings/view/'.$founder_pick_status['id'])];
+
+        $user = User::find($founder_pick_status['user_id']);
+
+        $user->notify(new NotifyHost($notification_data));
+
         return response()->json(['status' => 'success']);
     }
 
     public function viewListing($id)
     {
-        $listing = Listings::with(['getGuests', 'getTimes', 'getImages', 'getCategory'])->where('id', $id)->first();
-        return view("admin.view_listing")->with('listing', $listing);
+        $listing = Listings::with(['getGuests', 'getTimes', 'getImages', 'getCategory'])->withTrashed()->where('id', $id)->first();
+
+        if($listing['deleted_at']){
+            $user = User::where('id', $listing['deleted_by'])->first();
+
+            if(!strcmp($user['first_name'], Auth::user()->first_name)){
+                $deleting_user = 'you';
+            }
+            else{
+                $deleting_user = 'Host';
+            }
+            return view("admin.view_listing")->with(['listing' => $listing, 'deleting_user' => $deleting_user]);
+        }
+        else{
+            return view("admin.view_listing")->with('listing', $listing);
+        }
     }
 
     public function editListingView($id)
     {
         $categories = Categories::with(['childCategories'])->where('status', '1')->where('parent_id', '0')->get();
-        $listing_data = Listings::with(['getImages'])->where('id', $id)->first();
+        $listing_data = Listings::with(['getImages'])->withTrashed()->where('id', $id)->first();
         return view('admin.edit_listing')->with(['categories' => $categories, 'listing_data' => $listing_data]);
     }
 
@@ -131,10 +189,19 @@ class ListingController extends Controller
     {
         $listing_image = ListingImages::find($id);
 
+        $get_listing = Listings::where('id', $listing_image['listing_id'])->first();
+
         if(file_exists(public_path('images/listings/'.$listing_image->name)))
         {   
             $del_pic = unlink(public_path('images/listings/'.$listing_image->name));
             $listing_image->delete();
+
+            $notification_data = ["user" => '', "message" => "Gallery Image for your listing titled '".$get_listing->title."' has been removed by Admin.", "action" => url('host/listings/view/'.$get_listing['id'])];
+
+            $user = User::find($get_listing['user_id']);
+
+            $user->notify(new NotifyHost($notification_data));
+
             return response()->json(['status' => 'success','message' => 'Listing Image removed successfully']);
         }
         return response()->json(['status' => 'danger','message' => 'Something went wrong. Please try again later.']);
@@ -229,6 +296,12 @@ class ListingController extends Controller
                 }
             }
 
+            $notification_data = ["user" => '', "message" => "Listing titled '".$listing->title."' has been updated by Admin.", "action" => url('host/listings/view/'.$listing['id'])];
+
+            $user = User::find($listing['user_id']);
+
+            $user->notify(new NotifyHost($notification_data));
+
             return redirect()->route('listingsAdmin')->with(['status' => 'success' , 'message' => 'Listing updated successfully.']);
         }
         catch(\Exception $e)
@@ -256,7 +329,17 @@ class ListingController extends Controller
             $listing = Listings::find($id);
             $listing->deleted_by = Auth::user()->id;
             $listing->save();
+
+            $title = $listing->title;
+            $user_id = $listing->user_id;
+
             $listing->delete();
+
+            $notification_data = ["user" => '', "message" => "Admin has deleted listing - '".$title."'.", "action" => url('host/listings/view/'.$id)];
+
+            $user = User::find($user_id);
+
+            $user->notify(new NotifyHost($notification_data));
 
             return response()->json(['status' => 'success','message' => 'Listing deleted successfully.']); 
         }

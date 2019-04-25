@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Notifications\Admin\NotifyAdmin;
 use App\Models\UserRoleRelation;
 use Socialite;
 use App\Role;
@@ -43,6 +44,9 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+        $this->admin = User::whereHas('roles', function($q){
+                            $q->where('name', 'admin');
+                       })->first();
     }
 
     /**
@@ -80,7 +84,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $role_id = Role::where('name', $data['user_type'])->first();
+        $role = Role::where('name', $data['user_type'])->first();
         
         $newUserData = User::create([
             'first_name' => $data['first_name'],
@@ -94,10 +98,15 @@ class RegisterController extends Controller
         // set Role for New Register Doctor 
         $roleArray = array(
                     'user_id' => $newUserData->id,
-                    'role_id' => $role_id['id'],
+                    'role_id' => $role['id'],
                     );
         
         UserRoleRelation::insert($roleArray);
+
+        $notification_data = ["user" => '', "message" => "A new user has registered as ".$role['display_name'].".", "action" => url('admin/users/view/'.$newUserData['id'])];
+
+        $this->admin->notify(new NotifyAdmin($notification_data));
+
         return $newUserData;
     }
 }

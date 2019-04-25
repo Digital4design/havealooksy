@@ -1,4 +1,4 @@
-@extends('layouts.adminLayout.adminApp')
+@extends('layouts.hostLayout.hostApp')
 
 @section('pageCss')
 <style type="text/css">
@@ -84,12 +84,12 @@
                         </div>
                     </div>
                     <div class="box-row">
-                        <label></label>
+                        <label>Approval Status</label>
                         <div class="box-row-content">
-                            @if($listing['is_approved'] == 0)
-                            <a href="#" data-id="{{ $listing['id'] }}" class="btn btn-danger approve-unapprove">Approve</a>
-                            @elseif($listing['is_approved'] == 1)
-                            <a href="#" data-id="{{ $listing['id'] }}" class="btn btn-default approve-unapprove">Unapprove</a>
+                            @if($listing['is_approved'] == 1)
+                            <p class="box-row-content">Approved</p>
+                            @elseif($listing['is_approved'] == 0)
+                            <p class="box-row-content">Unapproved</p>
                             @endif
                         </div>
                     </div>

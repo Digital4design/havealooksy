@@ -22,7 +22,7 @@ class DashboardController extends Controller
                             $q->where('name', 'shopper')->orWhere('name', 'host');
                         })->get()->count();
         $categories = Categories::get()->count();
-        $listings = Listings::get()->count();
+        $listings = Listings::withTrashed()->get()->count();
         $bookings = Bookings::get()->count();
     	return view('admin.dashboard')->with(['users' => $users, 'categories' => $categories, 'listings' => $listings, 'bookings' => $bookings]);
     }
@@ -162,6 +162,13 @@ class DashboardController extends Controller
                             }
                             if($all_users['status'] == 0){
                                 return 'Blocked';
+                            }
+                        })->editColumn('email_verified_at', function($all_users){
+                            if($all_users['email_verified_at'] != null){
+                                return 'Verified';
+                            }
+                            else{
+                                return 'Not Verified';
                             }
                         })->addColumn('action', function ($all_users){
                             if($all_users['status'] == 1){
@@ -359,5 +366,10 @@ class DashboardController extends Controller
             return response()->json(['status' => 'success']);
         }
         return response()->json(['status' => 'danger']);
+    }
+
+    public function allNotifications()
+    {
+        return view('admin.all_notifications_view');
     }
 }

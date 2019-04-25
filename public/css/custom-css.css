@@ -49,6 +49,16 @@ header .intro-text .intro-lead-in{
 .modal-row p{
 	flex:70%;
 }
+a.notification_link{
+	padding:2px 10px !important;
+	white-space:inherit !important;
+}
+a.notification_link:hover{
+	background: #ceffff !important;
+}
+a#view_all_notifications:hover{
+	background:#ececec;
+}
 
 /* Loader */
 .loader {

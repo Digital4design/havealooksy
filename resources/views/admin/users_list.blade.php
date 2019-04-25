@@ -33,6 +33,7 @@
                           <th>Postal Code</th>
                           <th>User Type</th>
                           <th>Status</th>
+                          <th>Verification Status</th>
                           <th>Action</th>
                         </tr>
                     </thead>
@@ -45,6 +46,7 @@
                           <th>Postal Code</th>
                           <th>User Type</th>
                           <th>Status</th>
+                          <th>Verification Status</th>
                           <th>Action</th>
                         </tr>
                     </tfoot>
@@ -89,12 +91,35 @@ $(function() {
             { data: 'postal_code', name: 'postal_code' },
             { data: 'user_type', name: 'user_type' },
             { data: 'status', name: 'status', orderable: false, visible: false },
+            { data: 'email_verified_at', name: 'email_verified_at' },
             { data: 'action', name: 'action', orderable: false },
         ],
         oLanguage: {
           "sInfoEmpty" : "Showing 0 to 0 of 0 entries",
           "sZeroRecords": "No matching records found",
           "sEmptyTable": "No data available in table",
+        },
+        initComplete: function () {
+          var filterColumns = [5, 7];
+
+          this.api().columns(filterColumns).every(function(){
+                var column = this;
+                var select = $('<select class="form-control" style="font-weight:normal;"><option value="">Select</option></select>')
+                    .appendTo($(column.footer()).empty())
+                    .on('change', function(){
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+
+                        val = String(val).replace(/&/g, '&amp;');
+ 
+                        column.search(val ? '^'+val+'$' : '', true, false, false).draw();
+                    });
+ 
+                column.data().unique().sort().each(function(d, j){
+                    select.append('<option value="'+d+'">'+d+'</option>')
+                });
+            });
         },
     });
 
