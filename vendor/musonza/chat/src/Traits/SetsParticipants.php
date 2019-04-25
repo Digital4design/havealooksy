@@ -23,6 +23,20 @@ trait SetsParticipants
     }
 
     /**
+     * Sets user.
+     *
+     * @param object $user
+     *
+     * @return $this
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
      * Set Sender.
      *
      * @param int $from
@@ -31,7 +45,7 @@ trait SetsParticipants
      */
     public function from($from)
     {
-        $this->from = is_object($from) ? $from->id : $from;
+        $this->from = is_object($from) ? $from->getKey() : $from;
 
         return $this;
     }

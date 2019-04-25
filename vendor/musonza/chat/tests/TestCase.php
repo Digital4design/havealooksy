@@ -31,8 +31,12 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
     protected function migrateTestTables()
     {
+        $config = config('musonza_chat');
+        $userModel = app($config['user_model']);
+        $this->userModelPrimaryKey = $userModel->getKeyName();
+
         Schema::create('users', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments($this->userModelPrimaryKey);
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
@@ -43,8 +47,8 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
     protected function migrate()
     {
-        (new CreateChatTables)->up();
         $this->migrateTestTables();
+        (new CreateChatTables)->up();
     }
 
     /**
@@ -79,6 +83,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
         $app['config']->set('musonza_chat.user_model', 'Musonza\Chat\User');
         $app['config']->set('musonza_chat.sent_message_event', 'Musonza\Chat\Eventing\MessageWasSent');
         $app['config']->set('musonza_chat.broadcasts', false);
+        $app['config']->set('musonza_chat.user_model_primary_key', null);
     }
 
     protected function getPackageProviders($app)
@@ -103,8 +108,8 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
     public function tearDown()
     {
-        $this->rollbackTestTables();
         (new CreateChatTables)->down();
+        $this->rollbackTestTables();
         parent::tearDown();
     }
 

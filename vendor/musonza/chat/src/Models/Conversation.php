@@ -20,7 +20,7 @@ class Conversation extends BaseModel
      */
     public function users()
     {
-        return $this->belongsToMany('App\User', 'mc_conversation_user', 'conversation_id', 'user_id')->withTimestamps();
+        return $this->belongsToMany(Chat::userModel(), 'mc_conversation_user', 'conversation_id', 'user_id')->withTimestamps();
     }
 
     /**
@@ -61,7 +61,7 @@ class Conversation extends BaseModel
      * Gets the list of conversations.
      *
      * @deprecated This will be deprecated in 4.0
-     * 
+     *
      * @param User   $user     The user
      * @param int    $perPage  The per page
      * @param int    $page     The page
@@ -94,12 +94,10 @@ class Conversation extends BaseModel
      */
     public function addParticipants($userIds)
     {
-        
         if (is_array($userIds)) {
             foreach ($userIds as $id) {
                 $this->users()->attach($id);
             }
-
         } else {
             $this->users()->attach($userIds);
         }
@@ -144,6 +142,7 @@ class Conversation extends BaseModel
     public function start($participants, $data = [])
     {
         $conversation = $this->create(['data' => $data]);
+
         if ($participants) {
             $conversation->addParticipants($participants);
         }
@@ -155,7 +154,7 @@ class Conversation extends BaseModel
      * Sets conversation as public or private.
      *
      * @param bool $isPrivate
-     * 
+     *
      * @return Conversation
      */
     public function makePrivate($isPrivate = true)
@@ -185,7 +184,7 @@ class Conversation extends BaseModel
      */
     public function userConversations($user)
     {
-        $userId = is_object($user) ? $user->id : $user;
+        $userId = is_object($user) ? $user->getKey() : $user;
 
         return $this->join('mc_conversation_user', 'mc_conversation_user.conversation_id', '=', 'mc_conversations.id')
             ->where('mc_conversation_user.user_id', $userId)
@@ -202,7 +201,7 @@ class Conversation extends BaseModel
      */
     public function unReadNotifications($user)
     {
-        $notifications = MessageNotification::where([['user_id', '=', $user->id], ['conversation_id', '=', $this->id], ['is_seen', '=', 0]])->get();
+        $notifications = MessageNotification::where([['user_id', '=', $user->getKey()], ['conversation_id', '=', $this->id], ['is_seen', '=', 0]])->get();
 
         return $notifications;
     }
@@ -218,12 +217,12 @@ class Conversation extends BaseModel
     {
         if ($users instanceof \Illuminate\Database\Eloquent\Collection) {
             $users = $users->map(function ($user) {
-                return $user->id;
+                return $user->getKey();
             });
         }
 
         return $this->withCount(['users' => function ($query) use ($users) {
-            $query->whereIn('id', $users);
+            $query->whereIn(Chat::userModelPrimaryKey(), $users);
         }])->get()->filter(function ($conversation, $key) use ($users) {
             return $conversation->users_count == count($users);
         });
@@ -267,7 +266,7 @@ class Conversation extends BaseModel
     {
         $messages = $this->messages()
             ->join('mc_message_notification', 'mc_message_notification.message_id', '=', 'mc_messages.id')
-            ->where('mc_message_notification.user_id', $user->id);
+            ->where('mc_message_notification.user_id', $user->getKey());
         $messages = $deleted ? $messages->whereNotNull('mc_message_notification.deleted_at') : $messages->whereNull('mc_message_notification.deleted_at');
         $messages = $messages->orderBy('mc_messages.id', $paginationParams['sorting'])
             ->paginate(
@@ -293,10 +292,10 @@ class Conversation extends BaseModel
                 'last_message' => function ($query) use ($user) {
                     $query->join('mc_message_notification', 'mc_message_notification.message_id', '=', 'mc_messages.id')
                         ->select('mc_message_notification.*', 'mc_messages.*')
-                        ->where('mc_message_notification.user_id', $user->id)
+                        ->where('mc_message_notification.user_id', $user->getKey())
                         ->whereNull('mc_message_notification.deleted_at');
                 },
-            ])->where('mc_conversation_user.user_id', $user->id);
+            ])->where('mc_conversation_user.user_id', $user->getKey());
 
         if (!is_null($isPrivate)) {
             $paginator = $paginator->where('mc_conversations.private', $isPrivate);
@@ -310,7 +309,7 @@ class Conversation extends BaseModel
 
     private function notifications($user, $readAll)
     {
-        $notifications = MessageNotification::where('user_id', $user->id)
+        $notifications = MessageNotification::where('user_id', $user->getKey())
             ->where('conversation_id', $this->id);
 
         if ($readAll) {
@@ -322,7 +321,7 @@ class Conversation extends BaseModel
 
     private function clearConversation($user)
     {
-        return MessageNotification::where('user_id', $user->id)
+        return MessageNotification::where('user_id', $user->getKey())
             ->where('conversation_id', $this->id)
             ->delete();
     }

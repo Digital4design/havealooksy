@@ -19,6 +19,7 @@
                 <div class="clearfix"></div>
             </div>
             <div class="card-body">
+                @php $total = 0 @endphp
                 @foreach($data as $d)
                 <!-- PRODUCT -->
                 <div class="row">
@@ -40,10 +41,9 @@
                                 <small><b>Time Slot:</b> {{ $d['attributes']['time_slot'] }}</small>
                             </h4>
                         </div>
-                        @php $total = 0 @endphp
-                        @if($d['status'] != 'waiting' && $d['status'] != 'pending')
-                            @php $total = $d['price']; @endphp
-                        @else
+                        @if($d['status'] == 'pending')
+                        @php $total += $d['price']; @endphp
+                        @elseif($d['status'] == 'waiting')
                             <h4><small><b style="color:red;">Awaiting Confirmation.</b></small></h4>
                         @endif
                     </div>
@@ -72,22 +72,22 @@
                 <hr>
                 <!-- END PRODUCT -->
                 @endforeach
-                <div class="pull-right">
+                <!-- <div class="pull-right">
                     <a href="" class="btn btn-outline-secondary pull-right">
                         Update shopping cart
                     </a>
-                </div>
+                </div> -->
             </div>
             <div class="card-footer">
                 <div class="coupon col-md-5 col-sm-5 no-padding-left pull-left">
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="col-6">
                             <input type="text" class="form-control" placeholder="Coupon code">
                         </div>
                         <div class="col-6">
                             <input type="submit" class="btn btn-default" value="Use Coupon">
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="pull-right" style="margin: 0 10px">
                     @if($total != 0)

@@ -32,6 +32,10 @@ Route::get('/messages', 'HomeController@messagesView')->middleware('auth');
 Route::get('/messages/chat/{id}', 'HomeController@messagesChatView')->middleware('auth');
 Route::post('/search', 'HomeController@searchWebsite');
 
+/* Stripe Payment */
+Route::get('/checkout', ['as' => 'checkout', 'middleware'=> ['auth'], 'uses' => 'HomeController@stripePaymentView']);
+Route::match(['get', 'post'], '/checkout/pay', ['as' => 'stripe_payment', 'middleware'=> ['auth'], 'uses' => 'HomeController@postPaymentWithStripe']);
+
 // Route::group(['prefix' => 'home'], function(){
 //     Route::get('/', 'HomeController@index')->name('home');
 //     Route::get('/get-products/{id}', 'HomeController@getProducts');

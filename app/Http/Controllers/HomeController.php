@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use App\Models\ListingGuests;
+use Cartalyst\Stripe\Stripe;
 use App\Models\ListingTimes;
 use App\Models\Categories;
 use App\Models\Listings;
 use App\Models\Bookings;
+use Stripe\Error\Card;
 use Validator;
+use Session;
 use Auth;
 use Cart;
 
@@ -214,18 +218,11 @@ class HomeController extends Controller
                 return response()->json(['status' => 'danger', 'message' => 'This experience has been already added to cart.']);
             }
 
-            $start_time = substr($request->time, 0, 5);
-            $end_time = substr($request->time, 6);
-            $get_time_slot = ListingTimes::where('listing_id', $listing['id'])
-                                        ->where('start_time', $start_time)
-                                        ->where('end_time', $end_time)
-                                        ->first();
-
             /* Create booking entry */
             $booking = Bookings::create([
                 'date' => $request->date,
                 'no_of_seats' => $total_guests,
-                'time_slot' => $get_time_slot['id'],
+                'time_slot' => $request->time,
                 'status_id' => 3, /* Waiting for Host confirmation */
                 'listing_id' => $listing['id'],
                 'user_id' => Auth::user()->id,
@@ -252,6 +249,96 @@ class HomeController extends Controller
 
         Cart::session(Auth::user()->id)->remove($request->cart_item_id);
         return redirect()->back();
+    }
+
+    /* Stripe Payment */
+    public function stripePaymentView()
+    {
+        $data = Bookings::with(['getBookedListingUser', 'getBookingStatus'])
+                        ->where('user_id', Auth::user()->id)
+                        ->where('status_id', 1)
+                        ->get();
+
+        $total = 0;
+        $bookings_done = [];
+        foreach ($data as $d)
+        {
+            $total += $d['getBookedListingUser']['price'];
+            $bookings_done[] = $d['listing_id']; 
+        }
+
+        return view('frontapp.stripe_payment_view')->with(['data' => $data, 'total' => $total, 'bookings_done' => $bookings_done]);
+    }
+
+    public function postPaymentWithStripe(Request $request)
+    {   
+        $validator = Validator::make($request->all(), [
+                        'card_no' => 'required',
+                        'ccExpiryMonth' => 'required',
+                        'ccExpiryYear' => 'required',
+                        'cvvNumber' => 'required',
+                    ], ['card_no.required' => 'Crad number is required.', 'ccExpiryYear.required' => 'Expiry year is required.', 'ccExpiryMonth.required' => 'Expiry Month is required.', 'cvvNumber.required' => 'CVV number is required.']);
+
+        if ($validator->passes()) {
+            $input = $request->all();
+            $input = Arr::except($input, ['_token']);
+            $stripe = Stripe::make(env('STRIPE_SECRET_KEY'));
+
+            try {
+                $token = $stripe->tokens()->create([
+                        'card' => [
+                            'number' => $request->get('card_no'),
+                            'exp_month' => $request->get('ccExpiryMonth'),
+                            'exp_year' => $request->get('ccExpiryYear'),
+                            'cvc' => $request->get('cvvNumber'),
+                        ],
+                    ]);
+
+                if (!isset($token['id'])) {
+                    return redirect()->route('stripe_payment');
+                }
+                $charge = $stripe->charges()->create([
+                            'card' => $token['id'],
+                            'currency' => 'USD',
+                            /*'amount' => $request->amount,*/
+                            'amount' => 1,
+                            'description' => 'Charge for '.Auth::user()->email,
+                        ]);
+
+                if ($charge['status'] == 'succeeded') { 
+
+                    /* Remove cart items for whom payment is done */
+                    foreach ($request->bookings_done as $value)
+                    {
+                        $get_cart_item = Cart::session(Auth::user()->id)->get($value);
+                        $booking_id = $get_cart_item['attributes']['booking_id'];
+                        
+                        $remove_cart_item = Cart::session(Auth::user()->id)->remove($value);
+
+                        $booking_update = Bookings::find($booking_id);
+                        $booking_update->status_id = 2;
+                        $booking_update->save();
+                    }
+
+                    \Session::put('success', 'Payment Successful.');
+                    return redirect()->route('checkout');
+                } else {
+                    \Session::put('error', 'Payment Failed.');
+                    return redirect()->route('checkout');
+                }
+            } catch (Exception $e) {
+                \Session::put('pay-error', $e->getMessage());
+                return redirect()->route('checkout');
+            } catch (\Cartalyst\Stripe\Exception\CardErrorException $e) {
+                \Session::put('pay-error', $e->getMessage());
+                return redirect()->route('checkout');
+            } catch (\Cartalyst\Stripe\Exception\MissingParameterException $e) {
+                \Session::put('pay-error', $e->getMessage());
+                return redirect()->route('checkout');
+            }
+        } else {
+            return back()->withErrors($validator)->withInput();
+        }
     }
 
     public function searchWebsite(Request $request)

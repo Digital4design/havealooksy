@@ -16,7 +16,8 @@
         "laravel/tinker": "^1.0",
         "musonza/chat": "^3.2",
         "yajra/laravel-datatables-oracle": "~9.0",
-        "zizaco/entrust": "dev-master"
+        "zizaco/entrust": "dev-master",
+        "cartalyst/stripe-laravel": "10.0.*"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

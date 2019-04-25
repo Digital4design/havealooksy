@@ -37,7 +37,7 @@
 		<div class="time btn btn-default">
 			@php $time_slot =  Carbon::createFromFormat('H:i:s', $val['start_time'])->format('g:i a').'-'.Carbon::createFromFormat('H:i:s', $val['end_time'])->format('g:i a'); @endphp
 			<label>{{ $time_slot }}</label>
-			<input class="form-control" type="radio" value="{{ $time_slot }}" name="time">
+			<input class="form-control" type="radio" value="{{ $val['id'] }}" name="time">
 		</div>        				
 	@endforeach
 	<span class="error" id="error-time"></span>

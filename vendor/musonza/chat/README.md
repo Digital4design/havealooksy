@@ -1,7 +1,7 @@
 <p align="left"><img src="menu.png" alt="chat" width="330px"></p>
 
 [![Build Status](https://travis-ci.org/musonza/chat.svg?branch=master)](https://travis-ci.org/musonza/chat)
-[![Downloads](https://img.shields.io/packagist/dt/musonza/chat.svg)](https://packagist.org/packages/musonza/chat)
+[![Downloads](https://poser.pugx.org/musonza/chat/d/total.svg)](https://packagist.org/packages/musonza/chat)
 [![Packagist](https://img.shields.io/packagist/v/musonza/chat.svg)](https://packagist.org/packages/musonza/chat)
 ## Chat
 
@@ -74,6 +74,11 @@ This will publish database migrations and a configuration file `musonza_chat.php
 return [
     'user_model' => 'App\User',
 
+    /**
+     * If not set, the package will use getKeyName() on the user_model specified above
+     */
+    'user_model_primary_key' => null,
+
     /*
      * This will allow you to broadcast an event when a message is sent
      * Example:
@@ -93,6 +98,7 @@ return [
      */
     'make_three_or_more_users_public' => true,
 ];
+
 
 ```
 
@@ -168,45 +174,45 @@ $message = Chat::messages()->getById($id);
 #### Mark a message as read
 
 ```php
-Chat::message($message)->for($user)->markRead();
+Chat::message($message)->setUser($user)->markRead();
 ```
 
 #### Flag / mark a message
 
 ```php
-Chat::message($message)->for($user)->toggleFlag();
+Chat::message($message)->setUser($user)->toggleFlag();
 
-Chat::message($message)->for($user)->flagged(); // true
+Chat::message($message)->setUser($user)->flagged(); // true
 ```
 
 #### Mark whole conversation as read
 
 ```php
-Chat::conversation($conversation)->for($user)->readAll();
+Chat::conversation($conversation)->setUser($user)->readAll();
 ```
 
 #### Unread messages count
 
 ```php
-$unreadCount = Chat::messages()->for($user)->unreadCount();
+$unreadCount = Chat::messages()->setUser($user)->unreadCount();
 ```
 
 #### Unread messages count per Conversation
 
 ```php
-Chat::conversation($conversation)->for($user)->unreadCount();
+Chat::conversation($conversation)->setUser($user)->unreadCount();
 ```
 
 #### Delete a message
 
 ```php
-Chat::message($message)->for($user)->delete();
+Chat::message($message)->setUser($user)->delete();
 ```
 
 #### Clear a conversation
 
 ```php
-Chat::conversation($conversation)->for($user)->clear();
+Chat::conversation($conversation)->setUser($user)->clear();
 ```
 
 #### Get a conversation between two users
@@ -252,26 +258,26 @@ Chat::conversation($conversation)->addParticipants([$user3, $user4]);
 #### Get messages in a conversation
 
 ```php
-Chat::conversation($conversation)->for($user)->getMessages()
+Chat::conversation($conversation)->setUser($user)->getMessages()
 ```
 
 #### Get user conversations by type
 
 ```php
 // private conversations
-$conversations = Chat::conversations()->for($user)->isPrivate()->get();
+$conversations = Chat::conversations()->setUser($user)->isPrivate()->get();
 
 // public conversations
-$conversations = Chat::conversations()->for($user)->isPrivate(false)->get();
+$conversations = Chat::conversations()->setUser($user)->isPrivate(false)->get();
 
 // all conversations
-$conversations = Chat::conversations()->for($user)->get();
+$conversations = Chat::conversations()->setUser($user)->get();
 ```
 
 #### Get recent messages
 
 ```php
-$messages = Chat::conversations()->for($user)->limit(25)->page(1)->get();
+$messages = Chat::conversations()->setUser($user)->limit(25)->page(1)->get();
 ```
 
 Example
@@ -310,7 +316,7 @@ Example
 There are a few ways you can achieve pagination
 You can specify the `limit` and `page` as above using the respective functions or as below:
 ```
-   $paginated = Chat::conversations()->for($user)
+   $paginated = Chat::conversations()->setUser($user)
             ->setPaginationParams([
                 'page' => 3,
                 'perPage' => 10,

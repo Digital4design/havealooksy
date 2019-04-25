@@ -32,7 +32,7 @@
             <div class="tab-content">
               <div id="booking_calendar_box" class="active tab-pane box-body">
                 <div class="col-xs-12 col-lg-6" id="booking_calendar"></div>
-                <div class="col-xs-12 col-lg-6">
+                <div class="col-xs-12 col-lg-6" style="overflow-y:scroll; height:450px;">
                   @if(!$bookings->isEmpty())
                     @foreach($bookings as $b)
                       <div class="small-box">
