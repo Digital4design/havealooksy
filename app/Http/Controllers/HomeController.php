@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\Admin\NotifyAdmin;
+use App\Notifications\Host\NotifyHost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use App\Models\ListingGuests;
@@ -12,6 +14,7 @@ use App\Models\Listings;
 use App\Models\Bookings;
 use Stripe\Error\Card;
 use Validator;
+use App\User;
 use Session;
 use Auth;
 use Cart;
@@ -27,6 +30,13 @@ class HomeController extends Controller
     {
         $this->middleware('auth');
     }*/
+
+    public function __construct()
+    {
+        $this->admin = User::whereHas('roles', function($q){
+                            $q->where('name', 'admin');
+                       })->first();
+    }
 
     /**
      * Show the application dashboard.
@@ -321,12 +331,24 @@ class HomeController extends Controller
                     {
                         $get_cart_item = Cart::session(Auth::user()->id)->get($value);
                         $booking_id = $get_cart_item['attributes']['booking_id'];
+                        $listing_id = $get_cart_item['id'];
                         
                         $remove_cart_item = Cart::session(Auth::user()->id)->remove($value);
 
                         $booking_update = Bookings::find($booking_id);
                         $booking_update->status_id = 2;
                         $booking_update->save();
+
+                        $listing_booked = Listings::where('id', $listing_id)->first();
+
+                        $notification_data_admin = ["user" => '', "message" => "A booking for ".$listing_booked->title." has been reserved.", "action" => url('admin/bookings')];
+
+                        $notification_data_host = ["user" => '', "message" => "A booking for ".$listing_booked->title." has been reserved.", "action" => url('host/bookings')];
+
+                        $user = User::find($listing_booked['user_id']);
+
+                        $this->admin->notify(new NotifyAdmin($notification_data_admin));
+                        $user->notify(new NotifyHost($notification_data_host));
                     }
 
                     \Session::put('success', 'Payment Successful.');
