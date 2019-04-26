@@ -24,17 +24,21 @@ Route::get('/get-products/{id}', 'HomeController@getProducts');
 Route::get('/get-products/product-details/{id}', 'HomeController@getProductDetails');
 Route::get('/get-products/product-availability/{id}', 'HomeController@getProductAvailability');
 Route::post('/get-products/apply-filters', 'HomeController@applyFilters');
-Route::get('/cart', 'HomeController@viewCart')->middleware('auth');
+Route::get('/cart', 'HomeController@viewCart')->middleware(['auth', 'shopper']);
 Route::post('/add-to-cart', 'HomeController@addToCart');
-Route::post('/remove-from-cart', 'HomeController@removeFromCart')->middleware('auth');
-Route::get('/checkout', 'HomeController@checkoutPage')->middleware('auth');
+Route::post('/remove-from-cart', 'HomeController@removeFromCart')->middleware(['auth', 'shopper']);
 Route::get('/messages', 'HomeController@messagesView')->middleware('auth');
 Route::get('/messages/chat/{id}', 'HomeController@messagesChatView')->middleware('auth');
 Route::post('/search', 'HomeController@searchWebsite');
 
 /* Stripe Payment */
-Route::get('/checkout', ['as' => 'checkout', 'middleware'=> ['auth'], 'uses' => 'HomeController@stripePaymentView']);
-Route::match(['get', 'post'], '/checkout/pay', ['as' => 'stripe_payment', 'middleware'=> ['auth'], 'uses' => 'HomeController@postPaymentWithStripe']);
+Route::get('/checkout', ['as' => 'checkout', 'middleware'=> ['auth', 'shopper'], 'uses' => 'HomeController@stripePaymentView']);
+Route::match(['get', 'post'], '/checkout/pay', ['as' => 'stripe_payment', 'middleware'=> ['auth', 'shopper'], 'uses' => 'HomeController@postPaymentWithStripe']);
+
+Route::get('/order-success', ['as' => 'order-success', 'uses' => 'HomeController@orderSuccess'])->middleware(['auth', 'shopper']);
+
+Route::get('/wishlist', 'HomeController@wishlistView')->middleware(['auth', 'shopper']);
+Route::get('/add-to-wishlist/{id}', 'HomeController@addToWishlist')->middleware(['auth', 'shopper']);
 
 // Route::group(['prefix' => 'home'], function(){
 //     Route::get('/', 'HomeController@index')->name('home');
@@ -93,6 +97,13 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth', 'verified']
     Route::group(['prefix' => 'bookings', 'middleware' => ['admin', 'auth']], function(){
         Route::get('/', 'Admin\BookingController@getBookingsView');
         Route::get('/get-bookings', 'Admin\BookingController@getAllBookings');
+    });
+
+    /* Orders */
+    Route::group(['prefix' => 'orders', 'middleware' => ['admin', 'auth']], function(){
+        Route::get('/', 'Admin\OrdersController@getOrdersView');
+        Route::get('/get-orders', 'Admin\OrdersController@getAllOrders');
+        Route::get('/view/{id}', 'Admin\OrdersController@getOrderDetailsView');
     });
 
     /* Chat */
@@ -186,7 +197,7 @@ Route::group(['prefix' => 'shopper', 'middleware' => ['auth', 'shopper', 'verifi
     Route::get('/markAsRead', function(){
         Auth::user()->unreadNotifications->markAsRead();
     });
-    Route::get('/all-notifications', 'Shopper\DashboardController@allNotifications');   
+    Route::get('/all-notifications', 'Shopper\DashboardController@allNotifications');  
 });
 
 /*

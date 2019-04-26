@@ -90,7 +90,7 @@
                             <a class="page-scroll" href="{{ url('/register') }}">Host</a>
                         </li>
                         <li>
-                            <a class="page-scroll" href="#portfolio">Saved</a>
+                            <a class="page-scroll" href="{{ url('/wishlist') }}">Saved</a>
                         </li>
                         <li>
                             <a class="page-scroll" href="{{ url('/messages') }}">Messages</a>

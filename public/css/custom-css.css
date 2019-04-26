@@ -60,6 +60,44 @@ a#view_all_notifications:hover{
 	background:#ececec;
 }
 
+.add-to-wishlist{
+	font-size:15px;
+	float:right;
+	color:#ff2b2b;
+	padding-top:5px;
+}
+.add-to-wishlist a{
+	text-decoration:none;
+	color:inherit;
+}
+.add-to-wishlist a:hover{
+	color:#cc1414;
+}
+.wishlist-body{
+	display:flex;
+	border: 1px solid #eee;
+	padding:10px;
+	height:200px;
+	margin-bottom:5px;
+}
+.wishlist-image{
+	flex:0.1;
+	margin-right: 30px;
+}
+.wishlist-details{
+	flex:0.9;
+}
+.wishlist-price{
+	float:right;
+	margin-right:30px;
+}
+.wishlist-link{
+	text-decoration:none !important;
+}
+.wishlist-link:hover .wishlist-body{
+	background-color:#f3e9fc;
+}
+
 /* Loader */
 .loader {
   border: 8px solid #f3f3f3;

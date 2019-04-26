@@ -29,7 +29,7 @@
         <div class="row">
           <div class="col-xs-12" style="margin-bottom:12px;">
             <div class="pull-right">
-              <button id="new-conversation-button" type="button" class="btn btn-block btn-primary" data-toggle="modal" data-target="#start-new-conversation"><i class="fa fa-commenting-o"></i>&nbsp;&nbsp;New Conversation</button>
+              <button id="new-conversation-button" type="button" class="btn btn-block btn-primary" data-toggle="modal" data-target="#start-new-conversation"><i class="fa fa-commenting-o"></i>&nbsp;&nbsp;Message Admin</button>
             </div>
           </div>
           <div class="col-lg-12 col-xs-12">

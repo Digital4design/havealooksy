@@ -146,10 +146,7 @@
                             <a class="page-scroll" href="#about">About</a>
                         </li>
                         <li>
-                            <a class="page-scroll" href="#services">Host</a>
-                        </li>
-                        <li>
-                            <a class="page-scroll" href="#portfolio">Saved</a>
+                            <a class="page-scroll" href="{{ url('/wishlist') }}">Saved</a>
                         </li>
                         <li>
                             @php $unreadCount = Chat::messages()->for(Auth::user())->unreadCount(); @endphp
@@ -158,9 +155,6 @@
                                 <span class="label" style="margin-left:5px;background-color:rgba(137,43,225,0.6);font-weight:normal;padding:3px 5px;">{{ $unreadCount }}</span>
                                 @endif
                             </a>
-                        </li>
-                        <li>
-                            <a class="page-scroll" href="#contact">Contact</a>
                         </li>
                     </ul>
                     </div>

@@ -12,10 +12,14 @@ use App\Models\ListingTimes;
 use App\Models\Categories;
 use App\Models\Listings;
 use App\Models\Bookings;
+use App\Models\OrderItems;
+use App\Models\Wishlist;
+use App\Models\Orders;
 use Stripe\Error\Card;
 use Validator;
 use App\User;
 use Session;
+use Carbon;
 use Auth;
 use Cart;
 
@@ -105,7 +109,16 @@ class HomeController extends Controller
                                             ->where('status', '1')->where('id', '<>', $id)
                                             ->where('is_approved', '1')->get();
 
-        return view('frontapp.product-details')->with(['listing_data' => $listing_data, 'all_listings' => $all_listings_of_category]);
+        $check_wishlist = Wishlist::where('listing_id', $id)
+                            ->where('user_id', Auth::user()->id)
+                            ->first();
+
+        if($check_wishlist)
+        {
+            return view('frontapp.product-details')->with(['listing_data' => $listing_data, 'all_listings' => $all_listings_of_category, 'wishlist' => '1']);
+        }
+
+        return view('frontapp.product-details')->with(['listing_data' => $listing_data, 'all_listings' => $all_listings_of_category, 'wishlist' => '0']);
     }
 
     /* Get Listing Availability Details */
@@ -245,8 +258,8 @@ class HomeController extends Controller
         }
         catch(\Exception $e)
         {
-            // return response()->json(['status' => 'danger','message' => 'Something went wrong! Please try again later.']);
-            return response()->json(['status' => 'danger','message' => $e->getMessage()]);
+            return response()->json(['status' => 'danger','message' => 'Something went wrong! Please try again later.']);
+            // return response()->json(['status' => 'danger','message' => $e->getMessage()]);
         }
     }
 
@@ -324,7 +337,15 @@ class HomeController extends Controller
                             'description' => 'Charge for '.Auth::user()->email,
                         ]);
 
-                if ($charge['status'] == 'succeeded') { 
+                if ($charge['status'] == 'succeeded') {
+
+                    /* Save Order */
+                    $order = Orders::create([
+                        'order_number' => uniqid("order".mt_rand(0,9999)),
+                        'user_id' => Auth::user()->id,
+                        'order_amount' => $request->amount,
+                        'order_status' => 'Completed',
+                    ]); 
 
                     /* Remove cart items for whom payment is done */
                     foreach ($request->bookings_done as $value)
@@ -335,25 +356,32 @@ class HomeController extends Controller
                         
                         $remove_cart_item = Cart::session(Auth::user()->id)->remove($value);
 
+                        /* Update booking status */
                         $booking_update = Bookings::find($booking_id);
                         $booking_update->status_id = 2;
                         $booking_update->save();
 
+                        /* Save Order Items */
+                        OrderItems::create([
+                            'order_item' => $booking_id,
+                            'order_id' => $order->id, 
+                        ]);
+
+                        /* Notify Host */
                         $listing_booked = Listings::where('id', $listing_id)->first();
 
-                        $notification_data_admin = ["user" => '', "message" => "A booking for ".$listing_booked->title." has been reserved.", "action" => url('admin/bookings')];
-
                         $notification_data_host = ["user" => '', "message" => "A booking for ".$listing_booked->title." has been reserved.", "action" => url('host/bookings')];
-
                         $user = User::find($listing_booked['user_id']);
-
-                        $this->admin->notify(new NotifyAdmin($notification_data_admin));
                         $user->notify(new NotifyHost($notification_data_host));
                     }
 
-                    \Session::put('success', 'Payment Successful.');
-                    return redirect()->route('checkout');
-                } else {
+                    /* Notify Admin */
+                    $notification_data_admin = ["user" => '', "message" => "A new order has been placed.", "action" => url('admin/orders')];
+                    $this->admin->notify(new NotifyAdmin($notification_data_admin));
+
+                    return redirect()->to('/order-success')->with(['order_status' => 'success', 'order_number' => $order->order_number]);
+                } 
+                else {
                     \Session::put('error', 'Payment Failed.');
                     return redirect()->route('checkout');
                 }
@@ -370,6 +398,40 @@ class HomeController extends Controller
         } else {
             return back()->withErrors($validator)->withInput();
         }
+    }
+
+    public function orderSuccess()
+    {
+        return view('frontapp.order_success_view');
+    }
+
+    public function wishlistView()
+    {
+        $wishlist = Wishlist::with(['getListing', 'getListingImages'])
+                            ->whereHas("getListing", function($q){
+                                $q->where('is_approved', '1')->where('status', '1');
+                            })->where('user_id', Auth::user()->id)->get();
+
+        return view('frontapp.wishlist_view')->with(['status' => 'success', 'wishlist' => $wishlist]);
+    }
+
+    public function addToWishlist($id)
+    {
+        try
+        {
+            $listing = Listings::where('id', $id)->first();
+
+            Wishlist::create([
+                'listing_id' => $id,
+                'user_id' => Auth::user()->id,
+            ]);
+
+            return redirect()->to('/wishlist');
+        }
+        catch(\Exception $e)
+        {
+            return redirect()->back()->with(['status' => 'danger','message' => 'Something went wrong! Please try again later.']);
+        } 
     }
 
     public function searchWebsite(Request $request)

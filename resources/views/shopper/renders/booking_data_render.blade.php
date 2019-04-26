@@ -22,7 +22,7 @@
 	<label>Status</label>
 	<p>{{ $booking['getBookingStatus']['display_name'] }}
 		@if($booking['status_id'] == 1)
-			<a href="#" class="btn btn-info btn-sm" style="margin-left:10px;">Pay Now</a>
+			<a href="{{ url('/cart') }}" class="btn btn-info btn-sm" style="margin-left:10px;">Pay Now</a>
 		@endif
 	</p>
 </div>

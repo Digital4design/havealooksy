@@ -186,7 +186,12 @@
         </li>
         <li class="{{ Request::is('admin/bookings') ? 'active' : '' }}">
           <a href="{{ url('admin/bookings') }}">
-            <i class="fa fa-shopping-cart"></i> <span>Bookings</span>
+            <i class="fa fa-calendar"></i> <span>Bookings</span>
+          </a>
+        </li>
+        <li class="{{ Request::is('admin/orders') ? 'active' : '' }}">
+          <a href="{{ url('admin/orders') }}">
+            <i class="fa fa-shopping-cart"></i> <span>Orders</span>
           </a>
         </li>
         <li class="{{ Request::is('admin/chat') ? 'active' : '' }}">

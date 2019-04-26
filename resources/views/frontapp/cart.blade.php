@@ -8,6 +8,12 @@
 
 @extends($layout)
 
+@section('pageCss')
+<style type="text/css">
+    .btn-outline-info{background-color:#8241bf;color:#fff;}
+</style>
+@stop
+
 @section('content')
 <section class="product-detail">
 	<div class="container">

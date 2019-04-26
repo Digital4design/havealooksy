@@ -480,6 +480,8 @@ class ComposerStaticInitf8ecced294d53b32b2c9dba207998d33
         'App\\Models\\ListingImages' => __DIR__ . '/../..' . '/app/Models/ListingImages.php',
         'App\\Models\\ListingTimes' => __DIR__ . '/../..' . '/app/Models/ListingTimes.php',
         'App\\Models\\Listings' => __DIR__ . '/../..' . '/app/Models/Listings.php',
+        'App\\Models\\OrderItems' => __DIR__ . '/../..' . '/app/Models/OrderItems.php',
+        'App\\Models\\Orders' => __DIR__ . '/../..' . '/app/Models/Orders.php',
         'App\\Models\\UserRoleRelation' => __DIR__ . '/../..' . '/app/Models/UserRoleRelation.php',
         'App\\Notifications\\Admin\\NotifyAdmin' => __DIR__ . '/../..' . '/app/Notifications/Admin/NotifyAdmin.php',
         'App\\Notifications\\Host\\NotifyHost' => __DIR__ . '/../..' . '/app/Notifications/Host/NotifyHost.php',

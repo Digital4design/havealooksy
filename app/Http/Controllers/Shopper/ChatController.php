@@ -33,7 +33,7 @@ class ChatController extends Controller
 		}
 		
 		$users = User::with(['getRole'])->whereHas('roles', function($q){
-        			$q->where('name', 'admin')->orWhere('name', 'host');
+        			$q->where('name', 'admin');
         		 })->get();
 
 		return view('shopper.conversations')->with(['conversations' => $conversations, 'users' => $users]);

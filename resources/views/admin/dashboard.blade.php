@@ -67,7 +67,7 @@
                         <p>Bookings</p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-shopping-cart"></i>
+                        <i class="glyphicon glyphicon-calendar" style="font-size:80px;top:5px;"></i>
                     </div>
                     <a href="{{ url('admin/bookings') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                 </div>

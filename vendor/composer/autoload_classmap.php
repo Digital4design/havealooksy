@@ -47,6 +47,8 @@ return array(
     'App\\Models\\ListingImages' => $baseDir . '/app/Models/ListingImages.php',
     'App\\Models\\ListingTimes' => $baseDir . '/app/Models/ListingTimes.php',
     'App\\Models\\Listings' => $baseDir . '/app/Models/Listings.php',
+    'App\\Models\\OrderItems' => $baseDir . '/app/Models/OrderItems.php',
+    'App\\Models\\Orders' => $baseDir . '/app/Models/Orders.php',
     'App\\Models\\UserRoleRelation' => $baseDir . '/app/Models/UserRoleRelation.php',
     'App\\Notifications\\Admin\\NotifyAdmin' => $baseDir . '/app/Notifications/Admin/NotifyAdmin.php',
     'App\\Notifications\\Host\\NotifyHost' => $baseDir . '/app/Notifications/Host/NotifyHost.php',

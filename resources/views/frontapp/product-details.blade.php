@@ -25,9 +25,9 @@
 				<div class="wrapper row">
 					<div class="preview col-md-6">
 						<div class="preview-pic tab-content">
-						  	<div class="tab-pane active" id="pic-{{$listing_data['getImages'][0]['id']}}" style="position:relative;width:100%;height:600px;"><img src="{{ asset('public/images/listings/'.$listing_data['getImages'][0]['name']) }}" style="position:absolute;height:100%;width:100%;" /></div>
+						  	<div class="tab-pane active" id="pic-{{$listing_data['getImages'][0]['id']}}"><img src="{{ asset('public/images/listings/'.$listing_data['getImages'][0]['name']) }}" /></div>
 						  	@foreach($listing_data['getImages'] as $key => $img)
-						  		<div class="tab-pane" id="pic-{{$img['id']}}" style="position:relative;width:100%;height:600px;"><img src="{{ asset('public/images/listings/'.$img['name']) }}" style="position:absolute;height:100%;width:100%;" /></div>
+						  		<div class="tab-pane" id="pic-{{$img['id']}}"><img src="{{ asset('public/images/listings/'.$img['name']) }}" /></div>
 						  	@endforeach
 
 						  <!-- <div class="tab-pane active" id="pic-1"><img src="{{ asset('public/images/listings/'.$listing_data['image']) }}" /></div> -->
@@ -42,7 +42,11 @@
 						</ul>	
 					</div>
 					<div class="details col-md-6">
-						<h3 class="product-title">{{ $listing_data['title'] }}</h3>
+						<h3 class="product-title">{{ $listing_data['title'] }}
+							@if($wishlist == 0)
+							<span class="add-to-wishlist"><a href="{{ url('/add-to-wishlist/'.$listing_data['id']) }}"><i class="glyphicon glyphicon-heart"></i>Add to Wishlist</a></span>
+							@endif
+						</h3>
 						<div class="rating">
 							<div class="stars">
 								<span class="fa fa-star checked"></span>
@@ -61,10 +65,11 @@
 								<div class="btn-plus"><span class="glyphicon glyphicon-plus"></span></div>
 							</div> -->
 							<div class="action">
-								<a href="#" data-toggle="modal" data-target="#booking-calendar" class="add-to-cart btn btn-default">BUY THIS PRODUCT</a>							
+								<a href="#" data-toggle="modal" data-target="#booking-calendar" class="add-to-cart btn btn-default">BUY THIS PRODUCT</a>						
 							</div>
 						</div>
-						<p class="vote">CATEGORY : {{ $listing_data['getCategory']['name'] }}</p>
+						<p style="margin-top:10px;margin-bottom:0px;">LOCATION: {{ $listing_data['location'] }}</p>
+						<p>CATEGORY : {{ $listing_data['getCategory']['name'] }}</p>
 						<div class="action">
 							<a href="{{ url('/messages/chat/'.$listing_data['user_id']) }}" class="like btn btn-default"><i class="fa fa-comment"></i>Message Us</a>
 						</div>
