@@ -109,6 +109,14 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth', 'verified']
         Route::get('/view/{id}', 'Admin\OrdersController@getOrderDetailsView');
     });
 
+    /* Ratings & Reviews */
+    Route::group(['prefix' => 'ratings', 'middleware' => ['admin', 'auth']], function(){
+        Route::get('/', 'Admin\RatingController@getRatingsView');
+        Route::get('/get-ratings', 'Admin\RatingController@getAllRatings');
+        Route::get('/change-approval/{id}/{data}', 'Admin\RatingController@changeApproval');
+        Route::get('/mark-spam/{id}/{data}', 'Admin\RatingController@markSpam');
+    });
+
     /* Chat */
     Route::group(['prefix' => 'chat', 'middleware' => ['admin', 'auth']], function(){
         Route::get('/', 'Admin\ChatController@getAllConversations');
@@ -187,6 +195,14 @@ Route::group(['prefix' => 'shopper', 'middleware' => ['auth', 'shopper', 'verifi
         Route::get('/', 'Shopper\BookingController@getBookingsView');
         Route::get('/get-bookings', 'Shopper\BookingController@getAllBookings');
         Route::get('/get-booking-data/{id}', 'Shopper\BookingController@getBookingData');
+    });
+
+    /* Ratings and Reviews */
+    Route::group(['prefix' => 'ratings', 'middleware' => ['shopper', 'auth']], function(){
+        Route::get('/', 'Shopper\RatingController@getRatingsView');
+        Route::get('/get-products-ratings', 'Shopper\RatingController@getProductsRatings');
+        Route::post('/post-review', 'Shopper\RatingController@postReview');
+        Route::get('/get-review/{id}', 'Shopper\RatingController@getReview');
     });
 
     /* Chat */

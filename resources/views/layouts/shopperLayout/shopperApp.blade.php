@@ -175,6 +175,11 @@
             <i class="fa fa-shopping-cart"></i> <span>Bookings</span>
           </a>
         </li>
+        <li class="{{ Request::is('shopper/ratings') ? 'active' : '' }}">
+          <a href="{{ url('shopper/ratings') }}">
+            <i class="fa fa-star"></i> <span>Rate Your Experience</span>
+          </a>
+        </li>
 		    <li class="{{ Request::is('shopper/chat') ? 'active' : '' }}">
           <a href="{{ url('shopper/chat') }}">
             <i class="fa fa-commenting"></i> <span>Messages</span><span class="pull-right" style="margin-right:5px;">{{ ($unreadCount != 0) ? $unreadCount : '' }}</span>

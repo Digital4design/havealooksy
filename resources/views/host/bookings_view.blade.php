@@ -36,13 +36,17 @@
                   @if(!$bookings->isEmpty())
                     @foreach($bookings as $b)
                       <div class="small-box">
-                        <a href="#" id="get-booking-data" data-id="{{ $b['id'] }}" data-toggle="modal" data-target="#booking-data">
+                        <a href="#" class="get-booking-data" data-id="{{ $b['id'] }}" data-toggle="modal" data-target="#booking-data">
                           <h5>{{ Carbon::create($b['date'])->format('d/m/Y') }}</h5>
                           <div class="booking-box">
                             <p>{{ $b['getBookedListingUser']['title'] }}</p>
                             <p style="margin-left:auto;">{{ Carbon::create($b['getBookedListingTime']['start_time'])->format('g:i a') }}-{{ Carbon::create($b['getBookedListingTime']['end_time'])->format('g:i a') }}</p>
                           </div>
+                          @if(Carbon::today() > $b['date'] && $b['getbookingStatus']['name'] != 'reserved')
+                          <p style="color:red;">Requested booking date has passed.</p>
+                          @else
                           <p style="color:red;">{{ $b['getbookingStatus']['display_name'] }}</p>
+                          @endif
                         </a>
                       </div>
                     @endforeach
@@ -144,7 +148,7 @@
         },
     });
 
-    $("#get-booking-data").on("click", function(){
+    $("a.get-booking-data").on("click", function(){
       var id = $(this).attr("data-id")
       $.ajax({
           url: "{{ url('host/bookings/get-booking-data') }}/"+id,

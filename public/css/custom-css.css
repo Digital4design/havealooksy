@@ -97,6 +97,61 @@ a#view_all_notifications:hover{
 .wishlist-link:hover .wishlist-body{
 	background-color:#f3e9fc;
 }
+a.view_detail{
+	text-decoration:none;
+	color:inherit;
+}
+a.view_detail:hover{
+	color:#000;
+}
+
+/* Reviews Section */
+section#Reviews .section-title h2 {
+    font-size: 42px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 40px;
+    color: #363536;
+}
+.review-box{
+	display:flex;
+	flex-direction:column;
+	border-bottom: 1px solid #eee;
+	padding:15px;
+}
+.review-top{
+	display:flex;
+}
+.review-top img{
+	flex: 5%;
+    border-radius: 50%;
+    height: 60px;
+    width: 30px;
+}
+.review-top .review-top-data{
+	flex:95%;
+}
+.review-top .review-top-data h4{
+	font-weight:400;
+	margin: 5px 10px;
+}
+.review-top .review-top-data h4>span{
+	font-size:15px;
+	font-weight:100;
+	margin-left:5px;
+}
+.review-bottom{
+	padding-top:20px;
+}
+@media (max-width: 768px){
+	.review-top img{
+		flex: 10%;
+		width:60px;
+	}
+	.review-top .review-top-data{
+		flex:90%;
+	}
+}
 
 /* Loader */
 .loader {

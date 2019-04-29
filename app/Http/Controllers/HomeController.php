@@ -6,6 +6,7 @@ use App\Notifications\Admin\NotifyAdmin;
 use App\Notifications\Host\NotifyHost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use App\Models\RatingsAndReviews;
 use App\Models\ListingGuests;
 use Cartalyst\Stripe\Stripe;
 use App\Models\ListingTimes;
@@ -109,9 +110,21 @@ class HomeController extends Controller
                                             ->where('status', '1')->where('id', '<>', $id)
                                             ->where('is_approved', '1')->get();
 
+        $avg_rating = RatingsAndReviews::where('listing_id', $id)
+                                        ->where('approved', '1')
+                                        ->where('spam', '<>', '1')
+                                        ->selectRaw('avg(rating) as avg')
+                                        ->groupBy('listing_id')
+                                        ->first();
+
+        $ratings_data = RatingsAndReviews::with(['getReviewer'])->where('listing_id', $id)
+                                        ->where('approved', '1')
+                                        ->where('spam', '<>', '1')
+                                        ->get();
+        
         if(Auth::guest())
         {
-            return view('frontapp.product-details')->with(['listing_data' => $listing_data, 'all_listings' => $all_listings_of_category, 'wishlist' => '0']);
+            return view('frontapp.product-details')->with(['listing_data' => $listing_data, 'avg_rating' => $avg_rating, 'ratings_data' => $ratings_data, 'all_listings' => $all_listings_of_category, 'wishlist' => '0']);
         }
         
         $check_wishlist = Wishlist::where('listing_id', $id)
@@ -120,10 +133,10 @@ class HomeController extends Controller
 
         if($check_wishlist)
         {
-            return view('frontapp.product-details')->with(['listing_data' => $listing_data, 'all_listings' => $all_listings_of_category, 'wishlist' => '1']);
+            return view('frontapp.product-details')->with(['listing_data' => $listing_data, 'avg_rating' => $avg_rating, 'ratings_data' => $ratings_data, 'all_listings' => $all_listings_of_category, 'wishlist' => '1']);
         }
 
-        return view('frontapp.product-details')->with(['listing_data' => $listing_data, 'all_listings' => $all_listings_of_category, 'wishlist' => '0']);
+        return view('frontapp.product-details')->with(['listing_data' => $listing_data, 'avg_rating' => $avg_rating, 'ratings_data' => $ratings_data, 'all_listings' => $all_listings_of_category, 'wishlist' => '0']);
     }
 
     /* Get Listing Availability Details */

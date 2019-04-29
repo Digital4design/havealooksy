@@ -194,6 +194,11 @@
             <i class="fa fa-shopping-cart"></i> <span>Orders</span>
           </a>
         </li>
+        <li class="{{ Request::is('admin/ratings') ? 'active' : '' }}">
+          <a href="{{ url('admin/ratings') }}">
+            <i class="glyphicon glyphicon-star"></i> <span>Rating & Reviews</span>
+          </a>
+        </li>
         <li class="{{ Request::is('admin/chat') ? 'active' : '' }}">
           <a href="{{ url('admin/chat') }}">
             <i class="fa fa-commenting"></i> <span>Messages</span><span class="pull-right" style="margin-right:5px;">{{ ($unreadCount != 0) ? $unreadCount : '' }}</span>

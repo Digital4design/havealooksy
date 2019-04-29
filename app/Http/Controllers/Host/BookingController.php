@@ -64,8 +64,12 @@ class BookingController extends Controller
                             $time_slot = Carbon::create($time_slot['start_time'])->format("g:i a")."-".Carbon::create($time_slot['end_time'])->format("g:i a");
                             return $time_slot;
                         })->editColumn('listing_id', function ($bookings){
-                            return "<a href='".url('admin/listings/view/'.$bookings['listing_id'])."' class='view_eye'><i class='fa fa-eye'></i></a>";
+                            return "<a href='".url('host/listings/view/'.$bookings['listing_id'])."' class='view_eye'><i class='fa fa-eye'></i></a>";
                         })->addColumn('action', function ($bookings){
+                            if(Carbon::today() > $bookings['date'] && $bookings['status_id'] != 2)
+                            {
+                                return "Requested booking date passed.";
+                            }
                             if($bookings['status_id'] == 1){
                                 $label = "Revoke Confirmation";
                                 $btn_style = "btn-default";
@@ -74,10 +78,11 @@ class BookingController extends Controller
                                 $label = "Confirm Booking";
                                 $btn_style = "btn-info";
                             }
-                            else{
+                            elseif($bookings['status_id'] == 2){
                                 return $bookings['getBookingStatus']['display_name'];
                             }
-                            return "<a href='#' data-id='".$bookings['id']."' class='btn ".$btn_style." confirmation'>".$label."</a>";
+                            return "<a href='#' data-id='".$bookings['id']."' class='btn ".$btn_style." confirmation'>".$label."</a>"; 
+                            
                         })->rawColumns(['listing_id' => 'listing_id', 'action' => 'action'])->make(true);
     }
 

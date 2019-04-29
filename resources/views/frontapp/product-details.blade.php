@@ -48,12 +48,20 @@
 							@endif
 						</h3>
 						<div class="rating">
+							@php $rating = $avg_rating['avg']; @endphp
 							<div class="stars">
-								<span class="fa fa-star checked"></span>
-								<span class="fa fa-star checked"></span>
-								<span class="fa fa-star checked"></span>
-								<span class="fa fa-star checked"></span>
-								<span class="fa fa-star"></span>
+								@foreach(range(1,5) as $i)
+									@if($rating > 0)
+										@if($rating > 0.5)
+											<span class="fa fa-star checked"></span>
+										@else
+											<span class="fa fa-star-half-o checked"></span>
+										@endif
+									@else
+										<span class="fa fa-star-o"></span>
+									@endif
+									@php $rating--; @endphp
+								@endforeach
 							</div>
 						</div>
 						<h4 class="price"><span>${{ $listing_data['price'] }}</span></h4>
@@ -75,6 +83,56 @@
 						</div>
 					</div>
 				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!------------------------------------------->
+
+<section id="Reviews" class="Reviews">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 text-center">
+				<div class="section-title">
+					<h2>Guest Reviews</h2>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+		  	<div class="col-lg-12">
+		  		@if(!$ratings_data->isEmpty())
+		  			@foreach($ratings_data as $val)
+		  			<div class="review-box">
+		  				<div class="review-top">
+		  					<img src="{{ ($val['getReviewer']['profile_picture']) ? asset('public/images/profile_pictures/'.$val['getReviewer']['profile_picture']) : asset('public/images/default-pic.png') }}">
+		  					<div class="review-top-data">
+		  						<h4>{{ $val['getReviewer']['first_name'] }} {{ $val['getReviewer']['last_name'] }}<span>{{ Carbon::create($val['created_at']->toDateTimeString())->format('F, Y') }}</span></h4>
+
+		  						@php $rating = $val['rating']; @endphp
+								<div class="stars" style="margin-left:10px;">
+									@foreach(range(1,5) as $i)
+										@if($rating > 0)
+											@if($rating > 0.5)
+												<span class="fa fa-star checked"></span>
+											@else
+												<span class="fa fa-star-half-o checked"></span>
+											@endif
+										@else
+											<span class="fa fa-star-o"></span>
+										@endif
+										@php $rating--; @endphp
+									@endforeach
+								</div>
+		  					</div>
+		  				</div>
+		  				<div class="review-bottom" style="margin-bottom:0px;">
+		  					<p>{{ $val['review'] }}</p>
+		  				</div>
+		  			</div>
+		  			@endforeach
+				@else
+					<p class="text-center">No reviews.</p>
+				@endif
 			</div>
 		</div>
 	</div>

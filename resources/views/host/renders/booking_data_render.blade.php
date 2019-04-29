@@ -20,5 +20,9 @@
 </div>
 <div class="modal-row">
 	<label>Status</label>
+	@if(Carbon::today() > $booking['date'] && $booking['getbookingStatus']['name'] != 'reserved')
+	<p>Requested booking date has passed.</p>
+	@else
 	<p>{{ $booking['getBookingStatus']['display_name'] }}</p>
+	@endif
 </div>
