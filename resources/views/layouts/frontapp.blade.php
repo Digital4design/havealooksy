@@ -96,7 +96,7 @@
                             <a class="page-scroll" href="{{ url('/messages') }}">Messages</a>
                         </li>
                         <li>
-                            <a class="page-scroll" href="#contact">Contact</a>
+                            <a class="page-scroll" href="{{ url('/contact') }}">Contact</a>
                         </li>
                     </ul>
                     </div>

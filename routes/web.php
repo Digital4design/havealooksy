@@ -40,6 +40,9 @@ Route::get('/order-success', ['as' => 'order-success', 'uses' => 'HomeController
 Route::get('/wishlist', 'HomeController@wishlistView')->middleware(['auth', 'shopper']);
 Route::get('/add-to-wishlist/{id}', 'HomeController@addToWishlist')->middleware(['auth', 'shopper']);
 
+/* Contact Form */
+Route::get('/contact', 'HomeController@contactFormView');
+
 // Route::group(['prefix' => 'home'], function(){
 //     Route::get('/', 'HomeController@index')->name('home');
 //     Route::get('/get-products/{id}', 'HomeController@getProducts');

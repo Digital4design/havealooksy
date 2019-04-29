@@ -109,6 +109,11 @@ class HomeController extends Controller
                                             ->where('status', '1')->where('id', '<>', $id)
                                             ->where('is_approved', '1')->get();
 
+        if(Auth::guest())
+        {
+            return view('frontapp.product-details')->with(['listing_data' => $listing_data, 'all_listings' => $all_listings_of_category, 'wishlist' => '0']);
+        }
+        
         $check_wishlist = Wishlist::where('listing_id', $id)
                             ->where('user_id', Auth::user()->id)
                             ->first();
@@ -468,5 +473,10 @@ class HomeController extends Controller
         }
 
         return view('frontapp.search-results-view')->with(['listings' => $listings]);
+    }
+
+    public function contactFormView()
+    {
+        return view('frontapp.contact_form');
     }
 }
