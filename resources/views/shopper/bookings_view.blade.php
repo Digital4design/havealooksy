@@ -34,7 +34,7 @@
                 @if(!$bookings->isEmpty())
                   @foreach($bookings as $b)
                     <div class="small-box">
-                      <a href="#" id="get-booking-data" data-id="{{ $b['id'] }}" data-toggle="modal" data-target="#booking-data">
+                      <a href="#" class="get-booking-data" data-id="{{ $b['id'] }}" data-toggle="modal" data-target="#booking-data">
                         <h5>{{ Carbon::create($b['date'])->format('d/m/Y') }}</h5>
                         <div class="booking-box">
                           <p>{{ $b['getBookedListingUser']['title'] }}</p>
@@ -115,13 +115,7 @@
         },
     });
 
-    function newLine(display_txt)
-    {
-      display_txt = display_txt.replace(/\n/g, "<br />");
-      return display_txt;
-    }
-
-    $("#get-booking-data").on("click", function(){
+    $("a.get-booking-data").on("click", function(){
       var id = $(this).attr("data-id")
       $.ajax({
           url: "{{ url('shopper/bookings/get-booking-data') }}/"+id,

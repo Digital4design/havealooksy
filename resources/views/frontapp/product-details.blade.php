@@ -236,10 +236,12 @@
         		$(this).addClass("fc-highlight");
         		$("input[name=date]").val($(this).attr('data-date'));
 
+        		var clicked_date = Date.parse($(this).attr('data-date'))/1000;
+
         		var id = $("input[name=listing_id]").val();
         		$("#loading").toggleClass("hide");
           		$.ajax({
-			        'url'        : '{{ url("get-products/product-availability") }}/'+id,
+			        'url'        : '{{ url("get-products/product-availability") }}/'+id+"/"+clicked_date,
 			        'method'     : 'get',
 			        'dataType'   : 'json',
 			        success    : function(resp){
@@ -273,6 +275,10 @@
 									$(this).parent(".guestcount").find(".guest_input").val(quantity-1)
 								}
 							});
+			            }
+			            else if(resp.status == 'empty'){
+			              $("#loading").toggleClass("hide");	
+			              swal("Not Available", resp.message, "warning");
 			            }
 			            else if(resp.status == 'danger'){
 			              swal("Error", resp.message, "warning");

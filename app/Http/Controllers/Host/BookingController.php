@@ -56,7 +56,9 @@ class BookingController extends Controller
     {
         $bookings = Bookings::with(['getBookingStatus'])->get();
         return Datatables::of($bookings)
-                        ->editColumn('status_id', function ($bookings){
+                        ->editColumn('date', function ($bookings){
+                            return Carbon::create($bookings['date'])->format('d F, Y');
+                        })->editColumn('status_id', function ($bookings){
                             return $bookings['getBookingStatus']['display_name'];
                         })->editColumn('time_slot', function ($bookings){
                             $time_slot = ListingTimes::where('id', $bookings['time_slot'])

@@ -140,10 +140,65 @@ class HomeController extends Controller
     }
 
     /* Get Listing Availability Details */
-    public function getProductAvailability($id)
+    public function getProductAvailability($id, $date)
     {
+        $clicked_date = Date("Y-m-d", $date);
         $guests = ListingGuests::where('listing_id', $id)->first();
+
+        /* Check if all time slots are not empty */
+        $check_bookings = Bookings::where('listing_id', $id)
+                            ->where('status_id', '2')
+                            ->where('date', $clicked_date)
+                            ->select('time_slot')
+                            ->selectRaw('sum(no_of_seats) as seats_filled')
+                            ->groupBy('time_slot')
+                            ->get();
+        
+        if(!$check_bookings->isEmpty())
+        {
+            foreach ($check_bookings as $value)
+            {
+                if($value['seats_filled'] == $guests['total_count'])
+                {
+                    $filled_slot[] = $value['time_slot'];
+                }
+            }
+
+            if(isset($filled_slot))
+            {
+                $get_times = ListingTimes::where('listing_id', $id)->whereNotIn('id', $filled_slot)->get();
+
+                if($get_times->isEmpty())
+                {
+                    return response()->json(['status' => 'empty', 'message' => 'No free time slot available. Choose any other date.']);
+                }
+            } 
+        }
+
+        /* Return non-empty time-slots */
         $times = ListingTimes::where('listing_id', $id)->get();
+
+        foreach ($times as $t)
+        {
+            $bookings = Bookings::where('listing_id', $id)
+                            ->where('status_id', '2')
+                            ->where('date', $clicked_date)
+                            ->where('time_slot', $t['id'])
+                            ->select('time_slot')
+                            ->selectRaw('sum(no_of_seats) as seats_filled')
+                            ->groupBy('time_slot')
+                            ->first();
+
+            if($bookings['seats_filled'] != 0)
+            {
+                $seats_left = $guests['total_count']-$bookings['seats_filled'];
+                $t['seats_left'] = $seats_left;
+            }
+            else
+            {
+                $t['seats_left'] = $guests['total_count'];
+            }
+        }
 
         $listing_details = view('frontapp.renders.listing_details_render')->with(['guests' => $guests, 'times' => $times])->render();
 
@@ -251,7 +306,23 @@ class HomeController extends Controller
 
             if($total_guests > $listing['getGuests']['total_count'])
             {
-                return response()->json(['status' => 'danger', 'message' => 'Guest count must not exceed Maximum allowed guests']);
+                return response()->json(['status' => 'danger', 'message' => 'Guest count must not exceed Maximum allowed guests.']);
+            }
+
+            /* Check seats availablity */
+            $seats_filled = Bookings::where('listing_id', $request->listing_id)
+                            ->where('status_id', '2')
+                            ->where('date', $request->date)
+                            ->where('time_slot', $request->time)
+                            ->selectRaw('sum(no_of_seats) as total')
+                            ->groupBy('time_slot')
+                            ->first();
+
+            $seats_left = $listing['getGuests']['total_count']-$seats_filled['total'];
+
+            if($seats_left < $total_guests)
+            {  
+                return response()->json(['status' => 'danger', 'message' => 'Selected time slot has only '.$seats_left.' seats left.']);
             }
 
             if(Cart::session(Auth::user()->id)->get($listing['id']))

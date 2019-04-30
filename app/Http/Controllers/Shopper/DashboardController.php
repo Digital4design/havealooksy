@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Shopper;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use App\Models\RatingsAndReviews;
 use App\Models\Categories;
 use App\Models\Listings;
 use App\Models\Bookings;
@@ -38,7 +39,9 @@ class DashboardController extends Controller
     public function dashboardView()
     {
         $bookings = Bookings::where('user_id', Auth::user()->id)->get()->count();
-    	return view('shopper.dashboard')->with('bookings', $bookings);
+        $ratings = RatingsAndReviews::where('posted_by', Auth::user()->id)->get()->count();
+
+    	return view('shopper.dashboard')->with(['bookings' => $bookings, 'ratings' => $ratings]);
     }
 
     public function profile()

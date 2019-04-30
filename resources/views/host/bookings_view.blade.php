@@ -42,7 +42,7 @@
                             <p>{{ $b['getBookedListingUser']['title'] }}</p>
                             <p style="margin-left:auto;">{{ Carbon::create($b['getBookedListingTime']['start_time'])->format('g:i a') }}-{{ Carbon::create($b['getBookedListingTime']['end_time'])->format('g:i a') }}</p>
                           </div>
-                          @if(Carbon::today() > $b['date'] && $b['getbookingStatus']['name'] != 'reserved')
+                          @if(Carbon::today() > $b['date'] && $b['getbookingStatus']['name'] != 'reserved' && $b['getbookingStatus']['name'] != 'cancelled')
                           <p style="color:red;">Requested booking date has passed.</p>
                           @else
                           <p style="color:red;">{{ $b['getbookingStatus']['display_name'] }}</p>
@@ -56,7 +56,7 @@
                 </div>
               </div>
               <div id="booking_table_box"  class="tab-pane box-body">
-                <table id="bookings_list" class="table table-bordered table-striped">
+                <table id="bookings_list" class="table table-bordered table-striped" style="width:100%;">
                   <thead>
                       <tr>
                         <th>Booking ID</th>

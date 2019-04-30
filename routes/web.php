@@ -22,7 +22,7 @@ Auth::routes(['verify' => true]);
 
 Route::get('/get-products/{id}', 'HomeController@getProducts');
 Route::get('/get-products/product-details/{id}', 'HomeController@getProductDetails');
-Route::get('/get-products/product-availability/{id}', 'HomeController@getProductAvailability');
+Route::get('/get-products/product-availability/{id}/{date}', 'HomeController@getProductAvailability');
 Route::post('/get-products/apply-filters', 'HomeController@applyFilters');
 Route::get('/cart', 'HomeController@viewCart')->middleware(['auth', 'shopper']);
 Route::post('/add-to-cart', 'HomeController@addToCart');
@@ -100,6 +100,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth', 'verified']
     Route::group(['prefix' => 'bookings', 'middleware' => ['admin', 'auth']], function(){
         Route::get('/', 'Admin\BookingController@getBookingsView');
         Route::get('/get-bookings', 'Admin\BookingController@getAllBookings');
+        Route::get('/cancel-booking/{id}', 'Admin\BookingController@cancelBooking');
     });
 
     /* Orders */

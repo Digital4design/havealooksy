@@ -177,7 +177,7 @@
         </li>
         <li class="{{ Request::is('shopper/ratings') ? 'active' : '' }}">
           <a href="{{ url('shopper/ratings') }}">
-            <i class="fa fa-star"></i> <span>Rate Your Experience</span>
+            <i class="glyphicon glyphicon-star"></i> <span>Rate Your Experience</span>
           </a>
         </li>
 		    <li class="{{ Request::is('shopper/chat') ? 'active' : '' }}">

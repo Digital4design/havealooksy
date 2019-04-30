@@ -73,7 +73,7 @@
                 </div>
             </div>
             <div class="col-lg-3 col-xs-6">
-                <div class="small-box bg-teal">
+                <div class="small-box bg-purple">
                     <div class="inner">
                         <h3>{{ $orders }}</h3>
                         <p>Orders</p>

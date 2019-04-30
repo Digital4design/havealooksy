@@ -92,6 +92,34 @@
           "sEmptyTable": "No data available in table",
         },
     });
+
+    $(document).on("click", "a.cancel_booking", function(){
+      var id = $(this).attr("data-id");
+
+      $("#loading").toggleClass("hide");
+      $.ajax({
+        'url'      : '{{ url("admin/bookings/cancel-booking") }}/'+id,
+        'method'   : 'get',
+        'dataType' : 'json',
+        success    : function(data){
+          if(data.status == 'success'){
+            
+            $("#loading").toggleClass("hide");
+            swal({
+                title: "Success",
+                text: data.message,
+                timer: 2000,
+                type: "success",
+                showConfirmButton: false
+            });
+
+            setTimeout(function(){ 
+              location.reload();
+            }, 2000);
+          }  
+        } 
+      });
+    });
   });
 </script>
 @stop
