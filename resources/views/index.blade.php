@@ -54,10 +54,9 @@
                 </div>
             </div>
             <div class="row">
-              <div class="col-lg-12 text-center slider-cat">
+              <!-- <div class="col-lg-12 text-center slider-cat">
                 @if(!$fav_listings->isEmpty())
                     <div class="owl-carousel">
-                    <!-- start portfolio item -->
                     @foreach($fav_listings as $value)
                         <div class="item ">
                             <div class="ot-portfolio-item">
@@ -72,7 +71,28 @@
                             </div>
                         </div>
                     @endforeach
-                    <!-- end portfolio item -->
+                    </div>
+                @else
+                    <p class="text-center">No Favorite Listing Available!</p>
+                @endif
+              </div> -->
+              <div class="col-lg-12 text-center slider-cat">
+                @if(!$fav_listings->isEmpty())
+                    <div class="owl-carousel">
+                    @foreach($fav_listings as $value)
+                        <div class="item ">
+                            <div class="ot-portfolio-item">
+                                <figure class="effect-bubba">
+                                    <img src="{{ asset('public/images/listings/'.$value['listing_image']) }}" alt="{{ $value['title'] }}" class="img-responsive" />
+                                    <figcaption>
+                                        <h2>{{ $value['title'] }}</h2>
+                                        <p>{{ $value['description'] }}</p>
+                                        <a href="{{ url('get-products/product-details/'.$value['id']) }}" style="padding:180px 50px;" target="_blank">View more</a>
+                                    </figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    @endforeach
                     </div>
                 @else
                     <p class="text-center">No Favorite Listing Available!</p>

@@ -54,9 +54,27 @@ class HomeController extends Controller
         if(Auth::guest())
         {   
             $categories = Categories::where('status', '1')->get();
-            $fav_listings = Listings::with(['getImages', 'getCategory'])->where('status', '1')
-                                    ->where('is_approved', '1')
-                                    ->get();
+            // $fav_listings = Listings::with(['getImages', 'getCategory', 'getRatings'])
+            //                         ->where('status', '1')
+            //                         ->where('is_approved', '1')
+            //                         ->whereHas('getRatings', function($q){
+            //                             $q->where('approved', '1')
+            //                               ->where('spam', '0');
+            //                         })->get();
+
+            $fav_listings = Listings::leftJoin('listing_images' ,'listing_images.listing_id', '=', 'listings.id')
+                            ->leftJoin('ratings_and_reviews' ,'ratings_and_reviews.listing_id', '=', 'listings.id')
+                            ->where('ratings_and_reviews.approved', '1')
+                            ->where('ratings_and_reviews.spam', '0')
+                            ->where('listings.status', '1')
+                            ->where('listings.is_approved', '1')
+                            ->select('listing_images.name as listing_image', 'listings.*')
+                            ->selectRaw('avg(ratings_and_reviews.rating) as avg_rating')
+                            ->groupBy('ratings_and_reviews.listing_id')
+                            ->orderBy('avg_rating', 'desc')
+                            ->take(5)
+                            ->get();
+            // dd($fav_listings);
             $new_listings = Listings::with(['getImages', 'getCategory'])->where('status', '1')
                                     ->where('is_approved', '1')
                                     ->take(4)->orderBy('created_at', 'desc')
