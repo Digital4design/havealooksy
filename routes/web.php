@@ -42,6 +42,7 @@ Route::get('/add-to-wishlist/{id}', 'HomeController@addToWishlist')->middleware(
 
 /* Contact Form */
 Route::get('/contact', 'HomeController@contactFormView');
+Route::post('/contact/send-message', 'HomeController@sendContactMessage');
 
 // Route::group(['prefix' => 'home'], function(){
 //     Route::get('/', 'HomeController@index')->name('home');

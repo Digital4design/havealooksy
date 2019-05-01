@@ -125,7 +125,7 @@
         </p>
         <footer>
             <div class="container text-left">
-                <p>© All rights reserved2019. Looksy.</p>
+                <p><span style="font-family:Source Sans Pro;">©</span> 2019 Looksy. All rights reserved.</p>
             </div>
         </footer>
         <!-- Bootstrap core JavaScript

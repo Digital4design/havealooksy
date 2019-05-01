@@ -94,7 +94,7 @@
 		<div class="row">
 			<div class="col-lg-12 text-center">
 				<div class="section-title">
-					<h2>Guest Reviews</h2>
+					<h2>Customer Reviews</h2>
 				</div>
 			</div>
 		</div>
@@ -131,7 +131,7 @@
 		  			</div>
 		  			@endforeach
 				@else
-					<p class="text-center">No reviews.</p>
+					<p class="text-center" style="font-size:1.3em;">No reviews.</p>
 				@endif
 			</div>
 		</div>

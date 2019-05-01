@@ -22,7 +22,7 @@
             <div class="banner">
                 <div class="banner-container">
                     <div class="navbar-header">
-                        <a class="navbar-brand page-scroll" href="#page-top"><img src="{{asset('public/looksyassets/images/logo.png') }}" alt="Lattes theme logo"></a>
+                        <a class="navbar-brand page-scroll" href="{{ url('/') }}"><img src="{{asset('public/looksyassets/images/logo.png') }}" alt="Lattes theme logo"></a>
                     </div>
                     <div class="banner-content">
                        <h2>Become  A  Host</h2>

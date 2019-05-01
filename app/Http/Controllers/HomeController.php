@@ -23,6 +23,7 @@ use Session;
 use Carbon;
 use Auth;
 use Cart;
+use Mail;
 
 class HomeController extends Controller
 {
@@ -562,5 +563,39 @@ class HomeController extends Controller
     public function contactFormView()
     {
         return view('frontapp.contact_form');
+    }
+
+    public function sendContactMessage(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'subject' => ['required', 'string'],  
+            'message' => ['required'],   
+        ]);
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        try
+        {
+            $emailData = [
+                    'name' => $request->name,
+                    'email_message' => $request->message,
+                    'subject' => $request->subject,
+                ];
+
+            Mail::send(['html'=>'frontapp.contact_email'], $emailData, function($message) use($request){
+                $message->to(env('MAIL_USERNAME'), 'Looksy')->subject('Looksy - '.$request->subject);
+                $message->from($request->email, $request->name);
+            });
+
+            return redirect()->back()->with(['status' => 'success' , 'message' => 'Message sent successfully.']);
+        }
+        catch(\Exception $e)
+        {
+            // return redirect()->back()->with(['status' => 'danger' , 'message' => 'Something went wrong. Please try again later.']);
+            return redirect()->back()->with(['status' => 'danger' , 'message' => $e->getMessage()]);
+        }
     }
 }

@@ -179,7 +179,7 @@
                     </div>
                     <div class="col-md-2 col-sm-6">
                         <ul>
-                          <li><a href="#"> Carrer</a></li>
+                          <li><a href="#"> Carrier</a></li>
                           <li><a href="#"> Policies</a></li>                     
                           <li><a href="#"> Press</a></li>                        
                         </ul>
