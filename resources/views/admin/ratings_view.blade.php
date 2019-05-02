@@ -2,6 +2,7 @@
 
 @section('pageCss')
 <style type="text/css">
+  .filters .btn{margin-bottom:10px;}
 </style>
 @stop
 
@@ -33,7 +34,7 @@
                     <button id="discarded" class="btn btn-danger">DISCARDED</button>
                     <button id="spam" class="btn btn-warning">SPAM</button>
                   </div>
-                  <table id="ratings_list" class="table table-bordered table-striped">
+                  <table id="ratings_list" class="table table-bordered table-striped" style="width:100%;">
                     <thead>
                         <tr>
                           <th>Listing</th>
@@ -68,12 +69,18 @@
 
 @section('pageJs')
 <script>
-  $(document).ready(function(){     
+  $(document).ready(function(){
+    $('#ratings_list tfoot th:eq(0),#ratings_list tfoot th:eq(1),#ratings_list tfoot th:eq(2),#ratings_list tfoot th:eq(3)').each(function(){
+        var title = $(this).text();
+        $(this).css('width', '10%');
+        $(this).html('<input type="text" class="form-control search-column" style="font-weight:normal;" placeholder="Search '+title+'" />');
+    });     
     var table = $('#ratings_list').DataTable({
         processing: true,
         serverSide: true,
         lengthMenu: [10,25,50,100],
         responsive: true,
+        scrollX: true,
         ajax: {
           "url": '{!! url("admin/ratings/get-ratings") !!}',
           "type": 'GET',
@@ -93,6 +100,19 @@
           "sZeroRecords": "No matching records found",
           "sEmptyTable": "No data available in table",
         },
+    });
+
+    /* Individual column search */
+    table.columns().every(function(){
+        var that = this;
+ 
+        $('input', this.footer()).on('keyup change', function(){
+            if (that.search() !== this.value){
+                that
+                    .search(this.value)
+                    .draw();
+            }
+        });
     });
 
     $('#all').on('click', function () {

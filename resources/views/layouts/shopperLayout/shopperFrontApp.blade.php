@@ -46,6 +46,9 @@
                 text-decoration:none;
             }
             .navbar-default .nav li a.notification_link_front p{color:#fff;font-size:12px;}
+            li.notification-item{list-style:none;margin-top:10px;}
+            li.notification-item a{padding:0px;}
+            li.notification-item p{line-height:15px;}
         </style>
         @yield('pageCss')
     </head>
@@ -93,19 +96,20 @@
                     <ul class="nav" style="display:flex;"> 
                       <li class="dropdown notifications-menu" style="margin-left:0px;flex:20%;">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="markNotificationsAsRead()" style="padding:10px;">
-                          <i class="fa fa-bell-o"></i>
+                          <i class="glyphicon glyphicon-bell"></i>
                           @if(count(Auth::user()->unreadNotifications))
-                            <span class="label nav-unread" style="position:absolute;background-color:rgba(137,43,225,0.6);border-radius:50%;font-weight:normal;top:1px;left:22px;font-family:'Glyphicons Halflings'">{{count(Auth::user()->unreadNotifications)}}</span>
+                            <span class="notification_count nav-unread">{{count(Auth::user()->unreadNotifications)}}</span>
                           @endif
+                          <span class="notification_count nav-unread">1</span>
                         </a>
-                        <ul class="dropdown-menu" style="padding:5px;padding-bottom:0px;color:#fff;width:200px;font-size:12px;">
+                        <ul class="dropdown-menu" style="padding:5px;padding-bottom:0px;color:#fff;width:300px;font-size:12px;">
                           <li class="header">You have {{ (count(Auth::user()->unreadNotifications)) ? count(Auth::user()->unreadNotifications) : 0 }} notifications</li>
                           <li>
                             <!-- inner menu: contains the actual data -->
                             <ul class="menu" style="padding-inline-start:0px;">
                               @if(!Auth::user()->unreadNotifications->isEmpty())
                                 @foreach(Auth::user()->unreadNotifications as $notification)
-                                  <li>
+                                  <li class="notification-item">
                                     <a class="notification_link_front" href="{{ $notification->data['action'] }}">
                                       <div>
                                         <p>{{ $notification->data['user'] }}{{ $notification->data['message'] }}</p>
@@ -121,7 +125,13 @@
                           <li class="footer"><a class="text-center" id="view_all_notifications" href="{{ url('shopper/all-notifications') }}">View all</a></li>
                         </ul>
                       </li>
-                      <li class="cart" style="margin-left:0px;flex:20%;"><a href="{{ url('/cart') }}" style="padding:10px;"><span class="glyphicon glyphicon-shopping-cart"><span class="label" style="position:absolute;background-color:rgba(137,43,225,0.6);border-radius:50%;font-weight:normal;top:-10px;left:16px;">{{ Cart::session(Auth::user()->id)->getContent()->count() }}</span></span></a></li> 
+                      <li class="cart" style="margin-left:0px;flex:20%;">
+                        <a href="{{ url('/cart') }}" style="padding:10px;">
+                            <span class="glyphicon glyphicon-shopping-cart">
+                                <span class="cart_count">{{ Cart::session(Auth::user()->id)->getContent()->count() }}</span>
+                            </span>
+                        </a>
+                      </li> 
                       <li id="hoverable" style="flex:60%;"><a class="user_name text-center">{{ Auth::user()->first_name }}</a></li>
                       <ul class="dropdown-items">
                           <li class="dropdown-item"><a href="{{ url('shopper/dashboard') }}">Dashboard</a></li>

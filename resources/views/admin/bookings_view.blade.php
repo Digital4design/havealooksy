@@ -65,12 +65,18 @@
 
 @section('pageJs')
 <script>
-  $(document).ready(function(){     
+  $(document).ready(function(){
+    $('#bookings_list tfoot th:eq(1),#bookings_list tfoot th:eq(2),#bookings_list tfoot th:eq(3),#bookings_list tfoot th:eq(4)').each(function(){
+        var title = $(this).text();
+        $(this).css('width', '10%');
+        $(this).html('<input type="text" class="form-control search-column" style="font-weight:normal;" placeholder="Search '+title+'" />');
+    });     
     var table = $('#bookings_list').DataTable({
         processing: true,
         serverSide: true,
         lengthMenu: [10,25,50,100],
         responsive: true,
+        scrollX: true,
         order: [ 1, "asc" ],
         ajax: {
           "url": '{!! url("admin/bookings/get-bookings") !!}',
@@ -91,6 +97,19 @@
           "sZeroRecords": "No matching records found",
           "sEmptyTable": "No data available in table",
         },
+    });
+
+    /* Individual column search */
+    table.columns().every(function(){
+        var that = this;
+ 
+        $('input', this.footer()).on('keyup change', function(){
+            if (that.search() !== this.value){
+                that
+                    .search(this.value)
+                    .draw();
+            }
+        });
     });
 
     $(document).on("click", "a.cancel_booking", function(){

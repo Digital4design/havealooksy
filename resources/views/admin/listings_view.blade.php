@@ -4,7 +4,8 @@
 <style type="text/css">
   .box{border:none;}
   .toolbar{float:left;height:35px;margin-top:5px;}
-  .filters{margin-bottom:20px;}
+  .filters{margin-bottom:10px;}
+  .filters .btn{margin-bottom:10px;}
   .btn.button_delete, .btn-info, .btn.bg-teal{display:inline;}
   .approve-unapprove{vertical-align:-webkit-baseline-middle;}
 </style>
@@ -108,7 +109,12 @@
 
 @section('pageJs')
 <script>
-  $(document).ready(function(){     
+  $(document).ready(function(){
+    $('#listings_list tfoot th:eq(1),#listings_list tfoot th:eq(2),#listings_list tfoot th:eq(3),#listings_list tfoot th:eq(4),#listings_list tfoot th:eq(5)').each(function(){
+        var title = $(this).text();
+        $(this).css('width', '10%');
+        $(this).html('<input type="text" class="form-control search-column" style="font-weight:normal;" placeholder="Search '+title+'" />');
+    });     
     var table = $('#listings_list').DataTable({
         processing: true,
         serverSide: true,
@@ -158,28 +164,19 @@
           "sZeroRecords": "No matching records found",
           "sEmptyTable": "No data available in table",
         },
-        initComplete: function () {
-          var filterColumns = [1, 2, 3, 4, 5];
+    });
 
-          this.api().columns(filterColumns).every(function(){
-                var column = this;
-                var select = $('<select class="form-control" style="font-weight:normal;"><option value="">Select</option></select>')
-                    .appendTo($(column.footer()).empty())
-                    .on('change', function(){
-                        var val = $.fn.dataTable.util.escapeRegex(
-                            $(this).val()
-                        );
-
-                        val = String(val).replace(/&/g, '&amp;');
+    /* Individual column search */
+    table.columns().every(function(){
+        var that = this;
  
-                        column.search(val ? '^'+val+'$' : '', true, false, false).draw();
-                    });
- 
-                column.data().unique().sort().each(function(d, j){
-                    select.append('<option value="'+d+'">'+d+'</option>')
-                });
-            });
-        },
+        $('input', this.footer()).on('keyup change', function(){
+            if (that.search() !== this.value){
+                that
+                    .search(this.value)
+                    .draw();
+            }
+        });
     });
 
     function format(d){

@@ -3,8 +3,8 @@
 @section('pageCss')
 <style type="text/css">
   #add-listing-button{margin:1em auto;font-size:20px;padding:0.3em 1.5em;}
-  .filters{display:flex;justify-content:center;align-items:center;padding-bottom:20px;}
-  .filters label{margin-right:30px;}
+  .filters{margin-bottom:10px;}
+  .filters .btn{margin-bottom:10px;}
   .toolbar{float:left;height:35px;margin-top:5px;}
   .btn.button_delete, .btn-info, .btn.active-deactive, .is-favorite, .btn.bg-teal{padding:6px 10px;}
   .btn.button_delete, .btn-info, .btn.bg-teal{display:inline;}
@@ -39,14 +39,11 @@
                 <!-- /.box-header -->
                 <div class="box-body">
                   <div class="filters text-center">
-                    <label>Filters:</label>
-                    <button id="all" class="btn btn-primary" style="margin:auto 3px 0px;">ALL</button>
-                    <div style="margin-right:50px;">
+                      <button id="all" class="btn btn-primary">ALL</button>
                       <button id="active" class="btn btn-primary">ACTIVE</button>
                       <button id="inactive" class="btn btn-primary">INACTIVE</button>
                       <button id="approved" class="btn btn-danger">APPROVED</button>
                       <button id="unapproved" class="btn btn-danger">UNAPPROVED</button>
-                    </div>
                   </div>
                   <table id="listings_list" class="table table-bordered table-striped">
                     <thead>
@@ -106,11 +103,17 @@
 @section('pageJs')
 <script>
 $(function() {
+    $('#listings_list tfoot th:eq(1),#listings_list tfoot th:eq(2),#listings_list tfoot th:eq(3),#listings_list tfoot th:eq(4)').each(function(){
+        var title = $(this).text();
+        $(this).css('width', '10%');
+        $(this).html('<input type="text" class="form-control search-column" style="font-weight:normal;" placeholder="Search '+title+'" />');
+    });
     var table = $('#listings_list').DataTable({
         processing: true,
         serverSide: true,
         lengthMenu: [10,25,50,100],
         responsive: true,
+        scrollX: true,
         order: [ 1, "asc" ],
         dom: "<'row'<'col-md-2'l><'col-md-2'B><'col-md-8'f>>" + "<'row'<'col-md-4'><'col-md-4'>>" + "<'row'<'col-md-12't>><'row'<'col-md-12'ip>>",
         buttons: [
@@ -150,27 +153,19 @@ $(function() {
           "sZeroRecords": "No matching records found",
           "sEmptyTable": "No data available in table",
         },
-        initComplete: function () {
-          var filterColumns = [1, 2, 3, 4];
-          this.api().columns(filterColumns).every(function(){
-                var column = this;
-                var select = $('<select class="form-control" style="font-weight:normal;"><option value="">Select</option></select>')
-                    .appendTo($(column.footer()).empty())
-                    .on('change', function(){
-                        var val = $.fn.dataTable.util.escapeRegex(
-                            $(this).val()
-                        );
+    });
 
-                        val = String(val).replace(/&/g, '&amp;');
+    /* Individual column search */
+    table.columns().every(function(){
+        var that = this;
  
-                        column.search(val ? '^'+val+'$' : '', true, false, false).draw();
-                    } );
- 
-                column.data().unique().sort().each(function(d, j){
-                    select.append('<option value="'+d+'">'+d+'</option>')
-                });
-            });
-        },
+        $('input', this.footer()).on('keyup change', function(){
+            if (that.search() !== this.value){
+                that
+                    .search(this.value)
+                    .draw();
+            }
+        });
     });
 
     function format(d){

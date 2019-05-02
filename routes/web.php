@@ -160,11 +160,13 @@ Route::group(['prefix' => 'host', 'middleware' => ['host', 'auth', 'verified']],
 
     /* Bookings */
     Route::group(['prefix' => 'bookings', 'middleware' => ['host', 'auth']], function(){
-        Route::get('/', 'Host\BookingController@getBookingsView');
-        Route::get('/get-bookings', 'Host\BookingController@getAllBookings');
-        Route::get('/get-booking-data/{id}', 'Host\BookingController@getBookingData');
-        Route::get('/get-bookings-table', 'Host\BookingController@getBookingsTable');
-        Route::get('/change-confirmation/{id}/{data}', 'Host\BookingController@changeBookingConfirmation');
+        Route::get('/booking-calendar', 'Host\BookingController@getBookingsView');
+        Route::get('/booking-calendar/get-bookings', 'Host\BookingController@getAllBookings');
+        Route::get('/booking-calendar/get-booking-data/{id}', 'Host\BookingController@getBookingData');
+        Route::get('/booking-list', 'Host\BookingController@getBookingTableView');
+        Route::get('/booking-list/get-bookings-table', 'Host\BookingController@getBookingsTable');
+        Route::get('/booking-list/change-confirmation/{id}/{data}', 'Host\BookingController@changeBookingConfirmation');
+        Route::get('/booking-list/cancel/{id}/{data}', 'Host\BookingController@cancelBooking');
     });
 
     /* Chat */

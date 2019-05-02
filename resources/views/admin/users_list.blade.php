@@ -63,10 +63,17 @@
 @section('pageJs')
 <script>
 $(function() {
+    $('#user_list tfoot th:eq(0),#user_list tfoot th:eq(1),#user_list tfoot th:eq(2),#user_list tfoot th:eq(3),#user_list tfoot th:eq(4),#user_list tfoot th:eq(5),#user_list tfoot th:eq(6),#user_list tfoot th:eq(7)').each(function(){
+        var title = $(this).text();
+        $(this).css('width', '10%');
+        $(this).html('<input type="text" class="form-control search-column" style="font-weight:normal;" placeholder="Search '+title+'" />');
+    });
     var table = $('#user_list').DataTable({
         processing: true,
         serverSide: true,
         lengthMenu: [10,25,50,100],
+        responsive: true,
+        scrollX: true,
         ajax: {
           "url": '{!! url("admin/users/get-users") !!}',
           "type": 'GET',
@@ -99,28 +106,19 @@ $(function() {
           "sZeroRecords": "No matching records found",
           "sEmptyTable": "No data available in table",
         },
-        initComplete: function () {
-          var filterColumns = [5, 7];
+    });
 
-          this.api().columns(filterColumns).every(function(){
-                var column = this;
-                var select = $('<select class="form-control" style="font-weight:normal;"><option value="">Select</option></select>')
-                    .appendTo($(column.footer()).empty())
-                    .on('change', function(){
-                        var val = $.fn.dataTable.util.escapeRegex(
-                            $(this).val()
-                        );
-
-                        val = String(val).replace(/&/g, '&amp;');
+    /* Individual column search */
+    table.columns().every(function(){
+        var that = this;
  
-                        column.search(val ? '^'+val+'$' : '', true, false, false).draw();
-                    });
- 
-                column.data().unique().sort().each(function(d, j){
-                    select.append('<option value="'+d+'">'+d+'</option>')
-                });
-            });
-        },
+        $('input', this.footer()).on('keyup change', function(){
+            if (that.search() !== this.value){
+                that
+                    .search(this.value)
+                    .draw();
+            }
+        });
     });
 
     $('#all').on('click', function () {
@@ -141,7 +139,7 @@ $(function() {
       if($(this).hasClass("btn-danger")){
         status_data = 0;
       }
-      if($(this).hasClass("btn-info")){
+      if($(this).hasClass("bg-green")){
         status_data = 1;
       }
 
@@ -152,10 +150,10 @@ $(function() {
         success    : function(data){
           if(data.status == 'success'){
             if(data.user_status == 1){
-              $(".block-unblock[data-id="+id+"]").removeClass("btn-info").addClass("btn-danger").text("Block");
+              $(".block-unblock[data-id="+id+"]").removeClass("bg-green").addClass("btn-danger").text("Block");
             }
             if(data.user_status == 0){
-              $(".block-unblock[data-id="+id+"]").removeClass("btn-danger").addClass("btn-info").text("Unblock");
+              $(".block-unblock[data-id="+id+"]").removeClass("btn-danger").addClass("bg-green").text("Unblock");
             }
           }  
         } 

@@ -12,6 +12,7 @@ use App\Models\Bookings;
 use App\Models\Listings;
 use App\User;
 use Carbon;
+use Cart;
 
 class BookingController extends Controller
 {
@@ -53,9 +54,23 @@ class BookingController extends Controller
         $booking->status_id = 4;
         $booking->save();
 
+        $booking_user = User::where('id', $booking['user_id'])->first();
+        $cart_items = Cart::session($booking_user['id'])->getContent();
+        
+        foreach ($cart_items as $c)
+        {
+            if($c['attributes']['booking_id'] == $booking['id'])
+            {
+                $cart_item_id = $c['id'];
+                break;
+            }
+        }
+
+        $remove_cart_item = Cart::session($booking_user['id'])->remove($cart_item_id);
+
         $listing = Listings::find($booking['listing_id']);
 
-        $notification_data_host = ["user" => '', "message" => "Booking request for '".$listing['title']."' on ".Carbon::create($booking['date'])->format('d/m/Y')."  has been cancelled.", "action" => url('host/bookings')];
+        $notification_data_host = ["user" => '', "message" => "Booking request for '".$listing['title']."' on ".Carbon::create($booking['date'])->format('d/m/Y')."  has been cancelled.", "action" => url('host/bookings/booking-list')];
 
         $notification_data_shopper = ["user" => '', "message" => "Booking request for '".$listing['title']."' on ".Carbon::create($booking['date'])->format('d/m/Y')."  has been cancelled.", "action" => url('shopper/bookings')];
 

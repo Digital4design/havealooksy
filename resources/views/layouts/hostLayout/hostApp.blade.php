@@ -177,11 +177,23 @@
             <i class="fa fa-list-alt"></i> <span>Listings</span>
           </a>
         </li>
-        <li class="{{ Request::is('host/bookings') ? 'active' : '' }}">
+        <li class="treeview {{ Request::is('host/bookings') ? 'active' : '' }}">
+          <a href="#">
+            <i class="fa fa-shopping-cart"></i> <span>Bookings</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu" style="display: none;">
+            <li><a href="{{ url('host/bookings/booking-calendar') }}"><i class="fa fa-calendar"></i> Booking Calendar</a></li>
+            <li><a href="{{ url('host/bookings/booking-list') }}"><i class="fa fa-list"></i> Booking List</a></li>
+          </ul>
+        </li>
+        <!-- <li class="treeview {{ Request::is('host/bookings') ? 'active' : '' }}">
           <a href="{{ url('host/bookings') }}">
             <i class="fa fa-shopping-cart"></i> <span>Bookings</span>
           </a>
-        </li>
+        </li> -->
 		    <li class="{{ Request::is('host/chat') ? 'active' : '' }}">
           <a href="{{ url('host/chat') }}">
             <i class="fa fa-commenting"></i> <span>Messages</span><span class="pull-right" style="margin-right:5px;">{{ ($unreadCount != 0) ? $unreadCount : '' }}</span>

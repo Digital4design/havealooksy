@@ -25,7 +25,7 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                  <table id="category_list" class="table table-bordered table-striped">
+                  <table id="category_list" class="table table-bordered table-striped" style="width:100%;">
                     <thead>
                         <tr>
                           <th>Category Name</th>
@@ -140,10 +140,17 @@
 @section('pageJs')
 <script>
 $(function() {
-    $('#category_list').DataTable({
+    $('#category_list tfoot th:eq(0),#category_list tfoot th:eq(1),#category_list tfoot th:eq(2)').each(function(){
+        var title = $(this).text();
+        $(this).css('width', '10%');
+        $(this).html('<input type="text" class="form-control search-column" style="font-weight:normal;" placeholder="Search '+title+'" />');
+    });
+    var table = $('#category_list').DataTable({
         processing: true,
         serverSide: true,
         lengthMenu: [10,25,50,100],
+        responsive: true,
+        scrollX: true,
         ajax: {
           "url": '{!! url("admin/categories/get-categories") !!}',
           "type": 'GET',
@@ -166,6 +173,19 @@ $(function() {
           "sZeroRecords": "No matching records found",
           "sEmptyTable": "No data available in table",
         },
+    });
+
+    /* Individual column search */
+    table.columns().every(function(){
+        var that = this;
+ 
+        $('input', this.footer()).on('keyup change', function(){
+            if (that.search() !== this.value){
+                that
+                    .search(this.value)
+                    .draw();
+            }
+        });
     });
 
     $("#add-category-button").on("click", function(){
@@ -274,7 +294,7 @@ $(function() {
       return false;
     });
 
-    $(document).on("click", "button.button_delete", function(){
+    $(document).on("click", "a.button_delete", function(){
       var id = $(this).attr('data-id');
 
       swal({
@@ -310,7 +330,7 @@ $(function() {
       return false;
     });
 
-    $(document).on("click", "button.button_edit", function(){
+    $(document).on("click", "a.button_edit", function(){
       var id = $(this).attr('data-id');
       $("select[name=edit_parent_category]").html("");
       $("#loading").toggleClass("hide");

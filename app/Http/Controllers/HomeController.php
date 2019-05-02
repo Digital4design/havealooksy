@@ -362,6 +362,14 @@ class HomeController extends Controller
             Cart::session(Auth::user()->id)
                 ->add($listing['id'], $listing['title'], $listing['price'], 1, array('description' => $listing['description'], 'image' => $listing['getImages'][0]['name'], 'adults' => $adults, 'children' => $children, 'infants' => $infants, 'time_slot' => $request->time, 'booking_id' => $booking['id']));
 
+            /* Notify Host */
+            $listing_booked = Listings::where('id', $listing['id'])->first();
+
+            $notification_data_host = ["user" => '', "message" => "A new booking request for ".$listing_booked->title.".", "action" => url('host/bookings/booking-list')];
+            
+            $user = User::find($listing_booked['user_id']);
+            $user->notify(new NotifyHost($notification_data_host));
+
             return response()->json(['status' => 'success', 'message' => 'Your request for the experience has been submitted for confirmation.']);
         }
         catch(\Exception $e)
@@ -478,7 +486,7 @@ class HomeController extends Controller
                         /* Notify Host */
                         $listing_booked = Listings::where('id', $listing_id)->first();
 
-                        $notification_data_host = ["user" => '', "message" => "A booking for ".$listing_booked->title." has been reserved.", "action" => url('host/bookings')];
+                        $notification_data_host = ["user" => '', "message" => "A booking for ".$listing_booked->title." has been reserved.", "action" => url('host/bookings/booking-calendar')];
                         $user = User::find($listing_booked['user_id']);
                         $user->notify(new NotifyHost($notification_data_host));
                     }

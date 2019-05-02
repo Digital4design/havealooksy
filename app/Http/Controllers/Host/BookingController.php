@@ -12,6 +12,7 @@ use App\Models\Listings;
 use App\User;
 use Carbon;
 use Auth;
+use Cart;
 
 class BookingController extends Controller
 {
@@ -21,7 +22,7 @@ class BookingController extends Controller
                             ->whereHas('getBookedListingUser', function($q){
                         		$q->where('user_id', Auth::user()->id);
                         	})->orderBy('created_at', 'desc')->get();
-    	return view('host.bookings_view')->with('bookings', $bookings);
+    	return view('host.bookings_calendar')->with('bookings', $bookings);
     }
 
     public function getAllBookings()
@@ -52,6 +53,11 @@ class BookingController extends Controller
     	return response()->json(['status' => 'success', 'booking_data' => $booking_data]);
     }
 
+    public function getBookingTableView()
+    {
+        return view('host.bookings_table_view');
+    }
+
     public function getBookingsTable()
     {
         $bookings = Bookings::with(['getBookingStatus'])->get();
@@ -73,17 +79,17 @@ class BookingController extends Controller
                                 return "Requested booking date passed.";
                             }
                             if($bookings['status_id'] == 1){
-                                $label = "Revoke Confirmation";
-                                $btn_style = "btn-default";
+                                return "<a href='#' data-id='".$bookings['id']."' class='btn btn-default confirmation' style='margin-right:5px;display:inline;'>Revoke Confirmation</a>";
                             }
                             elseif($bookings['status_id'] == 3){
-                                $label = "Confirm Booking";
-                                $btn_style = "btn-info";
+                                return "<a href='#' data-id='".$bookings['id']."' class='btn btn-info confirmation' style='margin-right:5px;display:inline;'>Confirm</a><a href='#' data-id='".$bookings['id']."' class='btn btn-danger cancel_booking' style='display:inline;'>Cancel</a>";
                             }
                             elseif($bookings['status_id'] == 2){
                                 return $bookings['getBookingStatus']['display_name'];
                             }
-                            return "<a href='#' data-id='".$bookings['id']."' class='btn ".$btn_style." confirmation'>".$label."</a>"; 
+                            elseif($bookings['status_id'] == 4){
+                                return $bookings['getBookingStatus']['display_name'];
+                            } 
                             
                         })->rawColumns(['listing_id' => 'listing_id', 'action' => 'action'])->make(true);
     }
@@ -102,7 +108,57 @@ class BookingController extends Controller
 
             $time = Carbon::create($time_slot['start_time'])->format("g:i a")."-".Carbon::create($time_slot['end_time'])->format("g:i a");
 
-            $notification_data = ["user" => '', "message" => "Your booking for ".$listing->title." on ".$date." at ".$time." has been confirmed. Click here to make payment.", "action" => url('/cart')];
+            if($data == 1)
+            {
+                $notification_data = ["user" => '', "message" => "Your booking for ".$listing->title." on ".$date." at ".$time." has been confirmed. Click here to make payment.", "action" => url('/cart')];
+            }
+
+            if($data == 3)
+            {
+                $notification_data = ["user" => '', "message" => "Confirmation of your booking request for ".$listing->title." on ".$date." at ".$time." has been revoked.", "action" => url('/cart')];
+            }
+
+            $user = User::find($booking['user_id']);
+
+            $user->notify(new NotifyShopper($notification_data));
+
+            return response()->json(['status' => 'success']);
+        }
+        catch(\Exception $e)
+        {
+            return response()->json(['status' => 'danger' , 'message' => 'Something went wrong. Please try again later.']);
+        }
+    }
+
+    public function cancelBooking($id, $data)
+    {
+        try
+        {
+            $booking = Bookings::find($id);
+            $booking->status_id = $data;
+            $booking->save();
+
+            $booking_user = User::where('id', $booking['user_id'])->first();
+            $cart_items = Cart::session($booking_user['id'])->getContent();
+            
+            foreach ($cart_items as $c)
+            {
+                if($c['attributes']['booking_id'] == $booking['id'])
+                {
+                    $cart_item_id = $c['id'];
+                    break;
+                }
+            }
+
+            $remove_cart_item = Cart::session($booking_user['id'])->remove($cart_item_id);
+
+            $listing = Listings::where('id', $booking['listing_id'])->first();
+            $time_slot = ListingTimes::where('id', $booking['time_slot'])->first();
+            $date = Carbon::create($booking['date'])->format("d/m/Y");
+
+            $time = Carbon::create($time_slot['start_time'])->format("g:i a")."-".Carbon::create($time_slot['end_time'])->format("g:i a");
+
+            $notification_data = ["user" => '', "message" => "Your booking for ".$listing->title." on ".$date." at ".$time." has been cancelled.", "action" => ''];
 
             $user = User::find($booking['user_id']);
 
