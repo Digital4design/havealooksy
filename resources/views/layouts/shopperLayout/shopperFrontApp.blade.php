@@ -96,11 +96,11 @@
                     <ul class="nav" style="display:flex;"> 
                       <li class="dropdown notifications-menu" style="margin-left:0px;flex:20%;">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="markNotificationsAsRead()" style="padding:10px;">
-                          <i class="glyphicon glyphicon-bell"></i>
-                          @if(count(Auth::user()->unreadNotifications))
-                            <span class="notification_count nav-unread">{{count(Auth::user()->unreadNotifications)}}</span>
-                          @endif
-                          <span class="notification_count nav-unread">1</span>
+                          <i class="glyphicon glyphicon-bell" style="position:relative;text-align:center;line-height:1.5;">
+                            @if(count(Auth::user()->unreadNotifications))
+                                <span class="notification_count nav-unread">{{count(Auth::user()->unreadNotifications)}}</span>
+                            @endif
+                          </i>
                         </a>
                         <ul class="dropdown-menu" style="padding:5px;padding-bottom:0px;color:#fff;width:300px;font-size:12px;">
                           <li class="header">You have {{ (count(Auth::user()->unreadNotifications)) ? count(Auth::user()->unreadNotifications) : 0 }} notifications</li>
@@ -127,9 +127,9 @@
                       </li>
                       <li class="cart" style="margin-left:0px;flex:20%;">
                         <a href="{{ url('/cart') }}" style="padding:10px;">
-                            <span class="glyphicon glyphicon-shopping-cart">
+                            <i class="glyphicon glyphicon-shopping-cart" style="position:relative;text-align:center;line-height:1.9;top:-2px;">
                                 <span class="cart_count">{{ Cart::session(Auth::user()->id)->getContent()->count() }}</span>
-                            </span>
+                            </i>
                         </a>
                       </li> 
                       <li id="hoverable" style="flex:60%;"><a class="user_name text-center">{{ Auth::user()->first_name }}</a></li>
