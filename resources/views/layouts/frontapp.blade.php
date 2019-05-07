@@ -87,7 +87,7 @@
                             <a class="page-scroll" href="#about">About</a>
                         </li>
                         <li>
-                            <a class="page-scroll" href="{{ url('/register') }}">Host</a>
+                            <a class="page-scroll" href="{{ url('/register-host') }}">Host</a>
                         </li>
                         <li>
                             <a class="page-scroll" href="{{ url('/wishlist') }}">Saved</a>

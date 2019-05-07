@@ -68,7 +68,7 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request, $user)
     {
-        if(Auth::user()->roles->first()->name == 'shopper')
+        if(Auth::user()->roles->first()->name == 'shopper' || Auth::user()->roles->first()->name == 'host')
         {
             return redirect()->intended(Session::get('previous_url'));
         }

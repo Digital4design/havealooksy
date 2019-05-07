@@ -30,7 +30,9 @@ class ListingController extends Controller
     	$all_listings = Listings::with(['getImages', 'getGuests', 'getTimes'])->where('user_id', Auth::user()->id)->get();
         
         return Datatables::of($all_listings)
-        				->editColumn('status', function ($all_listings){
+                        ->editColumn('title', function ($all_listings){
+                            return "<a class='view_link' href='".url('get-products/product-details/'.$all_listings['id'])."' target='_blank'>".$all_listings['title']."</a>";
+        				})->editColumn('status', function ($all_listings){
                             if($all_listings['status'] == 1)
                                 return 'Active';
                             if($all_listings['status'] == 0)
@@ -75,7 +77,7 @@ class ListingController extends Controller
                             return "<a href='#' data-toggle='modal' data-target='#image-modal' class='listing_images' data-id='".$all_listings['id']."' style='font-size:1em;padding:10px;'><i class='glyphicon glyphicon-picture'></i></a>";
                         })->addColumn('action', function ($all_listings){
                             return "<a href='".url('host/listings/view/'.$all_listings['id'])."' class='btn bg-teal' style='margin-right:5px;'><i class='fa fa-eye'></i></a><a href='".route('editListing', $all_listings['id'])."' class='btn btn-info' style='margin-right:5px;'><i class='fa fa-edit'></i></a><button type='button' data-id='".$all_listings['id']."' class='btn btn-warning button_delete'><i class='fa fa-trash-o'></i></button>";
-            			})->rawColumns(['activate_deactivate' => 'activate_deactivate', 'action' => 'action', 'images' => 'images'])->make(true);
+            			})->rawColumns(['title' => 'title', 'activate_deactivate' => 'activate_deactivate', 'action' => 'action', 'images' => 'images'])->make(true);
     }
 
     public function getListingImages($id)

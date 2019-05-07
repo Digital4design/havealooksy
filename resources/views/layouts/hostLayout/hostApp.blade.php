@@ -49,7 +49,7 @@
 <body class="hold-transition skin-blue fixed sidebar-mini">
 <div class="wrapper">
   <header class="main-header">
-    <a href="{{ url('/admin') }}" class="logo">
+    <a href="{{ url('/') }}" class="logo">
       <!-- <span class="logo-mini"><b>A</b>LT</span> -->
       <span class="logo-lg"><b>LOOKSY</b></span>
     </a>
@@ -167,8 +167,8 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
-        <li class="{{ Request::is('host') ? 'active' : '' }}">
-          <a href="{{ url('host') }}">
+        <li class="{{ Request::is('host/dashboard') ? 'active' : '' }}">
+          <a href="{{ url('host/dashboard') }}">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
           </a>
         </li>
@@ -177,7 +177,7 @@
             <i class="fa fa-list-alt"></i> <span>Listings</span>
           </a>
         </li>
-        <li class="treeview {{ Request::is('host/bookings') ? 'active' : '' }}">
+        <li class="treeview {{ (Request::is('host/bookings/booking-calendar') || Request::is('host/bookings/booking-list')) ? 'active' : '' }}">
           <a href="#">
             <i class="fa fa-shopping-cart"></i> <span>Bookings</span>
             <span class="pull-right-container">

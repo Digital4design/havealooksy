@@ -1049,11 +1049,27 @@ section.login-block, .login-block .row {
 }     
 .login-block .row {margin: 0;}
 
-section.login-block .banner-sec .banner{
+section.login-block .banner-sec .banner.host{
     background:url('../images/banner2.jpg')no-repeat;
     width: 100%;
     height: 100%;
     float: left;
+}
+
+section.login-block .banner-sec .banner.shopper{
+    background:url('../images/signup-shopper.jpg')no-repeat;
+    width: 100%;
+    height: 100%;
+    float: left;
+	opacity:0.9;
+}
+
+section.login-block .banner-sec .banner.login{
+    background:url('../images/login-banner.jpg')no-repeat;
+    width: 100%;
+    height: 100%;
+    float: left;
+	background-size:cover;
 }
 
 section.login-block .banner-sec {

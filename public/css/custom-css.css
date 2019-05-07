@@ -36,6 +36,13 @@ header .intro-text .intro-lead-in{
 .view_eye:hover{
 	color:#333;
 }
+.view_link{
+	text-decoration:none;
+	color:inherit;
+}
+.view_link:hover{
+	color:rgba(137,43,225,1);
+}
 .small-box .booking-box{
 	display:flex;
 }

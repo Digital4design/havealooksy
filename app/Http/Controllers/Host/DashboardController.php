@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Listings;
 use App\Models\Bookings;
+use App\Models\Categories;
 use Validator;
 use App\User;
 use Auth;
@@ -15,11 +16,41 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $categories = Categories::where('status', '1')->get();
+
+        $fav_listings = Listings::leftJoin('listing_images' ,'listing_images.listing_id', '=', 'listings.id')
+                            ->leftJoin('ratings_and_reviews' ,'ratings_and_reviews.listing_id', '=', 'listings.id')
+                            ->where('ratings_and_reviews.approved', '1')
+                            ->where('ratings_and_reviews.spam', '0')
+                            ->where('listings.status', '1')
+                            ->where('listings.is_approved', '1')
+                            ->select('listing_images.name as listing_image', 'listings.*')
+                            ->selectRaw('avg(ratings_and_reviews.rating) as avg_rating')
+                            ->groupBy('ratings_and_reviews.listing_id')
+                            ->orderBy('avg_rating', 'desc')
+                            ->take(5)
+                            ->get();
+
+        $new_listings = Listings::with(['getImages', 'getCategory'])->where('status', '1')
+                                ->where('is_approved', '1')
+                                ->take(4)->orderBy('created_at', 'desc')
+                                ->get();
+        $founder_picks = Listings::with(['getImages', 'getCategory'])->where('status', '1')
+                                ->where('is_approved', '1')
+                                ->where('founder_pick', '1')
+                                ->take(4)->orderBy('created_at', 'desc')
+                                ->get();
+
+        return view('index')->with(['categories' => $categories, 'fav_listings' => $fav_listings, 'new_listings' => $new_listings, 'founder_picks' => $founder_picks]);
+    }
+
+    public function dashboardView()
+    {
         $listings = Listings::where('user_id', Auth::user()->id)->get()->count();
         $bookings = Bookings::whereHas('getBookedListingUser', function($q){
                         $q->where('user_id', Auth::user()->id);
                     })->get()->count();
-    	return view('host.dashboard')->with(['listings' => $listings, 'bookings' => $bookings]);
+        return view('host.dashboard')->with(['listings' => $listings, 'bookings' => $bookings]);
     }
 
     public function profile()

@@ -111,6 +111,12 @@ class HomeController extends Controller
         return redirect('/');
     }
 
+    /* Register as a Host */
+    public function registerHost()
+    {
+        return view('auth.register_host');
+    }
+
     /* Get Products of a category */
     public function getProducts($id)
     {
@@ -241,7 +247,7 @@ class HomeController extends Controller
         foreach ($price_filter as $value) 
         {   
             $priceRange = sscanf($value, '%d-%d');
-            $listings[] = Listings::where('category_id', $request->category_id)->where('status', '1')->whereBetween('price', [$priceRange[0], $priceRange[1]])->get();
+            $listings[] = Listings::with(['getImages'])->where('category_id', $request->category_id)->where('status', '1')->whereBetween('price', [$priceRange[0], $priceRange[1]])->get();
         }
 
         $filtered_listings = view('frontapp.renders.listings_render')->with('listings_list', $listings)->render();
@@ -304,6 +310,11 @@ class HomeController extends Controller
             if(Auth::guest())
             {
                 return response()->json(['status' => 'login']);
+            }
+
+            if(Auth::user()->roles->first()->name == 'host')
+            {
+                return response()->json(['status' => 'danger', 'message' => 'Please join as Shopper to buy experience.']);
             }
 
             

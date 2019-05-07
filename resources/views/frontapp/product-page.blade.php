@@ -3,7 +3,11 @@
 @endguest
 
 @auth
-  @php $layout = 'layouts.shopperLayout.shopperFrontApp' @endphp
+  	@if(Auth::user()->roles->first()->name == 'shopper')
+        @php $layout = 'layouts.shopperLayout.shopperFrontApp' @endphp
+    @elseif(Auth::user()->roles->first()->name == 'host')
+        @php $layout = 'layouts.hostLayout.hostFrontApp' @endphp
+    @endif
 @endauth
 
 @extends($layout)

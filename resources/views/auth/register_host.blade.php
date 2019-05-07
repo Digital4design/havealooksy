@@ -1,29 +1,20 @@
 @extends('layouts.app')
 
 @section('pageCss')
-<style type="text/css">
-/*.user_select{display:flex;justify-content:center;align-items:center;}
-.user_select_container{position:relative;padding:0;margin:auto 5px;width:100%;}
-.user_select input[type=radio]{opacity:0;height:40px;width:100%;}
-.user_select input[type=radio]:hover, .user_select_container label:hover{cursor:pointer;}
-.user_select_container label{position:absolute;top:12px;left:72px;}
-.btn-default{background-color: #f4f4f4;color: #444;border-color: #ddd;}
-.user_select_container:active{background-color:#d73925;}*/
-</style>
 @stop
 
 @section('content')
 <section class="login-block">
     <div class="row">
         <div class="col-md-8 banner-sec">   
-            <div class="banner shopper">
+            <div class="banner host">
                 <div class="banner-container">
                     <div class="navbar-header">
                         <a class="navbar-brand page-scroll" href="{{ url('/') }}"><img src="{{asset('public/looksyassets/images/logo.png') }}" alt="Lattes theme logo"></a>
                     </div>
                     <div class="banner-content">
-                       <h2>Become  A  Shopper</h2>
-                       <p> Learn & explore some of the best experiences directly from the experts. </p>
+                       <h2>Become  A  Host</h2>
+                       <p> There’s Somebody who wants to know  <br> “ How you Do It.”</p>
                     </div>                           
                 </div>
             </div>
@@ -32,17 +23,7 @@
             <h2 class="text-center">Signup Now</h2>
             <form method="POST" class="login100-form validate-form" action="{{ route('register') }}">
                 @csrf
-                <!-- <div class="wrap-input100 validate-input user_select">
-                    <div class="user_select_container btn btn-default">
-                        <input id="shopper" type="radio" value="shopper" class="form-control" name="user_type">
-                        <label for="shopper">Shopper</label>
-                    </div>
-                    <div class="user_select_container btn btn-default">
-                        <input id="host" type="radio" value="host" class="form-control" name="user_type">
-                        <label for="host">Host</label>
-                    </div>
-                </div> -->
-                <input type="hidden" name="user_type" value="shopper">
+                <input type="hidden" name="user_type" value="host">
                 <div class="wrap-input100 validate-input">
                     <input class="input100 form-control{{ $errors->has('first_name') ? ' is-invalid' : '' }}" type="text" name="first_name" placeholder="First Name" value="{{ old('first_name') }}" required>
                     @if ($errors->has('first_name'))
@@ -104,16 +85,8 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <p style="margin-bottom:0px;">Already have an account?&nbsp;<a href="{{ route('login') }}" style="text-decoration:none;">Sign In</a></p>
-                    <p>Want to join as Host?&nbsp;<a href="{{ url('register-host') }}" style="text-decoration:none;">Click here.</a></p>
+                    <p>Already have an account?&nbsp;<a href="{{ route('login') }}" style="text-decoration:none;">Sign In</a></p>
                 </div>
-                <!-- <div class="form-group">
-                    <div class="col-md-6 col-md-offset-4"> -->
-                        <!-- <a href="{{ url('/auth/github') }}" class="btn btn-github"><i class="fa fa-github"></i> Github</a>
-                        <a href="{{ url('/auth/twitter') }}" class="btn btn-twitter"><i class="fa fa-twitter"></i> Twitter</a> -->
-                        <!-- <a href="{{ url('/auth/facebook') }}" class="btn btn-facebook"><i class="fa fa-facebook"></i> Facebook</a>
-                    </div>
-                </div> -->
             </form>
         </div>
     </div>
@@ -121,10 +94,4 @@
 @endsection
 
 @section('pageJs')
-<!-- <script type="text/javascript">
-    $(".user_select input[type=radio]").on("click", function(){
-        $(".user_select_container").removeClass("btn-danger").addClass("btn-default");
-        $(this).parent(".user_select_container").removeClass("btn-default").addClass("btn-danger");
-    });
-</script> -->
 @stop

@@ -3,10 +3,10 @@
 		@foreach($listings as $val)
 		<!-- team member item -->
 		<div class="col-md-3 product-link grid_view">
-			<a href="{{ url('home/get-products/product-details/'.$val['id']) }}">
+			<a href="{{ url('get-products/product-details/'.$val['id']) }}">
 				<div class="team-item">
 					<div class="team-image">
-						<img src="{{ asset('public/images/listings/'.$val['image']) }}" class="img-responsive" alt="author">
+						<img src="{{ asset('public/images/listings/'.$val['getImages'][0]['name']) }}" class="img-responsive" alt="author">
 					</div>
 					<div class="team-text">
 					    <div class="team-name">RESTAURANT</div> 
@@ -17,7 +17,7 @@
 			</a>
 		</div>
 		<div class="col-md-9 product-link list_view" style="display:none;">
-			<a href="{{ url('home/get-products/product-details/'.$val['id']) }}">
+			<a href="{{ url('get-products/product-details/'.$val['id']) }}">
 				<div class="team-item">
 					<div class="team-image" style="width:30%;">
 						<img src="{{ asset('public/images/listings/'.$val['image']) }}" class="img-responsive" alt="author">

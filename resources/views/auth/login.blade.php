@@ -3,14 +3,14 @@
 <section class="login-block">
     <div class="row">
         <div class="col-md-8 banner-sec"> 
-            <div class="banner">
+            <div class="banner login">
                 <div class="banner-container">
                     <div class="navbar-header">
                         <a class="navbar-brand page-scroll" href="{{ url('/') }}"><img src="{{asset('public/looksyassets/images/logo.png')}}" alt="Lattes theme logo"></a>
                     </div>
                     <div class="banner-content">
-                        <h2>Become  A  Host</h2>
-                        <p> There’s Somebody who wants to know  <br> “ How you Do It.”</p>
+                        <h2>Experience the Unexplorable</h2>
+                        <p> Change the way you learn. <br> Share what you already know. </p>
                     </div>
                 </div>
             </div>

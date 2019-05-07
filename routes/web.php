@@ -20,6 +20,7 @@ Route::get('/', 'HomeController@index')->name('home');
 // Auth::routes();
 Auth::routes(['verify' => true]);
 
+Route::get('/register-host', 'HomeController@registerHost');
 Route::get('/get-products/{id}', 'HomeController@getProducts');
 Route::get('/get-products/product-details/{id}', 'HomeController@getProductDetails');
 Route::get('/get-products/product-availability/{id}/{date}', 'HomeController@getProductAvailability');
@@ -135,6 +136,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth', 'verified']
 
 Route::group(['prefix' => 'host', 'middleware' => ['host', 'auth', 'verified']], function() {
     Route::get('/', 'Host\DashboardController@index');
+    Route::get('/dashboard', 'Host\DashboardController@dashboardView');
     Route::get('/profile', 'Host\DashboardController@profile');  
     Route::post('/edit-profile', 'Host\DashboardController@editProfile');
     Route::get('/change-password', 'Host\DashboardController@changePassword');  

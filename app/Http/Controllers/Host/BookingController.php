@@ -60,7 +60,11 @@ class BookingController extends Controller
 
     public function getBookingsTable()
     {
-        $bookings = Bookings::with(['getBookingStatus'])->get();
+        $bookings = Bookings::with(['getBookingStatus'])
+                            ->whereHas('getBookedListingUser', function($q){
+                                $q->where('id', Auth::user()->id);
+                            })->get();
+        
         return Datatables::of($bookings)
                         ->editColumn('date', function ($bookings){
                             return Carbon::create($bookings['date'])->format('d F, Y');

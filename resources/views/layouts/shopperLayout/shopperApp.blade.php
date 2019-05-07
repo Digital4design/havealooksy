@@ -44,7 +44,7 @@
 <body class="hold-transition skin-blue fixed sidebar-mini">
 <div class="wrapper">
   <header class="main-header">
-    <a href="{{ url('/admin') }}" class="logo">
+    <a href="{{ url('/') }}" class="logo">
       <!-- <span class="logo-mini"><b>A</b>LT</span> -->
       <span class="logo-lg"><b>LOOKSY</b></span>
     </a>
@@ -54,9 +54,6 @@
       </a>
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
-          <li>
-            <a href="{{ url('shopper') }}">Back to Main Website</a>
-          </li>
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="get_unread_conversations">
