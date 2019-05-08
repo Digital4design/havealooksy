@@ -106,7 +106,7 @@ class ChatController extends Controller
     public function getUnreadConversations()
     {
         $conversations = Chat::conversations()->for(Auth::user())->get();
-        
+        $unread = Chat::messages()->for(Auth::user())->unreadCount();
         if($conversations)
         {
             foreach($conversations as $conv)
@@ -126,6 +126,6 @@ class ChatController extends Controller
             
             return response()->json(['status' => 'success', 'conversations' => $unread_list]);
         }
-        return response()->json(['status' => 'success', 'conversations' => '']);
+        return response()->json(['status' => 'success', 'conversations' => '', 'unread' => $unread]);
     }
 }

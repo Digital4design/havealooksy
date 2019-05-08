@@ -15,7 +15,7 @@ class BookingController extends Controller
     	$bookings = Bookings::with(['getBookedListingUser', 'getBookedListingTime', 'getBookingStatus'])
     						->where('user_id', Auth::user()->id)
     						->orderBy('created_at', 'desc')
-							->get();
+							->paginate(5);
 
     	return view('shopper.bookings_view')->with('bookings', $bookings);
     }

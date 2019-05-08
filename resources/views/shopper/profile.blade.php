@@ -1,32 +1,45 @@
 @extends('layouts.shopperLayout.shopperApp')
 @section('content')
-<div class="content-wrapper">
-    <section class="content">
-      @if(Session::get('status') == "success")
-      <div class="alert alert-success alert-dismissible">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          <i class="icon fa fa-check"></i>{{ Session::get('message') }}
-      </div>
-      @elseif(Session::get('status') == "danger")
-      <div class="alert alert-danger alert-dismissible">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          <i class="icon fa fa-ban"></i>{{ Session::get('message') }}
-      </div>
-      @endif
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="box box-info">
-            <div class="box-header with-border">
-              <h3 class="box-title">Edit Profile</h3>
+<div class="container-fluid dashboard-content">
+  @if(Session::get('status') == "success")
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ Session::get('message') }}
+    <a href="#" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">×</span>
+    </a>
+  </div>
+  @elseif(Session::get('status') == "danger")
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ Session::get('message') }}
+    <a href="#" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">×</span>
+    </a>
+  </div>
+  @endif
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="page-header">
+                <h2 class="pageheader-title">Edit ProfileProfile</h2>
+                <div class="page-breadcrumb">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url('/') }}" class="breadcrumb-link">Looksy</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Edit Profile</li>
+                        </ol>
+                    </nav>
+                </div>
             </div>
-            <!-- /.box-header -->
-            <!-- form start -->
-            <form class="form-horizontal" method="POST" action="{{ url('/shopper/edit-profile') }}">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <div class="card">
+            <div class="card-body">
+              <form class="form-horizontal" method="POST" action="{{ url('/shopper/edit-profile') }}">
               @csrf
               <div class="box-body">
                 <div class="form-group">
-                  <label for="first_name" class="col-sm-2 control-label">First Name</label>
-                  <div class="col-sm-10">
+                  <label for="first_name" class="control-label">First Name</label>
                     <input id="first_name" name="firstname" type="text" class="form-control" placeholder="First Name" value="{{ $errors->has('firstname') ? old('firstname') : $user_data['first_name'] }}">
 
                     @if ($errors->has('firstname'))
@@ -34,12 +47,9 @@
                           <strong>{{ $errors->first('firstname') }}</strong>
                       </span>
                     @endif
-
-                  </div>
                 </div>
                 <div class="form-group">
-                  <label for="last_name" class="col-sm-2 control-label">Last Name</label>
-                  <div class="col-sm-10">
+                  <label for="last_name" class="control-label">Last Name</label>
                     <input id="last_name" name="lastname" type="text" class="form-control" placeholder="Last Name" value="{{ $errors->has('lastname') ? old('lastname') : $user_data['last_name'] }}">
 
                     @if ($errors->has('lastname'))
@@ -47,18 +57,13 @@
                           <strong>{{ $errors->first('lastname') }}</strong>
                       </span>
                     @endif
-
-                  </div>
                 </div>
                 <div class="form-group">
-                  <label for="email_address" class="col-sm-2 control-label">Email</label>
-                  <div class="col-sm-10">
+                  <label for="email_address" class="control-label">Email</label>
                     <input id="email_address" name="email" type="email" class="form-control" placeholder="Email Address" value="{{ $user_data['email'] }}" disabled>
-                  </div>
                 </div>
                 <div class="form-group">
-                  <label for="user_name" class="col-sm-2 control-label">Username</label>
-                  <div class="col-sm-10">
+                  <label for="user_name" class="control-label">Username</label>
                     <input id="user_name" name="username" type="text" class="form-control" placeholder="Username" value="{{ $errors->has('username') ? old('username') : $user_data['user_name'] }}">
 
                     @if ($errors->has('username'))
@@ -66,12 +71,9 @@
                           <strong>{{ $errors->first('username') }}</strong>
                       </span>
                     @endif
-
-                  </div>
                 </div>
                 <div class="form-group">
-                  <label for="postal_code" class="col-sm-2 control-label">Postal Code</label>
-                  <div class="col-sm-10">
+                  <label for="postal_code" class="control-label">Postal Code</label>
                     <input id="postal_code" name="postalcode" type="text" class="form-control" placeholder="Postal Code" value="{{ $errors->has('postalcode') ? old('postalcode') : $user_data['postal_code'] }}">
 
                     @if ($errors->has('postalcode'))
@@ -79,19 +81,17 @@
                           <strong>{{ $errors->first('postalcode') }}</strong>
                       </span>
                     @endif
-
-                  </div>
                 </div>
               </div>
               <!-- /.box-body -->
-              <div class="box-footer">
+              <div class="box-footer" style="float:right;">
                 <button type="submit" class="btn btn-primary pull-right">Save</button>
               </div>
               <!-- /.box-footer -->
             </form>
+            </div>
           </div>
-        </div>
-      </div>
-    </section>
+        </div> 
+    </div>
 </div>
 @endsection

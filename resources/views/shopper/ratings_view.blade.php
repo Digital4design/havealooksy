@@ -12,26 +12,41 @@
 @stop
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content">
-      @if(Session::get('status') == "success")
-      <div class="alert alert-success alert-dismissible">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          <i class="icon fa fa-check"></i>{{ Session::get('message') }}
-      </div>
-      @elseif(Session::get('status') == "danger")
-      <div class="alert alert-danger alert-dismissible">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          <i class="icon fa fa-ban"></i>{{ Session::get('message') }}
-      </div>
-      @endif
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="box box-info">
-            <div class="box-header with-border">
-              <h3 class="box-title">Rate Your Experience</h3>
+<div class="container-fluid dashboard-content">
+  @if(Session::get('status') == "success")
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ Session::get('message') }}
+    <a href="#" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">×</span>
+    </a>
+  </div>
+  @elseif(Session::get('status') == "danger")
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ Session::get('message') }}
+    <a href="#" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">×</span>
+    </a>
+  </div>
+  @endif
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="page-header">
+                <h2 class="pageheader-title">Rate Your Experience</h2>
+                <div class="page-breadcrumb">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url('/') }}" class="breadcrumb-link">Looksy</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Rate Your Experience</li>
+                        </ol>
+                    </nav>
+                </div>
             </div>
-            <div class="box-body">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <div class="card">
+            <div class="card-body">
               <table id="products-ratings" class="table table-bordered table-striped">
                 <thead>
                     <tr>
@@ -54,17 +69,16 @@
               </table>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
+        </div> 
+    </div>
 </div>
 <div class="modal fade" id="post-rating" style="display: none;">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
+        <h4 class="modal-title">Leave a Review</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span></button>
-        <h4 class="modal-title">Leave a Review</h4>
       </div>
       <div class="modal-body">
         <form method="POST" id="rating-form">
@@ -73,26 +87,21 @@
           <div class="form-group">
             <label>Your Rating</label>
             <div class="rating-row">
-              <div class="rating-input">
-                <input type="radio" name="rating" value="1">
-                <label>1</label>
-              </div>
-              <div class="rating-input">
-                <input type="radio" name="rating" value="2">
-                <label>2</label>
-              </div>
-              <div class="rating-input">
-                <input type="radio" name="rating" value="3">
-                <label>3</label>
-              </div>
-              <div class="rating-input">
-                <input type="radio" name="rating" value="4">
-                <label>4</label>
-              </div>
-              <div class="rating-input">
-                <input type="radio" name="rating" value="5">
-                <label>5</label>
-              </div>
+              <label class="custom-control custom-radio custom-control-inline">
+                <input type="radio" name="rating" class="custom-control-input" value="1"><span class="custom-control-label">1</span>
+              </label>
+              <label class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" name="rating" class="custom-control-input" value="2"><span class="custom-control-label">2</span>
+              </label>
+              <label class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" name="rating" class="custom-control-input" value="3"><span class="custom-control-label">3</span>
+              </label>
+              <label class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" name="rating" class="custom-control-input" value="4"><span class="custom-control-label">4</span>
+              </label>
+              <label class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" name="rating" class="custom-control-input" value="5"><span class="custom-control-label">5</span>
+              </label>
             </div>
             <p class="error" id="error-rating"></p>
           </div>
@@ -114,9 +123,9 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
+        <h4 class="modal-title">Your Review</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span></button>
-        <h4 class="modal-title">Your Review</h4>
       </div>
       <div class="modal-body" id="review-body" style="font-size:15px;">
       </div>
