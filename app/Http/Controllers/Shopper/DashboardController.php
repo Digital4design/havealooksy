@@ -70,7 +70,8 @@ class DashboardController extends Controller
             'firstname' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'min:5', 'max:10'],  
-            'postalcode' => ['required', 'numeric'],  
+            'postalcode' => ['required', 'numeric'],
+            'profile_picture' => ['image', 'mimes:jpg,jpeg,png']  
         ]);
         if ($validator->fails()) {
              return back()->withErrors($validator)->withInput();
@@ -83,6 +84,18 @@ class DashboardController extends Controller
         	$save_profile->user_name = $request->username;
         	$save_profile->postal_code = $request->postalcode;
         	$save_profile->save();
+
+            if($request->hasFile('profile_picture'))
+            {
+                $user = User::find(Auth::user()->id);
+
+                $file = $request->file('profile_picture');
+                $filename = 'user-'.time().'.'.$file->getClientOriginalExtension();
+                $file->move('public/images/profile_pictures/',$filename);
+
+                $user->profile_picture = $filename;
+                $user->save();
+            }
 
         	return back()->with(['status' => 'success' , 'message' => 'Profile updated successfully.']);
         }
@@ -124,41 +137,6 @@ class DashboardController extends Controller
         }
     }
 
-    public function changeProfilePicture(Request $request)
-    {
-        $validator = Validator::make($request->all(),[
-            'profile_picture' => ['required', 'image', 'mimes:jpg,jpeg,png'],    
-        ]);
-        if ($validator->fails()) {
-             return response()->json($validator->errors());
-        }
-        try
-        {
-            $user = User::find(Auth::user()->id);
-
-            if($user->profile_picture)
-            {   
-                if(file_exists(public_path('images/profile_pictures/'.$user->profile_picture)))
-                {   
-                    $del_pic = unlink(public_path('images/profile_pictures/'.$user->profile_picture));
-                }
-            }
-
-            $file = $request->file('profile_picture');
-            $filename = 'user-'.time().'.'.$file->getClientOriginalExtension();
-            $file->move('public/images/profile_pictures/',$filename);
-
-            $user->profile_picture = $filename;
-            $user->save();
-            
-            return response()->json(['status' => 'success','message' => 'Profile Picture updated successfully']);
-        }
-        catch(\Exception $e)
-        {
-            return response()->json(['status' => 'danger','message' => 'Something went wrong. Please try again later.']);
-        }
-    }
-
     public function removeProfilePicture()
     {
         $user = User::find(Auth::user()->id);
@@ -167,9 +145,9 @@ class DashboardController extends Controller
             $del_pic = unlink(public_path('images/profile_pictures/'.$user->profile_picture));
             $user->profile_picture = null;
             $user->save();
-            return response()->json(['status' => 'success','message' => 'Profile Picture removed successfully']);
+            return back()->with(['status' => 'success','message' => 'Profile Picture removed successfully.']);
         }
-        return response()->json(['status' => 'danger','message' => 'Something went wrong. Please try again later.']);
+        return back()->with(['status' => 'danger','message' => 'Something went wrong. Please try again later.']);
     }
 
     public function allNotifications()

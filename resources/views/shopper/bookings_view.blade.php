@@ -12,21 +12,6 @@
 
 @section('content')
 <div class="container-fluid dashboard-content">
-  @if(Session::get('status') == "success")
-  <div class="alert alert-success alert-dismissible fade show" role="alert">
-    {{ Session::get('message') }}
-    <a href="#" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">×</span>
-    </a>
-  </div>
-  @elseif(Session::get('status') == "danger")
-  <div class="alert alert-danger alert-dismissible fade show" role="alert">
-    {{ Session::get('message') }}
-    <a href="#" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">×</span>
-    </a>
-  </div>
-  @endif
     <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="page-header">
@@ -35,6 +20,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ url('/') }}" class="breadcrumb-link">Looksy</a></li>
+                            <li class="breadcrumb-item"><a href="{{ url('shopper/dashboard') }}" class="breadcrumb-link">Dashboard</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Bookings</li>
                         </ol>
                     </nav>
@@ -42,9 +28,24 @@
             </div>
         </div>
     </div>
-    <div class="row" style="overflow:hidden;height:400px;width:auto;position:relative;">
+    @if(Session::get('status') == "success")
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      {{ Session::get('message') }}
+      <a href="#" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </a>
+    </div>
+    @elseif(Session::get('status') == "danger")
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      {{ Session::get('message') }}
+      <a href="#" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </a>
+    </div>
+    @endif
+    <div class="row" style="height:500px;width:auto;">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-          <div class="card" style="overflow:auto;height:400px;width:100%;position:absolute;">
+          <div class="card" style="height:500px;width:100%;">
             <div class="card-body">
               <div class="col-xl-7 col-lg-7 col-md-7 col-sm-12 col-12 booking-inline" id="booking_calendar" style="float:left;height:auto;"></div>
               <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12 booking-inline" style="height:450px;float:right;">

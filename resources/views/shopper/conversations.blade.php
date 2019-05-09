@@ -18,21 +18,6 @@
 
 @section('content')
 <div class="container-fluid dashboard-content">
-  @if(Session::get('status') == "success")
-  <div class="alert alert-success alert-dismissible fade show" role="alert">
-    {{ Session::get('message') }}
-    <a href="#" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">×</span>
-    </a>
-  </div>
-  @elseif(Session::get('status') == "danger")
-  <div class="alert alert-danger alert-dismissible fade show" role="alert">
-    {{ Session::get('message') }}
-    <a href="#" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">×</span>
-    </a>
-  </div>
-  @endif
     <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="page-header">
@@ -41,6 +26,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ url('/') }}" class="breadcrumb-link">Looksy</a></li>
+                            <li class="breadcrumb-item"><a href="{{ url('shopper/dashboard') }}" class="breadcrumb-link">Dashboard</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Messages</li>
                         </ol>
                         <div class="pull-right mb-2">
@@ -51,6 +37,21 @@
             </div>
         </div>
     </div>
+    @if(Session::get('status') == "success")
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      {{ Session::get('message') }}
+      <a href="#" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </a>
+    </div>
+    @elseif(Session::get('status') == "danger")
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      {{ Session::get('message') }}
+      <a href="#" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </a>
+    </div>
+    @endif
     <div class="row" style="overflow:hidden;height:400px;width:auto;position:relative;">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="card" style="overflow:auto;height:400px;width:100%;position:absolute;">
@@ -60,16 +61,16 @@
                     @foreach($conversations as $val)
                       <div class="small-box conv" style="margin-bottom:10px;border-radius:5px;box-shadow:1px 1px 5px #ccc;">
                           <a href="{{ url('shopper/chat/get-chat/'.$val['user']['id']) }}" class="inner conv_link" style="padding:5px;">
-                              <div class="col-lg-1 col-xs-4">
+                              <div class="col-xl-1 col-lg-1 col-md-1 col-sm-3 col-3">
                                 <img class="user-avatar-lg rounded-circle" src="{{ $val['user']['profile_picture'] ? asset('public/images/profile_pictures/'.$val['user']['profile_picture']) : asset('public/images/default-pic.png')}}">
                               </div>
-                              <div class="col-lg-11 col-xs-8 conv_data" style="display:flex;flex-direction:column;">
+                              <div class="col-xl-11 col-lg-11 col-md-11 col-sm-9 col-9 conv_data" style="display:flex;flex-direction:column;">
                                 <h5 style="margin:5px 0px;">{{ $val['user']['first_name'] }} {{ $val['user']['last_name'] }}<div class="pull-right">
                                   @if($val['unread_count'] != 0)
                                   <i class="fa fa-circle unread"><span style="font-size:11px;color:#fff;position:absolute;left:6px;top:4px;">&nbsp;{{ $val['unread_count'] }}</span></i>
                                   @endif
                                 </div></h5>
-                                <p style="margin-bottom:0px;color:#636363;font-size:12px;">{{ $val['last_message']['body'] }}<span class="pull-right" style="font-size:12px;color:#999;">&nbsp;({{ $val['user']['getRole']['display_name'] }})</span></p>
+                                <p style="margin-bottom:0px;color:#636363;font-size:12px;">{{ str_limit($val['last_message']['body'], 150) }}<span class="pull-right" style="font-size:12px;color:#999;">&nbsp;({{ $val['user']['getRole']['display_name'] }})</span></p>
                               </div>
                           </a>
                       </div>
@@ -102,10 +103,10 @@
             @foreach($users as $usr)
               <div class="small-box user" style="box-shadow:1px 1px 5px #ccc;">
                   <a href="{{ url('shopper/chat/get-chat/'.$usr['id']) }}" class="inner">
-                      <div class="col-lg-2 col-xs-3" style="position:relative;height:52px;width:9.9%;">
+                      <div class="col-xl-2 col-lg-2 col-md-2 col-sm-3 col-3" style="position:relative;height:52px;width:9.9%;">
                         <img class="user-avatar-lg rounded-circle" src="{{ $val['user']['profile_picture'] ? asset('public/images/profile_pictures/'.$val['user']['profile_picture']) : asset('public/images/default-pic.png')}}">
                       </div>
-                      <div class="col-lg-10 col-xs-9 conv_data">
+                      <div class="col-xl-10 col-lg-10 col-md-10 col-sm-9 col-9 conv_data">
                         <p style="margin-bottom:0px;">{{ $usr['first_name'] }} {{ $usr['last_name'] }}<span class="pull-right" style="font-size:12px;color:#999;">&nbsp;({{$usr['getRole']['display_name']}})</span></p>
                       </div>
                   </a>

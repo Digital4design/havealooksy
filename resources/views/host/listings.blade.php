@@ -6,89 +6,98 @@
   .filters{margin-bottom:10px;}
   .filters .btn{margin-bottom:10px;}
   .toolbar{float:left;height:35px;margin-top:5px;}
-  .btn.button_delete, .btn-info, .btn.active-deactive, .is-favorite, .btn.bg-teal{padding:6px 10px;}
-  .btn.button_delete, .btn-info, .btn.bg-teal{display:inline;}
+  .btn-info, .btn.active-deactive, .is-favorite, .btn.bg-secondary{padding:9px 10px;}
+  .btn.button_delete{padding:6px 10px;}
+  .btn.button_delete, .btn-info, .btn.bg-secondary{display:inline;}
 </style>
 @stop
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content">
-      @if(Session::get('status') == "success")
-      <div class="alert alert-success alert-dismissible">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          <i class="icon fa fa-check"></i>{{ Session::get('message') }}
-      </div>
-      @elseif(Session::get('status') == "danger")
-      <div class="alert alert-danger alert-dismissible">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          <i class="icon fa fa-ban"></i>{{ Session::get('message') }}
-      </div>
-      @endif
-        <div class="row">
-            <div class="col-xs-12">
-              <div class="pull-right">
-                <a id="add-listing-button" href="{{ url('/host/listings/add-listing') }}" class="btn btn-block btn-primary"><i class="fa fa-plus-circle"></i></a>
-              </div>
-            </div>
-            <div class="col-xs-12">
-              <div class="box">
-                <div class="box-header">
-                  <h3 class="box-title">All Listings</h3>
+<div class="container-fluid dashboard-content">
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="page-header">
+                <h2 class="pageheader-title">All Listings</h2>
+                <div class="page-breadcrumb">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url('/') }}" class="breadcrumb-link">Looksy</a></li>
+                            <li class="breadcrumb-item"><a href="{{ url('host/dashboard') }}" class="breadcrumb-link">Dashboard</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Listings</li>
+                        </ol>
+                    </nav>
                 </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                  <div class="filters text-center">
-                      <button id="all" class="btn btn-primary">ALL</button>
-                      <button id="active" class="btn btn-primary">ACTIVE</button>
-                      <button id="inactive" class="btn btn-primary">INACTIVE</button>
-                      <button id="approved" class="btn btn-danger">APPROVED</button>
-                      <button id="unapproved" class="btn btn-danger">UNAPPROVED</button>
-                  </div>
-                  <table id="listings_list" class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                          <th></th>
-                          <th>Title</th>
-                          <th>Location</th>
-                          <th>Price</th>
-                          <th>Category</th>
-                          <th>Status</th>
-                          <th>Approval Status</th>
-                          <th>Images</th>
-                          <th>Activate/Deactivate</th>
-                          <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                          <th></th>
-                          <th>Title</th>
-                          <th>Location</th>
-                          <th>Price</th>
-                          <th>Category</th>
-                          <th>Status</th>
-                          <th>Approval Status</th>
-                          <th>Images</th>
-                          <th>Activate/Deactivate</th>
-                          <th>Action</th>
-                        </tr>
-                    </tfoot>
-                  </table>
-                </div>
-                <!-- /.box-body -->
-              </div>
             </div>
         </div>
-    </section>
+    </div>
+    @if(Session::get('status') == "success")
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      {{ Session::get('message') }}
+      <a href="#" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </a>
+    </div>
+    @elseif(Session::get('status') == "danger")
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      {{ Session::get('message') }}
+      <a href="#" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </a>
+    </div>
+    @endif
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="filters text-center">
+                  <button id="all" class="btn btn-primary">ALL</button>
+                  <button id="active" class="btn btn-primary">ACTIVE</button>
+                  <button id="inactive" class="btn btn-primary">INACTIVE</button>
+                  <button id="approved" class="btn btn-danger">APPROVED</button>
+                  <button id="unapproved" class="btn btn-danger">UNAPPROVED</button>
+              </div>
+              <table id="listings_list" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                      <th></th>
+                      <th>Title</th>
+                      <th>Location</th>
+                      <th>Price</th>
+                      <th>Category</th>
+                      <th>Status</th>
+                      <th>Approval Status</th>
+                      <th>Images</th>
+                      <th>Activate/Deactivate</th>
+                      <th>Action</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                      <th></th>
+                      <th>Title</th>
+                      <th>Location</th>
+                      <th>Price</th>
+                      <th>Category</th>
+                      <th>Status</th>
+                      <th>Approval Status</th>
+                      <th>Images</th>
+                      <th>Activate/Deactivate</th>
+                      <th>Action</th>
+                    </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div> 
+    </div>
 </div>
 <div class="modal fade" id="image-modal" style="display: none;">
   <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
+          <h4 class="modal-title">Images</h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span></button>
-          <h4 class="modal-title">Images</h4>
         </div>
         <div class="modal-body">
         </div>
@@ -246,10 +255,10 @@ $(function() {
     $(document).on("click", "button.active-deactive", function(){
       var id = $(this).attr('data-id');
 
-      if($(this).hasClass("btn-danger")){
+      if($(this).hasClass("btn-primary")){
         status_data = 1;
       }
-      if($(this).hasClass("btn-default")){
+      if($(this).hasClass("btn-light")){
         status_data = 0;
       }
 
@@ -260,11 +269,11 @@ $(function() {
         success    : function(data){
           if(data.status == 'success'){
             if(data.listing_status == 1){
-              $(".active-deactive[data-id="+id+"]").removeClass("btn-danger").addClass("btn-default").text("Deactivate");
+              $(".active-deactive[data-id="+id+"]").removeClass("btn-primary").addClass("btn-light").text("Deactivate");
               // $(".active-deactive[data-id="+id+"]").closest("tr").find("td:eq(5)").text("Active");
             }
             if(data.listing_status == 0){
-              $(".active-deactive[data-id="+id+"]").removeClass("btn-default").addClass("btn-danger").text("Activate");
+              $(".active-deactive[data-id="+id+"]").removeClass("btn-light").addClass("btn-primary").text("Activate");
               // $(".active-deactive[data-id="+id+"]").closest("tr").find("td:eq(5)").text("Deactive");
             }
           }  

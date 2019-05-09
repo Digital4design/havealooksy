@@ -141,7 +141,6 @@ Route::group(['prefix' => 'host', 'middleware' => ['host', 'auth', 'verified']],
     Route::post('/edit-profile', 'Host\DashboardController@editProfile');
     Route::get('/change-password', 'Host\DashboardController@changePassword');  
     Route::post('/save-password', 'Host\DashboardController@savePassword');
-    Route::post('/change-profile-picture', 'Host\DashboardController@changeProfilePicture');
     Route::get('/remove-profile-picture', 'Host\DashboardController@removeProfilePicture');
     Route::get('/get-unread-conversations', 'Host\ChatController@getUnreadConversations');
 
@@ -192,7 +191,6 @@ Route::group(['prefix' => 'shopper', 'middleware' => ['auth', 'shopper', 'verifi
     Route::post('/edit-profile', 'Shopper\DashboardController@editProfile');
     Route::get('/change-password', 'Shopper\DashboardController@changePassword');  
     Route::post('/save-password', 'Shopper\DashboardController@savePassword');
-    Route::post('/change-profile-picture', 'Shopper\DashboardController@changeProfilePicture');
     Route::get('/remove-profile-picture', 'Shopper\DashboardController@removeProfilePicture');
     Route::get('/get-unread-conversations', 'Shopper\ChatController@getUnreadConversations');
 

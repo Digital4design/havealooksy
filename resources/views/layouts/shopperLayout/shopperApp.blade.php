@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="{{ asset('public/dashboardAssets/vendor/datatables/css/dataTables.bootstrap4.css') }}">
     <link rel="stylesheet" href="{{ asset('public/dashboardAssets/vendor/datatables/css/fixedHeader.bootstrap4.css') }}">
     <link rel="stylesheet" href="{{ asset('public/dashboardAssets/vendor/datatables/css/select.bootstrap4.css') }}">
+    <!-- LightBox -->
+    <link rel="stylesheet" href="{{asset('public/css/lightbox')}}/lightbox.min.css">
     <!-- Full Calendar -->
     <link rel="stylesheet" href="{{ asset('public/dashboardAssets/vendor/full-calendar/css/fullcalendar.css') }}">
     <!-- Custom CSS -->
@@ -214,6 +216,8 @@
     <script src="{{asset('public/js/datatables')}}/buttons.colVis.min.js"></script>
     <script src="{{ asset('public/dashboardAssets/vendor/datatables/js/buttons.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('public/dashboardAssets/vendor/datatables/js/data-table.js') }}"></script>
+    <!-- LightBox -->
+    <script src="{{asset('public/js/lightbox')}}/lightbox.min.js"></script>
     <!-- Full Calendar -->
     <script src="{{ asset('public/dashboardAssets/vendor/full-calendar/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('public/dashboardAssets/vendor/full-calendar/js/moment.min.js') }}"></script>

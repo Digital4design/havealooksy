@@ -1,23 +1,45 @@
 @extends('layouts.hostLayout.hostApp')
 
 @section('pageCss')
-<style type="text/css">
-  .small-box{padding:5px 10px;background-color:#ddf8ff;}
-  .small-box a{text-decoration:none;color:#444;}
-  .small-box:hover{color:inherit;cursor:pointer;background-color:#cceef7;}
-</style>
 @stop
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content">
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">Booking List</h3>
+<div class="container-fluid dashboard-content">
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="page-header">
+                <h2 class="pageheader-title">Booking List</h2>
+                <div class="page-breadcrumb">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url('/') }}" class="breadcrumb-link">Looksy</a></li>
+                            <li class="breadcrumb-item"><a href="{{ url('host/dashboard') }}" class="breadcrumb-link">Dashboard</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Booking List</li>
+                        </ol>
+                    </nav>
+                </div>
             </div>
-            <div id="booking_table_box" class="box-body">
+        </div>
+    </div>
+    @if(Session::get('status') == "success")
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      {{ Session::get('message') }}
+      <a href="#" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </a>
+    </div>
+    @elseif(Session::get('status') == "danger")
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      {{ Session::get('message') }}
+      <a href="#" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </a>
+    </div>
+    @endif
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <div class="card">
+            <div class="card-body">
               <table id="bookings_list" class="table table-bordered table-striped" style="width:100%;">
                 <thead>
                     <tr>
@@ -44,9 +66,8 @@
               </table>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
+        </div> 
+    </div>
 </div>
 @endsection
 
@@ -106,7 +127,7 @@
         data = 1;
         message = "Booking has been confirmed.";
       }
-      else if($(this).hasClass("btn-default")){
+      else if($(this).hasClass("btn-light")){
         data = 3;
         message = "Booking Confirmation has been revoked.";
       }

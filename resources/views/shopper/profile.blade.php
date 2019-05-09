@@ -1,41 +1,42 @@
 @extends('layouts.shopperLayout.shopperApp')
 @section('content')
 <div class="container-fluid dashboard-content">
-  @if(Session::get('status') == "success")
-  <div class="alert alert-success alert-dismissible fade show" role="alert">
-    {{ Session::get('message') }}
-    <a href="#" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">×</span>
-    </a>
-  </div>
-  @elseif(Session::get('status') == "danger")
-  <div class="alert alert-danger alert-dismissible fade show" role="alert">
-    {{ Session::get('message') }}
-    <a href="#" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">×</span>
-    </a>
-  </div>
-  @endif
     <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="page-header">
-                <h2 class="pageheader-title">Edit ProfileProfile</h2>
+                <h2 class="pageheader-title">Edit Profile</h2>
                 <div class="page-breadcrumb">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ url('/') }}" class="breadcrumb-link">Looksy</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Edit Profile</li>
+                            <li class="breadcrumb-item"><a href="{{ url('shopper/dashboard') }}" class="breadcrumb-link">Dashboard</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Profile</li>
                         </ol>
                     </nav>
                 </div>
             </div>
         </div>
     </div>
+    @if(Session::get('status') == "success")
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      {{ Session::get('message') }}
+      <a href="#" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </a>
+    </div>
+    @elseif(Session::get('status') == "danger")
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      {{ Session::get('message') }}
+      <a href="#" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </a>
+    </div>
+    @endif
     <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="card">
             <div class="card-body">
-              <form class="form-horizontal" method="POST" action="{{ url('/shopper/edit-profile') }}">
+              <form class="form-horizontal" method="POST" action="{{ url('/shopper/edit-profile') }}" enctype="multipart/form-data">
               @csrf
               <div class="box-body">
                 <div class="form-group">
@@ -82,6 +83,29 @@
                       </span>
                     @endif
                 </div>
+                @if(isset($user_data['profile_picture']))
+                <div class="form-group">
+                  <label for="image" class="control-label">Uploaded Profile Picture</label>
+                    <div id="image-box">
+                      <a href="{{ asset('public/images/profile_pictures/'.$user_data['profile_picture']) }}" data-lightbox="{{ $user_data['id'] }}">
+                          <img src="{{ asset('public/images/profile_pictures/'.$user_data['profile_picture']) }}">
+                      </a>
+                    </div>
+                    <a href="{{ url('shopper/remove-profile-picture') }}" class="btn btn-dark btn-sm text-center px-5 m-3">Remove</a>
+                </div>
+                @else
+                <div class="form-group">
+                  <label for="image" class="control-label">Upload Profile Picture</label>
+                    <input id="image" name="profile_picture" type="file" class="form-control" style="box-shadow:none;border-color:#d2d2e4;">
+                    <p class="help-block">Only .jpeg, .jpg, .png are supported.</p>
+
+                    @if ($errors->has('profile_picture'))
+                      <span class="invalid-feedback" role="alert">
+                          <strong>{{ $errors->first('profile_picture') }}</strong>
+                      </span>
+                    @endif
+                </div>
+                @endif
               </div>
               <!-- /.box-body -->
               <div class="box-footer" style="float:right;">

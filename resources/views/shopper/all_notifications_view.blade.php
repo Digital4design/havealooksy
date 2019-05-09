@@ -9,6 +9,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ url('/') }}" class="breadcrumb-link">Looksy</a></li>
+                            <li class="breadcrumb-item"><a href="{{ url('shopper/dashboard') }}" class="breadcrumb-link">Dashboard</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Notifications</li>
                         </ol>
                     </nav>

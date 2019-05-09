@@ -1,21 +1,6 @@
 @extends('layouts.shopperLayout.shopperApp')
 @section('content')
 <div class="container-fluid dashboard-content">
-  @if(Session::get('status') == "success")
-  <div class="alert alert-success alert-dismissible fade show" role="alert">
-    {{ Session::get('message') }}
-    <a href="#" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">×</span>
-    </a>
-  </div>
-  @elseif(Session::get('status') == "danger")
-  <div class="alert alert-danger alert-dismissible fade show" role="alert">
-    {{ Session::get('message') }}
-    <a href="#" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">×</span>
-    </a>
-  </div>
-  @endif
     <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="page-header">
@@ -24,6 +9,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ url('/') }}" class="breadcrumb-link">Looksy</a></li>
+                            <li class="breadcrumb-item"><a href="{{ url('shopper/dashboard') }}" class="breadcrumb-link">Dashboard</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Change Password</li>
                         </ol>
                     </nav>
@@ -31,6 +17,21 @@
             </div>
         </div>
     </div>
+    @if(Session::get('status') == "success")
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      {{ Session::get('message') }}
+      <a href="#" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </a>
+    </div>
+    @elseif(Session::get('status') == "danger")
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      {{ Session::get('message') }}
+      <a href="#" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </a>
+    </div>
+    @endif
     <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="card">

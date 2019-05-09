@@ -66,17 +66,17 @@ class ListingController extends Controller
                         })->addColumn('activate_deactivate', function ($all_listings){
                             if($all_listings['status'] == 1){
                                 $status = 'Deactivate';
-                                $btn_color = 'default';
+                                $btn_color = 'light';
                             }
                             if($all_listings['status'] == 0){
                                 $status = 'Activate';
-                                $btn_color = 'danger';
+                                $btn_color = 'primary';
                             }
                             return "<button type='button' data-id='".$all_listings['id']."' class='btn btn-".$btn_color." active-deactive' type='button'>".$status."</button>";
                         })->addColumn('images', function ($all_listings){
-                            return "<a href='#' data-toggle='modal' data-target='#image-modal' class='listing_images' data-id='".$all_listings['id']."' style='font-size:1em;padding:10px;'><i class='glyphicon glyphicon-picture'></i></a>";
+                            return "<a href='#' data-toggle='modal' data-target='#image-modal' class='listing_images' data-id='".$all_listings['id']."' style='font-size:1em;padding:15px;'><i class='fas fa-image'></i></a>";
                         })->addColumn('action', function ($all_listings){
-                            return "<a href='".url('host/listings/view/'.$all_listings['id'])."' class='btn bg-teal' style='margin-right:5px;'><i class='fa fa-eye'></i></a><a href='".route('editListing', $all_listings['id'])."' class='btn btn-info' style='margin-right:5px;'><i class='fa fa-edit'></i></a><button type='button' data-id='".$all_listings['id']."' class='btn btn-warning button_delete'><i class='fa fa-trash-o'></i></button>";
+                            return "<a href='".url('host/listings/view/'.$all_listings['id'])."' class='btn bg-secondary' style='margin-right:5px;'><i class='fas fa-eye'></i></a><a href='".route('editListing', $all_listings['id'])."' class='btn btn-info' style='margin-right:5px;'><i class='fa fa-edit'></i></a><button type='button' data-id='".$all_listings['id']."' class='btn btn-warning button_delete'><i class='fas fa-trash-alt' style='color:#fff;'></i></button>";
             			})->rawColumns(['title' => 'title', 'activate_deactivate' => 'activate_deactivate', 'action' => 'action', 'images' => 'images'])->make(true);
     }
 

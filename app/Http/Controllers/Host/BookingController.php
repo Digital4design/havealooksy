@@ -21,7 +21,7 @@ class BookingController extends Controller
     	$bookings = Bookings::with(['getBookedListingUser', 'getBookedListingTime', 'getbookingStatus'])
                             ->whereHas('getBookedListingUser', function($q){
                         		$q->where('user_id', Auth::user()->id);
-                        	})->orderBy('created_at', 'desc')->get();
+                        	})->orderBy('created_at', 'desc')->paginate(5);
     	return view('host.bookings_calendar')->with('bookings', $bookings);
     }
 
@@ -83,7 +83,7 @@ class BookingController extends Controller
                                 return "Requested booking date passed.";
                             }
                             if($bookings['status_id'] == 1){
-                                return "<a href='#' data-id='".$bookings['id']."' class='btn btn-default confirmation' style='margin-right:5px;display:inline;'>Revoke Confirmation</a>";
+                                return "<a href='#' data-id='".$bookings['id']."' class='btn btn-light confirmation' style='margin-right:5px;display:inline;'>Revoke Confirmation</a>";
                             }
                             elseif($bookings['status_id'] == 3){
                                 return "<a href='#' data-id='".$bookings['id']."' class='btn btn-info confirmation' style='margin-right:5px;display:inline;'>Confirm</a><a href='#' data-id='".$bookings['id']."' class='btn btn-danger cancel_booking' style='display:inline;'>Cancel</a>";
