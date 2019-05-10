@@ -64,7 +64,7 @@ class DashboardController extends Controller
     	$validator = Validator::make($request->all(),[
             'firstname' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'min:5', 'max:10'],  
+            'username' => ['required', 'string', 'min:5', 'max:255'],  
             'postalcode' => ['required', 'numeric'],
             'profile_picture' => ['image', 'mimes:jpg,jpeg,png']  
         ]);

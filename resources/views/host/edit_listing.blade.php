@@ -110,7 +110,7 @@
                   </div>
                   <div class="form-group" id="add_image_section">
                     <label for="image" class="control-label">Add Images</label>
-                      <input id="image" name="images[]" type="file" class="form-control" multiple style="box-shadow:none;border-color:#d2d2e4;;">
+                      <input id="image" name="images[]" type="file" class="form-control" multiple>
                       <p class="help-block">Only .jpeg, .jpg, .png are supported.</p>
 
                       @if ($errors->has('images'))

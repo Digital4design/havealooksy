@@ -72,7 +72,7 @@ class ListingController extends Controller
                                 $status = 'Activate';
                                 $btn_color = 'primary';
                             }
-                            return "<button type='button' data-id='".$all_listings['id']."' class='btn btn-".$btn_color." active-deactive' type='button'>".$status."</button>";
+                            return "<button type='button' data-id='".$all_listings['id']."' class='btn btn-sm btn-".$btn_color." active-deactive' type='button'>".$status."</button>";
                         })->addColumn('images', function ($all_listings){
                             return "<a href='#' data-toggle='modal' data-target='#image-modal' class='listing_images' data-id='".$all_listings['id']."' style='font-size:1em;padding:15px;'><i class='fas fa-image'></i></a>";
                         })->addColumn('action', function ($all_listings){

@@ -60,7 +60,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth', 'verified']
     Route::post('/edit-profile', 'Admin\DashboardController@editProfile');
     Route::get('/change-password', 'Admin\DashboardController@changePassword');  
     Route::post('/save-password', 'Admin\DashboardController@savePassword');
-    Route::post('/change-profile-picture', 'Admin\DashboardController@changeProfilePicture');
     Route::get('/remove-profile-picture', 'Admin\DashboardController@removeProfilePicture');
     Route::get('/get-unread-conversations', 'Admin\ChatController@getUnreadConversations');
 
@@ -89,6 +88,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth', 'verified']
         Route::get('/', ['as' => 'listingsAdmin', 'uses' => 'Admin\ListingController@getListingsView']);
         Route::get('/get-listings', 'Admin\ListingController@getAllListings');
         Route::get('/get-images/{id}', 'Admin\ListingController@getListingImages');
+        Route::get('/remove-from-deleted/{id}', 'Admin\ListingController@removeFromDeleted');
         Route::get('/change-approval/{id}/{status}', 'Admin\ListingController@changeApprovalSetting');
         Route::get('/founder-pick/{id}/{status}', 'Admin\ListingController@changeFounderPickStatus');
         Route::get('/view/{id}', 'Admin\ListingController@viewListing');

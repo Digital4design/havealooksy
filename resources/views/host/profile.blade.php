@@ -96,7 +96,7 @@
                 @else
                 <div class="form-group">
                   <label for="image" class="control-label">Upload Profile Picture</label>
-                    <input id="image" name="profile_picture" type="file" class="form-control" style="box-shadow:none;border-color:#d2d2e4;">
+                    <input id="image" name="profile_picture" type="file" class="form-control">
                     <p class="help-block">Only .jpeg, .jpg, .png are supported.</p>
 
                     @if ($errors->has('profile_picture'))

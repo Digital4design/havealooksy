@@ -21,17 +21,17 @@ class RatingController extends Controller
 
     	return Datatables::of($ratings)
     					->editColumn('listing_id', function ($ratings){
-                            return "<a href='".url('admin/listings/view/'.$ratings['listing_id'])."' class='view_detail'>".$ratings['getReviewedListing']['title']."</a>";
+                            return "<a href='".url('admin/listings/view/'.$ratings['listing_id'])."' class='view_detail text-secondary'>".$ratings['getReviewedListing']['title']."</a>";
                         })->editColumn('rating', function ($ratings){
                             return $ratings['rating'];
                         })->editColumn('review', function ($ratings){
                             return $ratings['review'];
                         })->editColumn('posted_by', function ($ratings){
-                        	return "<a href='".url('admin/users/view/'.$ratings['posted_by'])."' class='view_detail'>".$ratings['getReviewer']['first_name']."</a>";
+                        	return "<a href='".url('admin/users/view/'.$ratings['posted_by'])."' class='view_detail text-danger'>".$ratings['getReviewer']['first_name']."&nbsp;".$ratings['getReviewer']['last_name']."</a>";
                         })->editColumn('approved', function ($ratings){
                         	if($ratings['approved'] == 1){
                         		$label = "Discard";
-                        		$btn_class = "btn-default";
+                        		$btn_class = "btn-light";
                         	}
                         	if($ratings['approved'] == 0){
                         		$label = "Approve";
@@ -41,7 +41,7 @@ class RatingController extends Controller
                         })->editColumn('spam', function ($ratings){
                         	if($ratings['spam'] == 1){
                         		$label = "Remove from Spam";
-                        		$btn_class = "btn-default";
+                        		$btn_class = "btn-light";
                         	}
                         	if($ratings['spam'] == 0){
                         		$label = "Add to Spam";

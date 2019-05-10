@@ -3,60 +3,74 @@
 @section('pageCss')
   <style type="text/css">
     .filters{margin-bottom:20px;}
+    .btn-info, .btn-danger, .btn-success{display:inline;}
+    .btn-danger, .btn-success{padding:5.5px 12px;}
+
+    ::-webkit-input-placeholder{white-space:pre-line;position:relative;top:-7px;}
+    ::-moz-placeholder{white-space:pre-line;position:relative;top:-7px;}
+    :-ms-input-placeholder{white-space:pre-line;position:relative;top:-7px;}
+    :-moz-placeholder{white-space:pre-line;position:relative;top:-7px;}
   </style>
 @stop
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content">
-          <div class="row">
-            <div class="col-xs-12">
-                <div class="box">
-                <div class="box-header">
-                  <h3 class="box-title">All Users</h3>
+<div class="container-fluid dashboard-content">
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="page-header">
+                <h2 class="pageheader-title">All Users</h2>
+                <div class="page-breadcrumb">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url('/') }}" class="breadcrumb-link">Looksy</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Users</li>
+                        </ol>
+                    </nav>
                 </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                  <div class="text-center filters">
-                    <label style="margin-right:20px;">Filters : </label>
-                    <button id="all" class="btn btn-primary">ALL</button>
-                    <button id="active" class="btn btn-primary">ACTIVE</button>
-                    <button id="blocked" class="btn btn-primary">BLOCKED</button>
-                  </div>
-                  <table id="user_list" class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                          <th>Name</th>
-                          <th>Last Name</th>
-                          <th>Username</th>
-                          <th>Email</th>
-                          <th>Postal Code</th>
-                          <th>User Type</th>
-                          <th>Status</th>
-                          <th>Verification Status</th>
-                          <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                          <th>Name</th>
-                          <th>Last Name</th>
-                          <th>Username</th>
-                          <th>Email</th>
-                          <th>Postal Code</th>
-                          <th>User Type</th>
-                          <th>Status</th>
-                          <th>Verification Status</th>
-                          <th>Action</th>
-                        </tr>
-                    </tfoot>
-                  </table>
-                </div>
-                <!-- /.box-body -->
-              </div>
             </div>
         </div>
-    </section>
+    </div>
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="text-center filters">
+                <button id="all" class="btn btn-primary btn-sm">ALL</button>
+                <button id="active" class="btn btn-primary btn-sm">ACTIVE</button>
+                <button id="blocked" class="btn btn-primary btn-sm">BLOCKED</button>
+              </div>
+              <table id="user_list" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Last Name</th>
+                      <th>Username</th>
+                      <th>Email</th>
+                      <th>Postal Code</th>
+                      <th>User Type</th>
+                      <th></th>
+                      <th>Status</th><!-- Verification -->
+                      <th>Action</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                      <th>Name</th>
+                      <th>Last Name</th>
+                      <th>Username</th>
+                      <th>Email</th>
+                      <th>Postal Code</th>
+                      <th>User Type</th>
+                      <th></th>
+                      <th>Status</th><!-- Verification -->
+                      <th>Action</th>
+                    </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div> 
+    </div>
 </div>
 @endsection
 
@@ -139,7 +153,7 @@ $(function() {
       if($(this).hasClass("btn-danger")){
         status_data = 0;
       }
-      if($(this).hasClass("bg-green")){
+      if($(this).hasClass("btn-success")){
         status_data = 1;
       }
 
@@ -150,10 +164,10 @@ $(function() {
         success    : function(data){
           if(data.status == 'success'){
             if(data.user_status == 1){
-              $(".block-unblock[data-id="+id+"]").removeClass("bg-green").addClass("btn-danger").text("Block");
+              $(".block-unblock[data-id="+id+"]").removeClass("btn-success").addClass("btn-danger").text("Block");
             }
             if(data.user_status == 0){
-              $(".block-unblock[data-id="+id+"]").removeClass("btn-danger").addClass("bg-green").text("Unblock");
+              $(".block-unblock[data-id="+id+"]").removeClass("btn-danger").addClass("btn-success").text("Unblock");
             }
           }  
         } 

@@ -2,57 +2,63 @@
 
 @section('pageCss')
 <style type="text/css">
-  #add-category-button{margin:1em auto;font-size:20px;padding:0.3em 1.5em;}
-  #add_category_form{padding:1em 2rem;}
+  #add-category-button{margin-bottom:0.5em;font-size:20px;padding:0.2em 1.5em;}
+  #add_category_form{padding:1em;}
   .btn.button_delete, .btn-info{display:inline;}
   .error{color:red;}
 </style>
 @stop
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content">
-        <div class="row">
-            <div class="col-xs-12">
-              <div class="pull-right">
-                <button id="add-category-button" type="button" class="btn btn-block btn-primary" data-toggle="modal" data-target="#add-category"><i class="fa fa-plus-circle"></i></button>
-              </div>
-            </div>
-            <div class="col-xs-12">
-                <div class="box">
-                <div class="box-header">
-                  <h3 class="box-title">All Categories</h3>
+<div class="container-fluid dashboard-content">
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="page-header">
+                <h2 class="pageheader-title">All Categories</h2>
+                <div class="page-breadcrumb">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url('/') }}" class="breadcrumb-link">Looksy</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Categories</li>
+                        </ol>
+                        <div class="pull-right">
+                          <button id="add-category-button" type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-category"><i class="fa fa-plus-circle"></i></button>
+                        </div>
+                    </nav>
                 </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                  <table id="category_list" class="table table-bordered table-striped" style="width:100%;">
-                    <thead>
-                        <tr>
-                          <th>Category Name</th>
-                          <th>Status</th>
-                          <th>Parent Category</th>
-                          <th>Image</th>
-                          <th>Activate/Deactivate</th>
-                          <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                          <th>Category Name</th>
-                          <th>Status</th>
-                          <th>Parent Category</th>
-                          <th>Image</th>
-                          <th>Activate/Deactivate</th>
-                          <th>Action</th>
-                        </tr>
-                    </tfoot>
-                  </table>
-                </div>
-                <!-- /.box-body -->
-              </div>
             </div>
         </div>
-    </section>
+    </div>
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <div class="card">
+            <div class="card-body">
+              <table id="category_list" class="table table-bordered table-striped" style="width:100%;">
+                <thead>
+                    <tr>
+                      <th>Category Name</th>
+                      <th>Status</th>
+                      <th>Parent Category</th>
+                      <th>Image</th>
+                      <th>Activate/Deactivate</th>
+                      <th>Action</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                      <th>Category Name</th>
+                      <th>Status</th>
+                      <th>Parent Category</th>
+                      <th>Image</th>
+                      <th>Activate/Deactivate</th>
+                      <th>Action</th>
+                    </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div> 
+    </div>
 </div>
 <div class="modal fade" id="add-category" style="display: none;">
   <div class="modal-dialog">
@@ -60,9 +66,9 @@
       <form id="add_category_form" enctype="multipart/form-data" method="POST">
         @csrf
         <div class="modal-header">
+          <h4 class="modal-title">Add Category</h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span></button>
-          <h4 class="modal-title">Add Category</h4>
         </div>
         <div class="modal-body">
           <div class="form-group">
@@ -91,7 +97,7 @@
           <button id="attach_parent" type="button" class="btn btn-info"><span id="button_label">Attach Parent Category<i class="fa fa-plus" style="margin-left:0.5em;"></i></span></button>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-light pull-left" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary">Add</button>
         </div>
       </form>
@@ -105,9 +111,9 @@
         @csrf
         <input type="hidden" name="category_id">
         <div class="modal-header">
+          <h4 class="modal-title">Edit Category</h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span></button>
-          <h4 class="modal-title">Edit Category</h4>
         </div>
         <div class="modal-body">
           <div class="form-group">
@@ -123,12 +129,12 @@
             <p id="error-image" class="error"></p>
           </div>
           <div class="form-group" id="category_image" style="display:none;">
-            <img style="height:auto;width:auto;"><br>
+            <img style="height:auto;width:auto;max-width:50%;"><br>
             <button type="button" id="image_remove_button" class="btn btn-warning" style="margin-top:10px;">Remove Category Image</button>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-light pull-left" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary">Update</button>
         </div>
       </form>
@@ -164,7 +170,7 @@ $(function() {
             { data: 'name', name: 'name' },
             { data: 'status', name: 'status' },
             { data: 'parent_category', name: 'parent_category' },
-            { data: 'image', name: 'image' },
+            { data: 'image', name: 'image', orderable: false },
             { data: 'activate_deactivate', name: 'activate_deactivate', orderable: false },
             { data: 'action', name: 'action', orderable: false },
         ],
@@ -267,10 +273,10 @@ $(function() {
     $(document).on("click", "button.active-deactive", function(){
       var id = $(this).attr('data-id');
 
-      if($(this).hasClass("btn-danger")){
+      if($(this).hasClass("btn-primary")){
         status_data = 1;
       }
-      if($(this).hasClass("btn-default")){
+      if($(this).hasClass("btn-light")){
         status_data = 0;
       }
 
@@ -281,11 +287,11 @@ $(function() {
         success    : function(data){
           if(data.status == 'success'){
             if(data.category_status == 1){
-              $(".active-deactive[data-id="+id+"]").removeClass("btn-danger").addClass("btn-default").text("Deactivate");
+              $(".active-deactive[data-id="+id+"]").removeClass("btn-primary").addClass("btn-light").text("Deactivate");
               $(".active-deactive[data-id="+id+"]").closest("tr").find("td:eq(1)").text("Active");
             }
             if(data.category_status == 0){
-              $(".active-deactive[data-id="+id+"]").removeClass("btn-default").addClass("btn-danger").text("Activate");
+              $(".active-deactive[data-id="+id+"]").removeClass("btn-light").addClass("btn-primary").text("Activate");
               $(".active-deactive[data-id="+id+"]").closest("tr").find("td:eq(1)").text("Deactive");
             }
           }  
@@ -303,6 +309,7 @@ $(function() {
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: "btn-primary",
+        cancelButtonClass: "btn-light",
         confirmButtonText: "Yes, delete it!",
         closeOnConfirm: false
       },

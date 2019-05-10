@@ -7,63 +7,75 @@
 @stop
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content">
-      @if(Session::get('status') == "success")
-      <div class="alert alert-success alert-dismissible">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          <i class="icon fa fa-check"></i>{{ Session::get('message') }}
-      </div>
-      @elseif(Session::get('status') == "danger")
-      <div class="alert alert-danger alert-dismissible">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          <i class="icon fa fa-ban"></i>{{ Session::get('message') }}
-      </div>
-      @endif
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="box">
-                <div class="box-header">
-                  <h3 class="box-title">All Ratings & Reviews</h3>
+<div class="container-fluid dashboard-content">
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="page-header">
+                <h2 class="pageheader-title">All Ratings & Reviews</h2>
+                <div class="page-breadcrumb">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url('/') }}" class="breadcrumb-link">Looksy</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Ratings & Reviews</li>
+                        </ol>
+                    </nav>
                 </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                  <div class="text-center filters">
-                    <button id="all" class="btn btn-primary">ALL</button>
-                    <button id="approved" class="btn btn-primary">APPROVED</button>
-                    <button id="discarded" class="btn btn-danger">DISCARDED</button>
-                    <button id="spam" class="btn btn-warning">SPAM</button>
-                  </div>
-                  <table id="ratings_list" class="table table-bordered table-striped" style="width:100%;">
-                    <thead>
-                        <tr>
-                          <th>Listing</th>
-                          <th>Rating</th>
-                          <th>Review</th>
-                          <th>Posted By</th>
-                          <th>Status</th>
-                          <th>Spam</th>
-                          <th>Approval Status</th><!--  For Filtering purpose only  -->
-                          <th>Spam Status</th><!--  For Filtering purpose only  -->
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                          <th>Listing</th>
-                          <th>Rating</th>
-                          <th>Review</th>
-                          <th>Posted By</th>
-                          <th>Approval Status</th><!--  For Filtering purpose only  -->
-                          <th>Spam Status</th><!--  For Filtering purpose only  -->
-                        </tr>
-                    </tfoot>
-                  </table>
-                </div>
-                <!-- /.box-body -->
-              </div>
             </div>
         </div>
-    </section>
+    </div>
+    @if(Session::get('status') == "success")
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      {{ Session::get('message') }}
+      <a href="#" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </a>
+    </div>
+    @elseif(Session::get('status') == "danger")
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      {{ Session::get('message') }}
+      <a href="#" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </a>
+    </div>
+    @endif
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="text-center filters">
+                <button id="all" class="btn btn-primary btn-sm">ALL</button>
+                <button id="approved" class="btn btn-primary btn-sm">APPROVED</button>
+                <button id="discarded" class="btn btn-danger btn-sm">DISCARDED</button>
+                <button id="spam" class="btn btn-warning btn-sm">SPAM</button>
+              </div>
+              <table id="ratings_list" class="table table-bordered table-striped" style="width:100%;">
+                <thead>
+                    <tr>
+                      <th>Listing</th>
+                      <th>Rating</th>
+                      <th>Review</th>
+                      <th>Posted By</th>
+                      <th>Status</th>
+                      <th>Spam</th>
+                      <th>Approval Status</th><!--  For Filtering purpose only  -->
+                      <th>Spam Status</th><!--  For Filtering purpose only  -->
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                      <th>Listing</th>
+                      <th>Rating</th>
+                      <th>Review</th>
+                      <th>Posted By</th>
+                      <th>Approval Status</th><!--  For Filtering purpose only  -->
+                      <th>Spam Status</th><!--  For Filtering purpose only  -->
+                    </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div> 
+    </div>
 </div>
 @endsection
 
@@ -136,14 +148,14 @@
 
       if($(this).hasClass("btn-info"))
       {
-        $(this).removeClass("btn-info").addClass("btn-default");
+        $(this).removeClass("btn-info").addClass("btn-light");
         $(this).text("Discard");
         approval_data = 1;
         message = "Approved";
       }
-      else if($(this).hasClass("btn-default"))
+      else if($(this).hasClass("btn-light"))
       {
-        $(this).removeClass("btn-default").addClass("btn-info");
+        $(this).removeClass("btn-light").addClass("btn-info");
         $(this).text("Approve");
         approval_data = 0;
         message = "Discarded";
@@ -176,14 +188,14 @@
 
       if($(this).hasClass("btn-danger"))
       {
-        $(this).removeClass("btn-danger").addClass("btn-default");
+        $(this).removeClass("btn-danger").addClass("btn-light");
         $(this).text("Remove from Spam");
         data = 1;
         message = "Marked as Spam";
       }
-      else if($(this).hasClass("btn-default"))
+      else if($(this).hasClass("btn-light"))
       {
-        $(this).removeClass("btn-default").addClass("btn-danger");
+        $(this).removeClass("btn-light").addClass("btn-danger");
         $(this).text("Mark as Spam");
         data = 0;
         message = "Removed from Spam";

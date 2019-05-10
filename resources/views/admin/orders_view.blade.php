@@ -6,55 +6,67 @@
 @stop
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content">
-      @if(Session::get('status') == "success")
-      <div class="alert alert-success alert-dismissible">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          <i class="icon fa fa-check"></i>{{ Session::get('message') }}
-      </div>
-      @elseif(Session::get('status') == "danger")
-      <div class="alert alert-danger alert-dismissible">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          <i class="icon fa fa-ban"></i>{{ Session::get('message') }}
-      </div>
-      @endif
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="box">
-                <div class="box-header">
-                  <h3 class="box-title">All Orders</h3>
+<div class="container-fluid dashboard-content">
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="page-header">
+                <h2 class="pageheader-title">All Orders</h2>
+                <div class="page-breadcrumb">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url('/') }}" class="breadcrumb-link">Looksy</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Orders</li>
+                        </ol>
+                    </nav>
                 </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                  <table id="orders_list" class="table table-bordered table-striped" style="width:100%;">
-                    <thead>
-                        <tr>
-                          <th></th>
-                          <th>Order ID</th>
-                          <th>Amount</th>
-                          <th>Status</th>
-                          <th>Shopper</th>
-                          <th></th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                          <th></th>
-                          <th>Order ID</th>
-                          <th>Amount</th>
-                          <th>Status</th>
-                          <th>Shopper</th>
-                          <th></th>
-                        </tr>
-                    </tfoot>
-                  </table>
-                </div>
-                <!-- /.box-body -->
-              </div>
             </div>
         </div>
-    </section>
+    </div>
+    @if(Session::get('status') == "success")
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      {{ Session::get('message') }}
+      <a href="#" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </a>
+    </div>
+    @elseif(Session::get('status') == "danger")
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      {{ Session::get('message') }}
+      <a href="#" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </a>
+    </div>
+    @endif
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <div class="card">
+            <div class="card-body">
+              <table id="orders_list" class="table table-bordered table-striped" style="width:100%;">
+                <thead>
+                    <tr>
+                      <th></th>
+                      <th>Order ID</th>
+                      <th>Amount</th>
+                      <th>Status</th>
+                      <th>Shopper</th>
+                      <th></th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                      <th></th>
+                      <th>Order ID</th>
+                      <th>Amount</th>
+                      <th>Status</th>
+                      <th>Shopper</th>
+                      <th></th>
+                    </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div> 
+    </div>
 </div>
 @endsection
 

@@ -2,11 +2,11 @@
 
 @section('pageCss')
 <style type="text/css">
-  #add-listing-button{margin:1em auto;font-size:20px;padding:0.3em 1.5em;}
+  #add-listing-button{margin-bottom:0.5em;font-size:20px;padding:0.2em 1.5em;}
   .filters{margin-bottom:10px;}
   .filters .btn{margin-bottom:10px;}
   .toolbar{float:left;height:35px;margin-top:5px;}
-  .btn-info, .btn.active-deactive, .is-favorite, .btn.bg-secondary{padding:9px 10px;}
+  .btn-info, .is-favorite, .btn.bg-secondary{padding:9px 10px;}
   .btn.button_delete{padding:6px 10px;}
   .btn.button_delete, .btn-info, .btn.bg-secondary{display:inline;}
 </style>
@@ -25,6 +25,9 @@
                             <li class="breadcrumb-item"><a href="{{ url('host/dashboard') }}" class="breadcrumb-link">Dashboard</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Listings</li>
                         </ol>
+                        <div class="pull-right">
+                          <a id="add-listing-button" href="{{ url('/host/listings/add-listing') }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></a>
+                        </div>
                     </nav>
                 </div>
             </div>
@@ -50,11 +53,11 @@
           <div class="card">
             <div class="card-body">
               <div class="filters text-center">
-                  <button id="all" class="btn btn-primary">ALL</button>
-                  <button id="active" class="btn btn-primary">ACTIVE</button>
-                  <button id="inactive" class="btn btn-primary">INACTIVE</button>
-                  <button id="approved" class="btn btn-danger">APPROVED</button>
-                  <button id="unapproved" class="btn btn-danger">UNAPPROVED</button>
+                  <button id="all" class="btn btn-primary btn-sm">ALL</button>
+                  <button id="active" class="btn btn-primary btn-sm">ACTIVE</button>
+                  <button id="inactive" class="btn btn-primary btn-sm">INACTIVE</button>
+                  <button id="approved" class="btn btn-danger btn-sm">APPROVED</button>
+                  <button id="unapproved" class="btn btn-danger btn-sm">UNAPPROVED</button>
               </div>
               <table id="listings_list" class="table table-bordered table-striped">
                 <thead>
@@ -291,6 +294,7 @@ $(function() {
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: "btn-primary",
+        cancelButtonClass: "btn-light",
         confirmButtonText: "Yes, delete it!",
         closeOnConfirm: false
       },

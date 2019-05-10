@@ -3,7 +3,7 @@
 @section('pageCss')
 <style type="text/css">
 .conv-screen{padding-right:10px;height:65vh;display:flex;flex-direction:column;}
-.small-box.user>.inner, .small-box.conv>.inner{display:flex;justify-content:center;align-items:center;padding:10px;text-decoration:none;}
+.small-box.user>.inner, .small-box.conv>.inner{display:flex;justify-content:center;align-items:center;padding:5px;text-decoration:none;}
 .small-box.user{margin-bottom:10px;border-radius:5px;}
 .small-box>.inner:hover{background-color:#d2d8ff;border-radius:5px;color:#fff;}
 .small-box>.inner.no_conversation:hover{background-color:transparent;color:#333;}
@@ -104,7 +104,7 @@
               <div class="small-box user" style="box-shadow:1px 1px 5px #ccc;">
                   <a href="{{ url('host/chat/get-chat/'.$usr['id']) }}" class="inner">
                       <div class="col-xl-2 col-lg-2 col-md-2 col-sm-3 col-3" style="position:relative;height:52px;width:9.9%;">
-                        <img class="user-avatar-lg rounded-circle" src="{{ $val['user']['profile_picture'] ? asset('public/images/profile_pictures/'.$val['user']['profile_picture']) : asset('public/images/default-pic.png')}}">
+                        <img class="user-avatar-lg rounded-circle" src="{{ $usr['profile_picture'] ? asset('public/images/profile_pictures/'.$usr['profile_picture']) : asset('public/images/default-pic.png')}}">
                       </div>
                       <div class="col-xl-10 col-lg-10 col-md-10 col-sm-9 col-9 conv_data">
                         <p style="margin-bottom:0px;">{{ $usr['first_name'] }} {{ $usr['last_name'] }}<span class="pull-right" style="font-size:12px;color:#999;">&nbsp;({{$usr['getRole']['display_name']}})</span></p>

@@ -29,10 +29,15 @@ class ListingController extends Controller
 
     	return Datatables::of($all_listings)
     					->editColumn('status', function ($all_listings){
-                            if($all_listings['status'] == 1)
-                                return 'Active';
-                            if($all_listings['status'] == 0)
-                                return 'Deactive';
+                            if($all_listings['deleted_by'] != null){
+                                return "Deleted";
+                            }
+                            else{
+                                if($all_listings['status'] == 1)
+                                    return 'Active';
+                                if($all_listings['status'] == 0)
+                                    return 'Deactive';
+                            }   
                         })->editColumn('is_approved', function ($all_listings){
                             if($all_listings['is_approved'] == 1)
                                 return 'Approved';
@@ -66,26 +71,30 @@ class ListingController extends Controller
                                 return $time_slots;
                         })->addColumn('approved_unapproved', function ($all_listings){
                             if($all_listings['is_approved'] == 1){
-                                $approval_class = "text-green fa-check-square-o";   
+                                $approval_class = "fa-check-circle text-success";   
                             }
                             if($all_listings['is_approved'] == 0){
-                                $approval_class = "text-red fa-square-o";
+                                $approval_class = "fa-circle text-danger";
                             }
-                            return "<a href='#' data-id='".$all_listings['id']."' class='approve-unapprove' style='padding-left:25px;'><i class='fa ".$approval_class."'</i></a>";
+                            return "<a href='#' data-id='".$all_listings['id']."' class='approve-unapprove' style='padding-left:25px;'><i class='far ".$approval_class."'</i></a>";
                         })->addColumn('founder_pick_button', function ($all_listings){
                             if($all_listings['founder_pick'] == 1){
-                                $fndr_class = 'btn-default';
+                                $fndr_class = 'btn-light';
                                 $fndr_label = 'Remove'; 
                             }
                             if($all_listings['founder_pick'] == 0){
-                                $fndr_class = 'bg-olive';
+                                $fndr_class = 'btn-danger';
                                 $fndr_label = 'Add'; 
                             }
-                            return "<a href='#' data-id='".$all_listings['id']."' class='founder_pick_btn btn btn-sm ".$fndr_class."' style='margin-left:15px;'>".$fndr_label."</a>";
+                            return "<a href='#' data-id='".$all_listings['id']."' class='founder_pick_btn btn btn-sm ".$fndr_class."'>".$fndr_label."</a>";
                         })->addColumn('action', function ($all_listings){
-                            return "<a href='".url('admin/listings/view/'.$all_listings['id'])."' class='btn bg-teal' style='margin-right:5px;'><i class='fa fa-eye'></i></a><a href='".route('editListingAdmin', $all_listings['id'])."' class='btn btn-info' style='margin-right:5px;'><i class='fa fa-edit'></i></a><button type='button' data-id='".$all_listings['id']."' class='btn btn-warning button_delete'><i class='fa fa-trash-o'></i></button>";
+                            if($all_listings['deleted_by'] != null)
+                            {
+                                return "<a href='#' class='btn btn-sm btn-light remove_from_deleted' data-id='".$all_listings['id']."' style='word-wrap:break-word;'>Remove Deletion</a>";
+                            }
+                            return "<a href='".url('admin/listings/view/'.$all_listings['id'])."' class='btn bg-secondary' style='margin-right:5px;'><i class='fa fa-eye'></i></a><a href='".route('editListingAdmin', $all_listings['id'])."' class='btn btn-info' style='margin-right:5px;'><i class='fa fa-edit'></i></a><button type='button' data-id='".$all_listings['id']."' class='btn btn-warning button_delete'><i class='fas fa-trash-alt' style='color:#fff;'></i></button>";
                         })->addColumn('images', function ($all_listings){
-                            return "<a href='#' data-toggle='modal' data-target='#image-modal' class='listing_images' data-id='".$all_listings['id']."' style='font-size:1em;padding:10px;'><i class='glyphicon glyphicon-picture'></i></a>";
+                            return "<a href='#' data-toggle='modal' data-target='#image-modal' class='listing_images' data-id='".$all_listings['id']."' style='font-size:1em;padding:15px;'><i class='fas fa-image'></i></a>";
                         })->editColumn('created_at', function ($all_listings){
                             $created_at = Carbon::create($all_listings['created_at']->toDateTimeString())->format("d/m/Y g:i a");                        
                             return $created_at;
@@ -118,6 +127,16 @@ class ListingController extends Controller
         $get_images = ListingImages::where('listing_id', $id)->get();
         $images = view('host.renders.listing_images_render')->with('get_images', $get_images)->render();
         return response()->json(['status' => 'success', 'images' => $images]);
+    }
+
+    public function removeFromDeleted($id)
+    {
+        $listing = Listings::withTrashed()->find($id);
+        $listing->deleted_by = null;
+        $listing->deleted_at = null;
+        $listing->save();
+
+        return response()->json(['status' => 'success', 'message' => 'Listing deletion has been revoked.']);
     }
 
     public function changeApprovalSetting($id, $status)

@@ -114,6 +114,8 @@ a.view_detail:hover{
 }
 .page-header{margin-bottom:10px;}
 .notification-list-user-block{padding-left:20px;}
+input[type=file]{box-shadow:none;border-color:#d2d2e4;}
+.search-column{font-size:12px;padding:10px 6px;}
 
 /* Notification count bubble */
 .notification_count{
@@ -331,7 +333,7 @@ tr.shown td.details-control:after {
 	max-width: 21%;
 }
 #image-box img{
-	height: calc(9em + 10px);
+	height: calc(7em + 10px);
     width: auto;
     border: 1px solid #ccc;
     box-shadow: 2px 2px 3px #999;

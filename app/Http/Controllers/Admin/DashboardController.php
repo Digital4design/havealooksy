@@ -40,8 +40,9 @@ class DashboardController extends Controller
     	$validator = Validator::make($request->all(),[
             'firstname' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'min:5', 'max:10'],  
-            'postalcode' => ['required', 'numeric'],  
+            'username' => ['required', 'string', 'min:5', 'max:255'],  
+            'postalcode' => ['required', 'numeric'],
+            'profile_picture' => ['image', 'mimes:jpg,jpeg,png']  
         ]);
         if ($validator->fails()) {
              return back()->withErrors($validator)->withInput();
@@ -54,6 +55,18 @@ class DashboardController extends Controller
         	$save_profile->user_name = $request->username;
         	$save_profile->postal_code = $request->postalcode;
         	$save_profile->save();
+
+            if($request->hasFile('profile_picture'))
+            {
+                $user = User::find(Auth::user()->id);
+
+                $file = $request->file('profile_picture');
+                $filename = 'admin-'.time().'.'.$file->getClientOriginalExtension();
+                $file->move('public/images/profile_pictures/',$filename);
+
+                $user->profile_picture = $filename;
+                $user->save();
+            }
 
         	return back()->with(['status' => 'success' , 'message' => 'Profile updated successfully.']);
         }
@@ -95,41 +108,6 @@ class DashboardController extends Controller
         }
     }
 
-    public function changeProfilePicture(Request $request)
-    {
-        $validator = Validator::make($request->all(),[
-            'profile_picture' => ['required', 'image', 'mimes:jpg,jpeg,png'],    
-        ]);
-        if ($validator->fails()) {
-             return response()->json($validator->errors());
-        }
-        try
-        {
-            $user = User::find(Auth::user()->id);
-
-            if($user->profile_picture)
-            {   
-                if(file_exists(public_path('images/profile_pictures/'.$user->profile_picture)))
-                {   
-                    $del_pic = unlink(public_path('images/profile_pictures/'.$user->profile_picture));
-                }
-            }
-
-            $file = $request->file('profile_picture');
-            $filename = 'admin-'.time().'.'.$file->getClientOriginalExtension();
-            $file->move('public/images/profile_pictures/',$filename);
-
-            $user->profile_picture = $filename;
-            $user->save();
-            
-            return response()->json(['status' => 'success','message' => 'Profile Picture updated successfully']);
-        }
-        catch(\Exception $e)
-        {
-            return response()->json(['status' => 'danger','message' => 'Something went wrong. Please try again later.']);
-        }
-    }
-
     public function removeProfilePicture()
     {
         $user = User::find(Auth::user()->id);
@@ -138,9 +116,9 @@ class DashboardController extends Controller
             $del_pic = unlink(public_path('images/profile_pictures/'.$user->profile_picture));
             $user->profile_picture = null;
             $user->save();
-            return response()->json(['status' => 'success','message' => 'Profile Picture removed successfully']);
+            return back()->with(['status' => 'success','message' => 'Profile Picture removed successfully']);
         }
-        return response()->json(['status' => 'danger','message' => 'Something went wrong. Please try again later.']);
+        return back()->with(['status' => 'danger','message' => 'Something went wrong. Please try again later.']);
     }
 
     public function getUsersView()
@@ -179,7 +157,7 @@ class DashboardController extends Controller
                             }
                             if($all_users['status'] == 0){
                                 $status = 'Unblock';
-                                $btn_color = 'bg-green';
+                                $btn_color = 'btn-success';
                             }
                             return "<a href='".url('admin/users/view/'.$all_users['id'])."' class='btn btn-info' style='margin-right:5px;display:inline;'><i class='fa fa-eye'></i></a><button type='button' data-id='".$all_users['id']."' class='btn ".$btn_color." block-unblock' style='display:inline;'>".$status."</button>";
                         })->rawColumns(['action' => 'action'])->make(true);
@@ -227,18 +205,18 @@ class DashboardController extends Controller
                         })->addColumn('activate_deactivate', function ($all_categories){
                             if($all_categories['status'] == 1){
                                 $status = 'Deactivate';
-                                $btn_color = 'default';
+                                $btn_color = 'light';
                             }
                             if($all_categories['status'] == 0){
                                 $status = 'Activate';
-                                $btn_color = 'danger';
+                                $btn_color = 'primary';
                             }
-                            return "<button type='button' data-id='".$all_categories['id']."' class='btn btn-".$btn_color." active-deactive' type='button'>".$status."</button>";
+                            return "<button type='button' data-id='".$all_categories['id']."' class='btn btn-sm btn-".$btn_color." active-deactive' type='button'>".$status."</button>";
                         })->addColumn('action', function ($all_categories){
-                            return "<a href='#' data-id='".$all_categories['id']."' class='btn btn-info button_edit' style='margin-right:5px;' data-toggle='modal' data-target='#edit-category'><i class='fa fa-edit'></i></a><a href='#' data-id='".$all_categories['id']."' class='btn btn-warning button_delete'><i class='fa fa-trash-o'></i></a>";
+                            return "<a href='#' data-id='".$all_categories['id']."' class='btn btn-info button_edit' style='margin-right:5px;' data-toggle='modal' data-target='#edit-category'><i class='fa fa-edit'></i></a><a href='#' data-id='".$all_categories['id']."' class='btn btn-warning button_delete'><i class='fas fa-trash-alt' style='color:#fff;'></i></a>";
                         })->editColumn('image', function ($all_categories){
                             if($all_categories['image'] != "")
-                                return "<a href='".asset('public/images/categories/'.$all_categories['image'])."' style='font-size:1em;padding:10px;' data-lightbox='".$all_categories['name']."'><i class='glyphicon glyphicon-picture'></i></a>";
+                                return "<a href='".asset('public/images/categories/'.$all_categories['image'])."' style='font-size:1em;padding:15px;' data-lightbox='".$all_categories['name']."'><i class='fas fa-image'></i></a>";
                             else
                                 return "<p>-</p>";
                         })->rawColumns(['activate_deactivate' => 'activate_deactivate', 'image' => 'image','action' => 'action'])->make(true);

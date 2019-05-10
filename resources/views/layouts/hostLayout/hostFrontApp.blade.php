@@ -29,7 +29,7 @@
             #hoverable a{border-radius:5px;}
             #hoverable a:hover{background:none;border-radius:0px;}
             #hoverable a.user_name:hover{background:none;border-bottom:2px solid #761dc9;border-radius:0px;}
-            .dropdown-items{position:absolute;list-style:none;background-color:rgba(0,0,0,0.6);right:0px;z-index:1;color:#fff;border-radius:5px;margin-top:3px;padding:0px;display:none;top:40px;}
+            .dropdown-items{position:absolute;list-style:none;background-color:rgba(0,0,0,0.6);right:0px;z-index:1;color:#fff;border-radius:5px;margin-top:3px;padding:0px;display:none;top:45px;}
             .dropdown-menu{background-color:rgba(0,0,0,0.6)}
             li.dropdown-item{padding:15px 7px;}
             li.dropdown-item:hover{background-color:rgb(118,29,201);width:100%;}
@@ -102,7 +102,7 @@
                             @endif
                           </i>
                         </a>
-                        <ul class="dropdown-menu" style="padding:5px;padding-bottom:0px;color:#fff;width:300px;font-size:12px;">
+                        <ul class="dropdown-menu" style="padding:5px;padding-bottom:0px;color:#fff;width:240px;font-size:12px;">
                           <li class="header">You have {{ (count(Auth::user()->unreadNotifications)) ? count(Auth::user()->unreadNotifications) : 0 }} notifications</li>
                           <li>
                             <!-- inner menu: contains the actual data -->
