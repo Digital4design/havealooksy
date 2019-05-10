@@ -91,7 +91,7 @@
                           <img src="{{ asset('public/images/profile_pictures/'.$user_data['profile_picture']) }}">
                       </a>
                     </div>
-                    <a href="{{ url('host/remove-profile-picture') }}" class="btn btn-dark btn-sm text-center px-5 m-3">Remove</a>
+                    <a href="{{ url('host/remove-profile-picture') }}" class="btn btn-dark btn-sm text-center px-5 mt-3">Remove</a>
                 </div>
                 @else
                 <div class="form-group">
