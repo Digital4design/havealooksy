@@ -27,7 +27,7 @@
                         @if(!$categories->isEmpty())
                             <div class="owl-carousel">
                                 @foreach($categories as $value)
-                                    <a href="{{ url('get-products/'.$value['id']) }}" class="item" target="_blank">
+                                    <a href="{{ url('get-products/'.$value['id']) }}" class="item">
                                         @if($value['image'] != "")
                                         <div class="partner-logo"><img src="{{ asset('public/images/categories/'.$value['image']) }}" alt="partners"></div>
                                         @else
@@ -58,28 +58,6 @@
                 </div>
             </div>
             <div class="row">
-              <!-- <div class="col-lg-12 text-center slider-cat">
-                @if(!$fav_listings->isEmpty())
-                    <div class="owl-carousel">
-                    @foreach($fav_listings as $value)
-                        <div class="item ">
-                            <div class="ot-portfolio-item">
-                                <figure class="effect-bubba">
-                                    <img src="{{ asset('public/images/listings/'.$value['getImages'][0]['name']) }}" alt="{{ $value['title'] }}" class="img-responsive" />
-                                    <figcaption>
-                                        <h2>{{ $value['title'] }}</h2>
-                                        <p>{{ $value['description'] }}</p>
-                                        <a href="{{ url('get-products/product-details/'.$value['id']) }}" style="padding:180px 50px;" target="_blank">View more</a>
-                                    </figcaption>
-                                </figure>
-                            </div>
-                        </div>
-                    @endforeach
-                    </div>
-                @else
-                    <p class="text-center">No Favorite Listing Available!</p>
-                @endif
-              </div> -->
               <div class="col-lg-12 text-center slider-cat">
                 @if(!$fav_listings->isEmpty())
                     <div class="owl-carousel">
@@ -91,7 +69,7 @@
                                     <figcaption>
                                         <h2>{{ $value['title'] }}</h2>
                                         <p>{{ $value['description'] }}</p>
-                                        <a href="{{ url('get-products/product-details/'.$value['id']) }}" style="padding:180px 50px;" target="_blank">View more</a>
+                                        <a href="{{ url('get-products/product-details/'.$value['id']) }}" style="padding:180px 50px;">View more</a>
                                     </figcaption>
                                 </figure>
                             </div>
@@ -120,7 +98,7 @@
                     @if(!$founder_picks->isEmpty())
                         @foreach($founder_picks as $val)
                         <div class="col-md-3">
-                            <a href="{{ url('get-products/product-details/'.$val['id']) }}" target="_blank">
+                            <a href="{{ url('get-products/product-details/'.$val['id']) }}">
                                 <div class="team-item">
                                     <div class="team-image">
                                         <img src="{{ asset('public/images/listings/'.$val['getImages'][0]['name']) }}" class="img-responsive"  alt="{{ $val['title'] }}">
@@ -154,7 +132,7 @@
                         @foreach($new_listings as $val)
                         <!-- team member item -->
                         <div class="col-md-3">
-                            <a href="{{ url('get-products/product-details/'.$val['id']) }}" target="_blank">
+                            <a href="{{ url('get-products/product-details/'.$val['id']) }}">
                                 <div class="team-item">
                                     <div class="team-image">
                                         <img src="{{ asset('public/images/listings/'.$val['getImages'][0]['name']) }}" alt="{{ $val['title'] }}" class="img-responsive">
