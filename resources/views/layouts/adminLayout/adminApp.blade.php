@@ -54,7 +54,7 @@
                             </div>
                         </li> -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link nav-icons" href="#" id="get_unread_conversations" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-envelope"></i>
+                            <a class="nav-link nav-icons" href="#" id="get_unread_conversations" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-envelope my-2"></i>
                               @php $unreadCount = Chat::messages()->for(Auth::user())->unreadCount(); @endphp
                                 @if($unreadCount) 
                                   <span class="indicator" style="right:20px;"></span>
@@ -72,7 +72,7 @@
                             </ul>
                         </li>
                         <li class="nav-item dropdown notification">
-                            <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  onclick="markNotificationsAsRead()"><i class="fas fa-fw fa-bell"></i>
+                            <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  onclick="markNotificationsAsRead()"><i class="fas fa-fw fa-bell my-2"></i>
                               @if(count(Auth::user()->unreadNotifications))
                                 <span class="indicator nav-unread"></span>
                               @endif
@@ -153,6 +153,9 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ Request::is('admin/orders') ? 'active' : '' }}" href="{{ url('admin/orders') }}"><i class="fa fa-fw fa-shopping-cart"></i>Orders</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ Request::is('admin/invoices') ? 'active' : '' }}" href="{{ url('admin/invoices') }}"><i class="fa fa-fw far fa-file-alt"></i>Invoices</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ Request::is('admin/ratings') ? 'active' : '' }}" href="{{ url('admin/ratings') }}"><i class="fa fa-fw fa-star"></i>Rating & Reviews</a>

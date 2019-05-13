@@ -9,6 +9,7 @@ use Yajra\Datatables\Datatables;
 use App\Models\Categories;
 use App\Models\Listings;
 use App\Models\Bookings;
+use App\Models\Invoices;
 use App\Models\Orders;
 use Validator;
 use App\User;
@@ -26,7 +27,8 @@ class DashboardController extends Controller
         $listings = Listings::withTrashed()->get()->count();
         $bookings = Bookings::get()->count();
         $orders = Orders::get()->count();
-    	return view('admin.dashboard')->with(['users' => $users, 'categories' => $categories, 'listings' => $listings, 'bookings' => $bookings, 'orders' => $orders]);
+        $invoices = Invoices::get()->count();
+    	return view('admin.dashboard')->with(['users' => $users, 'categories' => $categories, 'listings' => $listings, 'bookings' => $bookings, 'orders' => $orders, 'invoices' => $invoices]);
     }
 
     public function profile()

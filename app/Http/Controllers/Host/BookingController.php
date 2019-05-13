@@ -60,9 +60,9 @@ class BookingController extends Controller
 
     public function getBookingsTable()
     {
-        $bookings = Bookings::with(['getBookingStatus'])
+        $bookings = Bookings::with(['getBookingStatus', 'getBookedListingUser'])
                             ->whereHas('getBookedListingUser', function($q){
-                                $q->where('id', Auth::user()->id);
+                                $q->where('user_id', Auth::user()->id);
                             })->get();
         
         return Datatables::of($bookings)

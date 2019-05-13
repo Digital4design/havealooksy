@@ -112,6 +112,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin', 'auth', 'verified']
         Route::get('/view/{id}', 'Admin\OrdersController@getOrderDetailsView');
     });
 
+    /* Orders */
+    Route::group(['prefix' => 'invoices', 'middleware' => ['admin', 'auth']], function(){
+        Route::get('/', 'Admin\OrdersController@getInvoicesView');
+        Route::get('/get-invoices', 'Admin\OrdersController@getAllInvoices');
+    });
+
     /* Ratings & Reviews */
     Route::group(['prefix' => 'ratings', 'middleware' => ['admin', 'auth']], function(){
         Route::get('/', 'Admin\RatingController@getRatingsView');

@@ -15,6 +15,7 @@ use App\Models\Listings;
 use App\Models\Bookings;
 use App\Models\OrderItems;
 use App\Models\Wishlist;
+use App\Models\Invoices;
 use App\Models\Orders;
 use Stripe\Error\Card;
 use Validator;
@@ -50,7 +51,7 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-    {
+    {   
         if(Auth::guest())
         {   
             $categories = Categories::where('status', '1')->get();
@@ -472,6 +473,15 @@ class HomeController extends Controller
                         'user_id' => Auth::user()->id,
                         'order_amount' => $request->amount,
                         'order_status' => 'Completed',
+                    ]);
+
+                    /* Save Invoice */
+                    $invoice = Invoices::create([
+                        'order_id' => $order->id,
+                        'transaction_id' => $charge['id'],
+                        'amount' => $request->amount,
+                        'invoice_date' => Carbon::today()->toDateString(),
+                        'user_id' => Auth::user()->id
                     ]); 
 
                     /* Remove cart items for whom payment is done */

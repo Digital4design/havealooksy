@@ -1,4 +1,10 @@
 @extends('layouts.adminLayout.adminApp')
+
+<style type="text/css">
+    .bg-orange-light{background-color:#ffdcc2;}
+    .text-orange{color:orange;}
+</style>
+
 @section('content')
 <div class="container-fluid dashboard-content ">
     <!-- ============================================================== -->
@@ -110,6 +116,24 @@
                     <div class="card-footer p-0 text-center">
                         <div class="card-footer-item card-footer-item-bordered">
                             <a href="{{ url('admin/orders') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
+                <div class="card border-3 border-top border-top-primary">
+                    <div class="card-body">
+                        <div class="d-inline-block">
+                            <h5 class="text-muted">Invoices</h5>
+                            <h2 class="mb-0">{{ $invoices }}</h2>
+                        </div>
+                        <div class="float-right icon-circle-medium  icon-box-lg  bg-orange-light mt-1">
+                            <i class="fa fa-fw fas fa-sm fa-file-alt text-orange"></i>
+                        </div>
+                    </div>
+                    <div class="card-footer p-0 text-center">
+                        <div class="card-footer-item card-footer-item-bordered">
+                            <a href="{{ url('admin/invoices') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
                 </div>

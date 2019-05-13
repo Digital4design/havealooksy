@@ -7,7 +7,9 @@ use App\Http\Controllers\Controller;
 use Yajra\Datatables\Datatables;
 use App\Models\OrderItems;
 use App\Models\Bookings;
+use App\Models\Invoices;
 use App\Models\Orders;
+use Carbon;
 
 class OrdersController extends Controller
 {
@@ -39,5 +41,26 @@ class OrdersController extends Controller
     	}
 
     	return view('admin.order_details_view')->with(['order_items' => $order_items]);
+    }
+
+    public function getInvoicesView()
+    {
+        return view('admin.invoices_view');
+    }
+
+    public function getAllInvoices()
+    {
+        $invoices = Invoices::get();
+
+        return Datatables::of($invoices)
+                        ->editColumn('order_id', function ($invoices){
+                            $order = Orders::where('id', $invoices['order_id'])->first();
+                            return "<a href='".url('admin/orders/view/'.$invoices['order_id'])."' class='text-secondary'>".$order['order_number']."</a>";
+                        })->editColumn('user_id', function ($invoices){
+                            return "<a href='".url('admin/users/view/'.$invoices['user_id'])."' class='view_eye'><i class='fa fa-eye'></i></a>";
+                        })->editColumn('invoice_date', function ($invoices){
+                            return Carbon::create($invoices['invoice_date'])->format('d F, Y');
+                        })->rawColumns(['order_id' => 'order_id', 'user_id' => 'user_id'])
+                        ->make(true);
     }
 }
