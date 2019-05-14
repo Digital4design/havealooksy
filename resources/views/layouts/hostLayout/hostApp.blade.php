@@ -177,7 +177,7 @@
         <!-- ============================================================== -->
         <!-- wrapper  -->
         <!-- ============================================================== -->
-        <div class="dashboard-wrapper" style="height:100%;min-height:596px !important;">
+        <div class="dashboard-wrapper" style="min-height:596px !important;">
             <div class="dashboard-ecommerce">
               @yield('content')
             </div>
